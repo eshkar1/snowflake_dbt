@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('salesforce','account_table') }}
+    select * from {{ source('salesforce','contact_table') }}
 ),
 
 renamed as (
