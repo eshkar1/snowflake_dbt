@@ -1,0 +1,27 @@
+version: 2
+sources:
+  - name: ironscales_us
+    description: ironscales_us raw tables
+    database: dev_raw
+    schema: ironscales_us_raw_db
+    tables:
+      
+      - name: auth_user_table 
+        # description: 
+      
+      - name: campaigns_brand_table
+      
+      - name: campaigns_company_table
+      #   # description:
+
+      - name: campaigns_companylicense
+        # description:  
+      
+      - name: profiles_profile_table
+        # description: 
+      
+      - name: profiles_profile_tags_table
+      #   # description: 
+      
+      - name: profiles_tag_table
+        # description: 
