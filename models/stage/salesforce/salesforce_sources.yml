@@ -1,0 +1,40 @@
+version: 2
+sources:
+  - name: salesforce
+    description: salesforce raw tables
+    database: dev_raw
+    schema: salesforce_raw_db
+    tables:
+      - name: account_table 
+        description: accounts in salesforce
+
+      - name: contact_table
+        description: 
+      
+      - name: conversion_rate_table
+        description: has date & conversion currency & rate
+      
+      - name: opportunity_line_item
+        description: 
+      
+      - name: opp_table
+        description: 
+
+      - name: poc_c
+        description: more details about POCs
+      
+      - name: products2
+        description: 
+
+      - name: setupaudittrail
+        description: 
+
+      - name: tenant_table
+        description: 
+      
+      - name: user_table
+        description: 
+
+  
+
+
