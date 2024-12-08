@@ -7,34 +7,36 @@ sources:
     tables:
       - name: account_table 
         description: accounts in salesforce
-
+      
+      - name: opp_table
+      
       - name: contact_table
-        description: 
+      #   # description: 
       
       - name: conversion_rate_table
         description: has date & conversion currency & rate
       
       - name: opportunity_line_item
-        description: 
+      #   # description: 
       
-      - name: opp_table
-        description: 
-
-      - name: poc_c
+      - name: poc__c
         description: more details about POCs
       
-      - name: products2
-        description: 
-
-      - name: setupaudittrail
-        description: 
-
       - name: tenant_table
-        description: 
+        # description: 
       
       - name: user_table
-        description: 
+      #   description: 
 
   
+      # - name: products2
+      #   # description: 
+
+      # - name: setupaudittrail
+      #   # description: 
+
+
+      
+      
 
 

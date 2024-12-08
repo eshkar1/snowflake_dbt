@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('salesforce','account_table') }}
+    select * from {{ source('ironscales_us','profiles_profile_table') }}
 ),
 
 renamed as (
