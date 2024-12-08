@@ -16,6 +16,10 @@ auth_user as (
 
 active_profiles as (
     select * from {{ ref('tenants_us_active_profile')}}
+),
+
+shared_profiles as (
+    select * from {{ ref('tenants_us_shared_profile')}}
 )
 
 select
@@ -53,12 +57,11 @@ select
     t.depth as depth,
     t.approved as approved,
     t.tree_key as tree_key,
-    l._rivery_last_update as roundup_timestamp
+    -- l._rivery_last_update as roundup_timestamp
 from
     tenants_us t
     left join active_profiles a on t.tenant_global_id = a.tenant_global_id 
-    -- left join ironscales_us_db.rr_prod_sch.active_profiles_vw a on t.tenant_global_id = a.tenant_global_id
-    -- left join ironscales_us_db.rr_prod_sch.shared_profiles_vw s on t.tenant_global_id = s.tenant_global_id
+    left join shared_profiles s on t.tenant_global_id = s.tenant_global_id
     left join campaigns_companylicense l on t.tenant_id = l.company_id
     left join campaigns_company c on t.TENANT_GLOBAL_ID = c.tenant_global_id
-    left join auth_user u on c.owner_id = u.id;
+    left join auth_user u on c.owner_id = u.id
