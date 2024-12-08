@@ -1,17 +1,21 @@
 with tenants_us as (
-    select * from {{ ref("tenants_us_tree")}}
+    select * from {{ ref('tenants_us_tree')}}
 ),
 
 campaigns_companylicense as (
-    select * from {{ ref("stg_ironscales_campaigns_companylicense")}}
+    select * from {{ ref('stg_ironscales_campaigns_companylicense')}}
 ),
 
 campaigns_company as (
-    select * from {{ ref("stg_ironscales_campaigns_company_table")}}
+    select * from {{ ref('stg_ironscales_campaigns_company_table')}}
 ),
 
 auth_user as (
-    select * from {{ ref("stg_ironscales_auth_user_table")}}
+    select * from {{ ref('stg_ironscales_auth_user_table')}}
+),
+
+active_profiles as (
+    select * from {{ ref('tenants_us_active_profile')}}
 )
 
 select
@@ -52,6 +56,7 @@ select
     l._rivery_last_update as roundup_timestamp
 from
     tenants_us t
+    left join active_profiles a on t.tenant_global_id = a.tenant_global_id 
     -- left join ironscales_us_db.rr_prod_sch.active_profiles_vw a on t.tenant_global_id = a.tenant_global_id
     -- left join ironscales_us_db.rr_prod_sch.shared_profiles_vw s on t.tenant_global_id = s.tenant_global_id
     left join campaigns_companylicense l on t.tenant_id = l.company_id

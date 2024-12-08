@@ -21,7 +21,8 @@ sources:
         # description: 
       
       - name: profiles_profile_tags_table
-      #   # description: 
-
+        # description: 
+      
+      - name: profiles_tag_table
     
     
