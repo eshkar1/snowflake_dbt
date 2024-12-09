@@ -24,5 +24,11 @@ sources:
         # description: 
       
       - name: profiles_tag_table
+
+
+    # models:
+    #   - name: tenants_us_tree
+    #       +materialized: table
+      
     
     
