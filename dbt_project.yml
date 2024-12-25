@@ -39,7 +39,11 @@ models:
   ironscales_dbt_project:
     # Applies to all files under models/example/
     conform:
+<<<<<<< HEAD
       +schema: new_test
+=======
+      +schema: test
+>>>>>>> f00cbeab99a4f42d3490101590545513081df1f0
       +materialized: table
     stage:
       +materialized: view
