@@ -3,7 +3,7 @@ with tenants_us as (
 ),
 
 campaigns_companylicense as (
-    select * from {{ ref('stg_ironscales_campaigns_companylicense')}}
+    select * from {{ ref('stg_ironscales_campaigns_companylicense_table')}}
 ),
 
 campaigns_company as (

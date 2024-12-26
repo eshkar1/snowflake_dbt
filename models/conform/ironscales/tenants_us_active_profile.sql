@@ -3,7 +3,7 @@ with profiles_profile as (
 ),
 
 campaigns_companylicense as (
-    select * from {{ ref('stg_ironscales_campaigns_companylicense')}}
+    select * from {{ ref('stg_ironscales_campaigns_companylicense_table')}}
 )
 
 
