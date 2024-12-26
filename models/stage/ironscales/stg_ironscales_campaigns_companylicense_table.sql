@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('ironscales_us','campaigns_companylicense') }}
+    select * from {{ source('ironscales_us','campaigns_companylicense_table') }}
 ),
 
 renamed as (
