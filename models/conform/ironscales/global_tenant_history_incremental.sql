@@ -1,10 +1,30 @@
+{{
+    config(
+        materialized='incremental'
+    )
+}}
+
+
 with tenants_us_final as (
     select * from {{ ref('tenants_us_final')}}
+
+    {% if is_incremental() %}
+
+    where roundup_timestamp > (select max(roundup_timestamp) from ({this}))
+
+    {% endif %}
 ),
 
 tenants_eu_final as (
     select * from {{ ref('stg_ironscales_tenants_eu')}}
+
+    {% if is_incremental() %}
+
+    where roundup_timestamp > (select max(roundup_timestamp) from ({this}))
+
+    {% endif %}
 )
+
 
 
 select
@@ -166,5 +186,4 @@ select
         iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
         ) as billing_status
 from
-    -- secondary_eu_db.tenants_sch.tenants_tbl
     tenants_eu_final

@@ -27,10 +27,10 @@ sources:
       - name: profiles_tag_table
         description: The table contains records of user profiles tagged with specific auto tag types. Each record represents a tagged user profile and includes the user's name, associated auto tag type, and relevant identifiers for company, locale, tenant, and tag.
 
-
-    # models:
-    #   - name: tenants_us_tree
-    #       +materialized: table
       
-    
-    
+  - name: ironscales_eu
+    description: ironscales_eu raw tables
+    database: secondary_eu_db
+    schema: tenants_sch
+    tables:
+      - name: tenants_tbl
