@@ -9,7 +9,7 @@ with tenants_eu_final as (
 
     {% if is_incremental() %}
 
-    where roundup_timestamp > (select max(date(roundup_timestamp)) from {{this}})
+    where date(roundup_timestamp) > (select max(date(roundup_timestamp)) from {{this}})
 
     {% endif %}
 )
