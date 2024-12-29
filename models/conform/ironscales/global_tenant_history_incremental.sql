@@ -4,14 +4,11 @@
     )
 }}
 
-
 with tenants_us_final as (
     select * from {{ ref('tenants_us_final')}}
 
     {% if is_incremental() %}
-
-    where roundup_timestamp > (select max(roundup_timestamp) from ({this}))
-
+    where roundup_timestamp > (select max(roundup_timestamp) from {{ this }})
     {% endif %}
 ),
 
@@ -19,9 +16,7 @@ tenants_eu_final as (
     select * from {{ ref('stg_ironscales_tenants_eu')}}
 
     {% if is_incremental() %}
-
-    where roundup_timestamp > (select max(roundup_timestamp) from ({this}))
-
+    where roundup_timestamp > (select max(roundup_timestamp) from {{ this }})
     {% endif %}
 )
 
