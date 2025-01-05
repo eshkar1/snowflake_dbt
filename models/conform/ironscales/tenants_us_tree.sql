@@ -1,9 +1,13 @@
 with campaigns_brand as (
     select * from {{ ref('stg_ironscales_campaigns_brand_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()
 ),
 
 campaigns_company as (
     select * from {{ ref('stg_ironscales_campaigns_company_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()
 ),
 
 higher_tree as (
