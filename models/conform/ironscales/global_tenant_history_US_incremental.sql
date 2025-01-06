@@ -1,8 +1,20 @@
+{{
+    config(
+        materialized='incremental'
+    )
+}}
 
 
 with tenants_us_final as (
 
     select * from {{ ref('tenants_us_final')}}
+
+    {% if is_incremental() %}
+
+    where date(roundup_timestamp) > (select max(date(roundup_timestamp)) from {{this}})
+
+    {% endif %}
+
 )
 
 
