@@ -1,17 +1,8 @@
-{{
-    config(
-        materialized='incremental'
-    )
-}}
+
 
 with tenants_us_final as (
+
     select * from {{ ref('tenants_us_final')}}
-
-    {% if is_incremental() %}
-
-    where _RIVERY_LAST_UPDATE > (select max(_RIVERY_LAST_UPDATE) from {{this}})
-
-    {% endif %}
 )
 
 
