@@ -1,17 +1,31 @@
+{{
+    config(
+        materialized='incremental'
+    )
+}}
+
 with tenants_us as (
     select * from {{ ref('tenants_us_tree')}}
 ),
 
 campaigns_companylicense as (
     select * from {{ ref('stg_ironscales_campaigns_companylicense_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()
+
 ),
 
 campaigns_company as (
     select * from {{ ref('stg_ironscales_campaigns_company_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()
+
 ),
 
 auth_user as (
     select * from {{ ref('stg_ironscales_auth_user_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()
 ),
 
 active_profiles as (
