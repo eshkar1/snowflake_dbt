@@ -4,14 +4,20 @@ with tenants_us as (
 
 campaigns_companylicense as (
     select * from {{ ref('stg_ironscales_campaigns_companylicense_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()-1
 ),
 
 campaigns_company as (
     select * from {{ ref('stg_ironscales_campaigns_company_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()-1
 ),
 
 auth_user as (
     select * from {{ ref('stg_ironscales_auth_user_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()-1
 ),
 
 active_profiles as (

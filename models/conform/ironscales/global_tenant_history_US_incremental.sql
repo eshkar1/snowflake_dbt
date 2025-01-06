@@ -9,7 +9,7 @@ with tenants_us_final as (
 
     {% if is_incremental() %}
 
-    where date(roundup_timestamp) > (select max(date(roundup_timestamp)) from ({this}))
+    where _RIVERY_LAST_UPDATE > (select max(_RIVERY_LAST_UPDATE) from {{this}})
 
     {% endif %}
 )
