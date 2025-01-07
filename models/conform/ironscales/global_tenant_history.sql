@@ -6,6 +6,12 @@ tenants_eu_final as (
     select * from {{ ref('stg_ironscales_tenants_eu')}}
 )
 
+select
+*
+from dev_conform.new_test.global_tenant_history
+
+union 
+
 
 select
     root,
