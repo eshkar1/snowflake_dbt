@@ -8,7 +8,7 @@ tenants_eu_final as (
 
 select
 *
-from dev_conform.new_test.global_tenant_history
+from prod_conform.new_test.global_tenant_history
 
 union 
 
