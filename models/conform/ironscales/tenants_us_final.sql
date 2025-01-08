@@ -1,8 +1,4 @@
-{{
-    config(
-        materialized='incremental'
-    )
-}}
+
 
 with tenants_us as (
     select * from {{ ref('tenants_us_tree')}}
