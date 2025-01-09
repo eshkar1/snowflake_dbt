@@ -82,6 +82,7 @@ select
         else ifnull(to_varchar(trial_premium_id), 'No Premium')
     end as trial_premium_name,
     date(trial_plan_expiry) as trial_plan_expiry_date ,
+    DMARC_MANAGEMENT,
     depth,
     approved,
     tree_key,
@@ -163,6 +164,7 @@ select
         else ifnull(to_varchar(trial_premium_id), 'No Premium')
     end as trial_premium_name,
     date(trial_plan_expiry) as trial_plan_expiry_date,
+    DMARC_MANAGEMENT,
     depth,
     approved,
     tree_key,
