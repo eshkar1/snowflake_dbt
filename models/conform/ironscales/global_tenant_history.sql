@@ -6,11 +6,11 @@ tenants_eu_final as (
     select * from {{ ref('stg_ironscales_tenants_eu')}}
 )
 
-select
-*
-from prod_conform.new_test.global_tenant_history
+-- select
+-- *
+-- from prod_conform.new_test.global_tenant_history
 
-union 
+-- union 
 
 
 select
