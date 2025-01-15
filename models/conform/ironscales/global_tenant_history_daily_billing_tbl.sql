@@ -1,6 +1,6 @@
 
 with current_month_ltp_roundup_tbl as (
-    select * from {{ ref('current_month_ltp_roundup_tbl')}} 
+    select * from {{ ref('current_month_ltp_roundup_tbl_updated')}} 
 ),
 
 global_tenant_history as (
