@@ -62,7 +62,6 @@ where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
-    and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and plan_name != 'Phishing Simulation and Training'
     and licensed_profiles is not NULL
@@ -114,7 +113,6 @@ where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25')  
     and plan_name = 'Phishing Simulation and Training'
     and premium_name = 'No Premium'
@@ -154,7 +152,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and premium_name != 'No Premium'
 group by                              
@@ -185,7 +182,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and incident_management = true
 group by
@@ -216,7 +212,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
@@ -244,7 +239,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
@@ -279,7 +273,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and security_awareness_training = true
     and simulation_and_training_bundle = false
@@ -309,7 +302,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and security_awareness_training = true
     and simulation_and_training_bundle = false
@@ -342,7 +334,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and themis_co_pilot = true
     and AI_EMPOWER_BUNDLE = false
@@ -374,7 +365,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and link_scanning = true
     and plan_name != 'Complete Protect'
@@ -407,7 +397,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and file_scanning = true
     and plan_name != 'Complete Protect'
@@ -440,7 +429,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and AI_EMPOWER_BUNDLE = true
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = false
@@ -471,7 +459,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
@@ -501,7 +488,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and ATO = true
     and plan_name != 'Complete Protect'
@@ -531,7 +517,6 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    -- and record_date = '2024-12-31'
     and ltp in ('US-733','EU-25') 
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
