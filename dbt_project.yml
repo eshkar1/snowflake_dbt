@@ -38,8 +38,11 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   ironscales_dbt_project:
     # Applies to all files under models/example/
+    prod:
+      +schema: final_tables
+      +materialized: table
     conform:
       +schema: new_test
-      +materialized: table
+      +materialized: view
     stage:
       +materialized: view
