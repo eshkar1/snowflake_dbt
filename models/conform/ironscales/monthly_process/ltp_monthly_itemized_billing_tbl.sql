@@ -1,16 +1,16 @@
 
 with pricing_function_pax8 as (
-    select * from {{ ref('daily_pricing_function_for_pax8')}} 
+    select * from {{ ref('monthly_pricing_function_for_pax8')}} 
 ),
 
 pricing_function_all_ltps as (
-    select * from {{ ref('daily_pricing_function_for_all_ltps')}}
+    select * from {{ ref('monthly_pricing_function_for_all_ltps')}}
 )
 
 
 -- SELECT
 -- *
--- from prod_conform.new_test.ltp_daily_itemized_billing_tbl
+-- from prod_conform.new_test.ltp_monthly_itemized_billing_tbl
 
 -- union all 
 
