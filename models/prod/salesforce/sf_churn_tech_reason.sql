@@ -7,7 +7,7 @@ split_values AS (
                         *,
                         TRIM(f.value::STRING) as split_reason
                         FROM 
-                            sf_churn
+                            sf_churn,
                             TABLE(FLATTEN(SPLIT(product_issues, ';'))) f
                         WHERE 
                             PRODUCT_ISSUES IS NOT NULL

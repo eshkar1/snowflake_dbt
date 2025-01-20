@@ -8,7 +8,7 @@ tenants_eu_final as (
 
 select
 *
-from prod_conform.new_test.global_tenant_history
+from prod_conform.final_tables.ltp_daily_itemized_billing_tbl
 
 union 
 

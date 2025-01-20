@@ -39,10 +39,11 @@ models:
   ironscales_dbt_project:
     # Applies to all files under models/example/
     prod:
-      +schema: final_tables
+      +schema: dbt_prod_db
       +materialized: table
     conform:
-      +schema: new_test
+      +schema: dbt_stage_db
       +materialized: view
     stage:
-      +materialized: view
+      +schema: dbt_raw_db
+      +materialized: table
