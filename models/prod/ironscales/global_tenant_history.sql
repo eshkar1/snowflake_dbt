@@ -6,11 +6,11 @@ tenants_eu_final as (
     select * from {{ ref('stg_ironscales_tenants_eu')}}
 )
 
--- select
--- *
--- from prod_conform.final_tables.ltp_daily_itemized_billing_tbl
+select
+*
+from PROD_CONFORM.DBT_PROD_DB.GLOBAL_TENANT_HISTORY
 
--- union 
+union 
 
 
 select
