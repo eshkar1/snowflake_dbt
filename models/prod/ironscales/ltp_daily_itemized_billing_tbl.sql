@@ -8,11 +8,11 @@ pricing_function_all_ltps as (
 )
 
 
--- SELECT
--- *
--- from prod_conform.new_test.ltp_daily_itemized_billing_tbl
+SELECT
+*
+from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_TBL
 
--- union all 
+union all 
 
 
 SELECT
