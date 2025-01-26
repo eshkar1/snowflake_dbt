@@ -41,6 +41,8 @@ models:
     prod:
       +schema: dbt_prod_db
       +materialized: table
+      
+
     conform:
       +schema: dbt_stage_db
       +materialized: view

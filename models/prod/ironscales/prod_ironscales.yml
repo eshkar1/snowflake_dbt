@@ -1,0 +1,10 @@
+models:
+  - name: global_tenant_history
+    config:
+      grants:
+        select: ['RIVERY_ROLE']
+
+  - name: ltp_daily_itemized_billing_tbl
+    config:
+      grants:
+        select: ['RIVERY_ROLE']
