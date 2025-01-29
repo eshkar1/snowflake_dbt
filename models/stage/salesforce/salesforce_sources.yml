@@ -7,33 +7,57 @@ sources:
     tables:
       - name: account_table 
         description: accounts in salesforce
-      
+        columns:
+          - name: id
+            tests:
+              - not_null
+                  
       - name: opp_table
-      
+        columns:
+          - name: id
+            tests:
+              - not_null
+
       - name: contact_table
-      #   # description: 
+        columns:
+          - name: id
+            tests:
+              - not_null
+
       
       - name: conversion_rate_table
         description: has date & conversion currency & rate
       
-      - name: opportunity_line_item
+      - name: OPPORTUNITY_LINE_ITEM_TABLE
       #   # description: 
-      
-      - name: poc__c
+        columns:
+          - name: id
+            tests:
+              - not_null
+
+      - name: poc_table
         description: more details about POCs
-      
+        columns:
+          - name: id
+            tests:
+              - not_null
+
       - name: tenant_table
         # description: 
-      
+        columns:
+          - name: id
+            tests:
+              - not_null
+
       - name: user_table
       #   description: 
+        columns:
+          - name: id
+            tests:
+              - not_null
 
   
-      # - name: products2
-      #   # description: 
 
-      # - name: setupaudittrail
-      #   # description: 
 
 
       
