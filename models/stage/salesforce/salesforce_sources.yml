@@ -2,7 +2,7 @@ version: 2
 sources:
   - name: salesforce
     description: salesforce raw tables
-    database: dev_raw
+    database: prod_raw
     schema: salesforce_raw_db
     tables:
       - name: account_table 
