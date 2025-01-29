@@ -1,5 +1,5 @@
 with source as (
-    select * from {{ source('salesforce','poc__c') }}
+    select * from {{ source('salesforce','poc_table') }}
 ),
 
 renamed as (
