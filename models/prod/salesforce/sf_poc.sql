@@ -56,7 +56,7 @@ left join account_table a on o.account_master_id__c = a.account_master_id__c
 left join user_table u on o.ownerid = u.id
 left join poc_table p on o.id = p.opportunity__c 
 where
-year( to_date(p.end_date__c)) = 2024
+year( to_date(p.end_date__c)) >= 2024
 and u.name in (
                                         'Justin Pemberton',
                                         'Simon Carter',
