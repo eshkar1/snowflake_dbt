@@ -4,6 +4,9 @@ sources:
     description: salesforce raw tables
     database: prod_raw
     schema: salesforce_raw_db
+    config:
+      grants:
+        select: ['RIVERY_ROLE']
     tables:
       - name: account_table 
         description: accounts in salesforce
