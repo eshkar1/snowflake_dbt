@@ -1,10 +1,10 @@
 
 with pricing_function_pax8 as (
-    select * from {{ ref('daily_pricing_function_for_pax8')}} 
+    select * from {{ ref('LTP_daily_pricing_function_for_pax8')}} 
 ),
 
 pricing_function_all_ltps as (
-    select * from {{ ref('daily_pricing_function_for_all_ltps')}}
+    select * from {{ ref('LTP_daily_pricing_function_for_all_ltps')}}
 )
 
 
