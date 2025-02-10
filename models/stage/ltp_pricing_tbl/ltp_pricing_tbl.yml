@@ -8,4 +8,7 @@ sources:
       
       - name: ltp_pricing_list
         description: The table contains records of pricing lists, each record representing a unique pricing list with details such as associated tenant, depth, and activation date. Additionally, the table includes information about the sales and CSM owners, comments, and pricing model percentages.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
       
