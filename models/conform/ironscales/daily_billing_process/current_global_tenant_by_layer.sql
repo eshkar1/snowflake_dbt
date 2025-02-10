@@ -1,54 +1,57 @@
-
 with global_tenant_history as (
     select * from {{ ref('global_tenant_history')}}
 ),
 
-ltp_pricing_list as (
-    select * from {{ ref('ltp_pricing_tbl')}}
-),
+main_data as (
+    with extracted_data AS (
+                WITH global_tenant_history_main as (
+                        select * from {{ ref('global_tenant_history')}}
+                                                    ),
+                ltp_pricing_list as (
+                        select * from {{ ref('ltp_pricing_tbl')}}
+                    )
 
-main_data AS (
-    WITH extracted_data AS (
+                SELECT
+                    CASE
+                    when l.tenant_global_id is null then 'not_ltp'
+                    else 'ltp'
+                    end as is_ltp,
+                    LEFT(ROOT, 2) AS prefix,
+                    REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 1) AS first_number,
+                    REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 2) AS second_number,
+                    REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 3) AS third_number,
+                    REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 4) AS fourth_number,
+                    REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 5) AS fifth_number,
+                    *
+                FROM global_tenant_history_main g
+                left join ltp_pricing_list l on g.root = l.tenant_global_id
+                WHERE
+                    record_date = current_date
+                    AND billing_status = 'Active'
+                    AND approved = true
+            )
         SELECT
-            CASE
-            when l.tenant_global_id is null then 'not_ltp'
-            else 'ltp'
-            end as is_ltp,
-            LEFT(ROOT, 2) AS prefix,
-            REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 1) AS first_number,
-            REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 2) AS second_number,
-            REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 3) AS third_number,
-            REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 4) AS fourth_number,
-            REGEXP_SUBSTR(TREE_KEY, '[0-9]{1,}', 1, 5) AS fifth_number,
-            *
-        FROM global_tenant_history g
-        left join ltp_pricing_tbl l on g.root = l.tenant_global_id
-        WHERE
-            record_date = current_date
-            AND billing_status = 'Active'
-            AND approved = true
-    )
-    SELECT
-        d.is_ltp,
-        COALESCE(prefix || '-' || first_number, '') AS first_layer,
-        COALESCE(prefix || '-' || second_number, '') AS second_layer,
-        COALESCE(prefix || '-' || third_number, '') AS third_layer,
-        COALESCE(prefix || '-' || fourth_number, '') AS fourth_layer,
-        COALESCE(prefix || '-' || fifth_number, '') AS fifth_layer,
-        * EXCLUDE (is_ltp, first_number, second_number, third_number, fourth_number, fifth_number)
-    FROM extracted_data d
+            d.is_ltp,
+            COALESCE(prefix || '-' || first_number, '') AS first_layer,
+            COALESCE(prefix || '-' || second_number, '') AS second_layer,
+            COALESCE(prefix || '-' || third_number, '') AS third_layer,
+            COALESCE(prefix || '-' || fourth_number, '') AS fourth_layer,
+            COALESCE(prefix || '-' || fifth_number, '') AS fifth_layer,
+            * EXCLUDE (is_ltp, first_number, second_number, third_number, fourth_number, fifth_number)
+        FROM extracted_data d
 )
+
 SELECT
     a.is_ltp,
-    a.first_layer AS FIRST_LAYER,
+    a.first_layer AS FIRST_LAYER_ID,
     COALESCE(b.tenant_name, '') AS FIRST_LAYER_NAME,
-    a.second_layer AS SECOND_LAYER,
+    a.second_layer AS SECOND_LAYER_ID,
     COALESCE(c.tenant_name, '') AS SECOND_LAYER_NAME,
-    a.third_layer AS THIRD_LAYER,
+    a.third_layer AS THIRD_LAYER_ID,
     COALESCE(d.tenant_name, '') AS THIRD_LAYER_NAME,
-    a.fourth_layer AS FOURTH_LAYER,
+    a.fourth_layer AS FOURTH_LAYER_ID,
     COALESCE(e.tenant_name, '') AS FOURTH_LAYER_NAME,
-    a.fifth_layer AS FIFTH_LAYER,
+    a.fifth_layer AS FIFTH_LAYER_ID,
     COALESCE(f.tenant_name, '') AS FIFTH_LAYER_NAME,
     a.DOMAIN,
     a.PARTNER_PRICING,
