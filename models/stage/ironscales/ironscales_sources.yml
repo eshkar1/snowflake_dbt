@@ -4,14 +4,17 @@ sources:
     description: ironscales_us raw tables
     database: prod_raw
     schema: ironscales_us_raw_db
-    config:
-      grants:
-        select: ['RIVERY_ROLE']
+    # config:
+    #   grants:
+    #     select: ['RIVERY_ROLE']
             
     tables:
       
       - name: auth_user_table 
         description: The table contains records of user accounts. Each record represents a unique user and includes details such as username, first name, last name, email address, and the date the account was created. Additional columns store identifiers for external systems.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -20,6 +23,9 @@ sources:
                   
       - name: campaigns_brand_table
         description: The table contains records of marketing campaigns and associated brand information. Each record includes details about the campaign name, logo, and default settings for company IDs and group settings.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']        
         columns:
           - name: id
             tests:
@@ -28,6 +34,9 @@ sources:
 
       - name: campaigns_company_table
         description: The table contains records of email marketing campaigns. Each record includes details about the campaign name, domain, contact information, registration and last harvest dates, and various settings such as approval status, locale ID, and timezone.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -36,6 +45,9 @@ sources:
 
       - name: campaigns_companylicense_table
         description: The table contains records of company licenses and campaign settings for a security solution. Each record includes details about the associated company ID, license information, and campaign expiration dates, as well as settings for various features such as email and file scanning, external campaigns, and data privacy. 
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -44,6 +56,9 @@ sources:
 
       - name: profiles_profile_table
         description: The table contains records of user profiles, each record representing an individual's profile with details such as name, title, department, email, location, and various access levels.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -52,6 +67,9 @@ sources:
 
       - name: profiles_profile_tags_table
         description: The table contains records of user profiles and their associated tags. Each record represents a single profile-tag association and includes the unique identifiers for the profile and tag.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -60,6 +78,9 @@ sources:
 
       - name: profiles_tag_table
         description: The table contains records of user profiles tagged with specific auto tag types. Each record represents a tagged user profile and includes the user's name, associated auto tag type, and relevant identifiers for company, locale, tenant, and tag.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:

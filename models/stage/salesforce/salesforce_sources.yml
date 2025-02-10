@@ -4,24 +4,33 @@ sources:
     description: salesforce raw tables
     database: prod_raw
     schema: salesforce_raw_db
-    config:
-      grants:
-        select: ['RIVERY_ROLE']
+    # config:
+    #   grants:
+    #     select: ['RIVERY_ROLE']
     tables:
       - name: account_table 
         description: accounts in salesforce
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
               - not_null
                   
       - name: opp_table
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
               - not_null
 
       - name: contact_table
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -33,6 +42,9 @@ sources:
       
       - name: OPPORTUNITY_LINE_ITEM_TABLE
       #   # description: 
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -40,6 +52,9 @@ sources:
 
       - name: poc_table
         description: more details about POCs
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -47,6 +62,9 @@ sources:
 
       - name: tenant_table
         # description: 
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
@@ -54,6 +72,9 @@ sources:
 
       - name: user_table
       #   description: 
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
         columns:
           - name: id
             tests:
