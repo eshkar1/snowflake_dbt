@@ -15,8 +15,8 @@ ltp_pricing_list as (
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 g.plan_name as item,    
 -- p.profile_type,
 sum(licensed_profiles) as quantity,
@@ -57,20 +57,20 @@ CASE
                      
 end as amount        
 -- my_record_date as record_date
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and plan_name != 'Phishing Simulation and Training'
     and licensed_profiles is not NULL
 
 group by
 g.record_date,
-FIRST_LAYER,
-SECOND_LAYER, 
+FIRST_LAYER_ID,
+SECOND_LAYER_ID, 
 plan_name,
 profile_type,
 -- premium_name,
@@ -100,8 +100,8 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 g.plan_name as item,    
 -- p.profile_type,
 sum(licensed_profiles) as quantity,
@@ -110,19 +110,19 @@ CASE
     WHEN g.partner_pricing = True then  quantity * PSTNFR_1
     WHEN g.partner_pricing = False then  quantity * PST_1
 end as amount,
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
-    and ltp in ('US-733','EU-25')  
+    and FIRST_LAYER_ID in ('US-733','EU-25')  
     and plan_name = 'Phishing Simulation and Training'
     and premium_name = 'No Premium'
 group by 
 g.record_date,
-FIRST_LAYER,
-SECOND_LAYER, 
+FIRST_LAYER_ID,
+SECOND_LAYER_ID, 
 plan_name,
 g.partner_pricing,
 PSTNFR_1,
@@ -140,8 +140,8 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 premium_name as item, 
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
@@ -152,17 +152,17 @@ case
     when 'Habitu8' then quantity * PSCP_1
 end as amount,
 
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and premium_name != 'No Premium'
 group by                              
 g.record_date,
-FIRST_LAYER,
-SECOND_LAYER, 
+FIRST_LAYER_ID,
+SECOND_LAYER_ID, 
 item,
 profile_type,
 -- g.partner_pricing,
@@ -177,24 +177,24 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'Incident Management' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * IM_1 as amount
 
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and incident_management = true
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -210,25 +210,25 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'S&T Bundle' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * PSTSTB_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -239,26 +239,26 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'S&T Bundle' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * STB_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -273,28 +273,28 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'Security Awareness Training' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * PSTSAT_1
 
  as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and security_awareness_training = true
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -305,19 +305,19 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'Security Awareness Training' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * SAT_1
  as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and security_awareness_training = true
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
@@ -325,8 +325,8 @@ where
     and plan_name != 'Phishing Simulation and Training'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -340,26 +340,26 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'Themis Co-Pilot' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * THEMIS_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and themis_co_pilot = true
     and AI_EMPOWER_BUNDLE = false
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -373,26 +373,26 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'URL Scans' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * URL_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and link_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -407,26 +407,26 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'Attachment Scans' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * AS_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and file_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -441,25 +441,25 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'AI Empower Bundle' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * AIEB_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and AI_EMPOWER_BUNDLE = true
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = false
     and plan_name != 'Complete Protect'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -473,24 +473,24 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'S&T Plus Bundle' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * STBP_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -504,24 +504,24 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'Account Takeover' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * ATO_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and ATO = true
     and plan_name != 'Complete Protect'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
@@ -535,24 +535,24 @@ UNION
 
 select
 g.record_date,
-g.FIRST_LAYER as FIRST_LAYER,
-g.SECOND_LAYER as SECOND_LAYER,
+g.FIRST_LAYER_ID as FIRST_LAYER_ID,
+g.SECOND_LAYER_ID as SECOND_LAYER_ID,
 'Multi Tenant' as item,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * MT_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('US-733','EU-25') 
+    and FIRST_LAYER_ID in ('US-733','EU-25') 
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
 group by
     g.record_date,
-    FIRST_LAYER,
-    SECOND_LAYER, 
+    FIRST_LAYER_ID,
+    SECOND_LAYER_ID, 
     item,
     profile_type,
     -- g.partner_pricing,
