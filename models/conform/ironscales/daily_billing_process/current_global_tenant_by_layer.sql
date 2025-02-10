@@ -53,6 +53,8 @@ SELECT
     COALESCE(e.tenant_name, '') AS FOURTH_LAYER_NAME,
     a.fifth_layer AS FIFTH_LAYER_ID,
     COALESCE(f.tenant_name, '') AS FIFTH_LAYER_NAME,
+    a.approved,
+    a.billing_status,
     a.DOMAIN,
     a.PARTNER_PRICING,
     a.PLAN_ID,
