@@ -1,11 +1,11 @@
 with global_tenant_history as (
-    select * from {{ ref('global_tenant_history')}}
+    select * from {{ ref('global_tenant_history_daily_billing_tbl')}}
 ),
 
 main_data as (
     with extracted_data AS (
                 WITH global_tenant_history_main as (
-                        select * from {{ ref('global_tenant_history')}}
+                        select * from {{ ref('global_tenant_history_daily_billing_tbl')}}
                                                     ),
                 ltp_pricing_list as (
                         select * from {{ ref('ltp_pricing_tbl')}}
@@ -26,7 +26,7 @@ main_data as (
                 FROM global_tenant_history_main g
                 left join ltp_pricing_list l on g.root = l.tenant_global_id
                 WHERE
-                    record_date = current_date
+                    date_recorded = current_date
                     AND billing_status = 'Active'
                     AND approved = true
             )
@@ -61,7 +61,7 @@ SELECT
     a.PLAN_NAME,
     a.PREMIUM_ID,
     a.PREMIUM_NAME,
-    a.PLAN_EXPIRY_date,
+    -- a.PLAN_EXPIRY_date,
     a.TRIAL_PLAN_ID,
     a.TRIAL_PLAN_NAME,
     a.TRIAL_PREMIUM_ID,
@@ -83,7 +83,8 @@ SELECT
     a.TEAMS_PROTECTION,
     a.FILE_SCANNING,
     a.LINK_SCANNING,
-    a.SHARED_PROFILES
+    a.SHARED_PROFILES,
+    a.date_recorded
 FROM main_data a
 LEFT JOIN global_tenant_history b ON a.record_date = b.record_date AND a.first_layer = b.tenant_global_id
 LEFT JOIN global_tenant_history c ON a.record_date = c.record_date AND a.second_layer = c.tenant_global_id

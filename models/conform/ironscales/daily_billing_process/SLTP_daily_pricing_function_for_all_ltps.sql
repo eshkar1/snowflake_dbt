@@ -6,6 +6,12 @@ ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
     tenant_global_id not in ('US-11100','US-733','EU-25')
+),
+
+LTP_DAILY_ITEMIZED_BILLING_TBL as (
+    select * from {{ ref('ltp_daily_itemized_billing_tbl')}}
+    where
+    billing_date = current_date
 )
 
 
@@ -14,103 +20,78 @@ ltp_pricing_list as (
                                     -- Plans --
 ----------------------------------------------------------------------------------------
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
-g.plan_name as item,    
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
+g.plan_name as item, 
+g.partner_pricing,   
 -- p.profile_type,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
     when 'shared' then 
                     case 
-                        when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-                        else (sum(Active_profiles) - sum(SHARED_PROFILES))
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
                     end
-end as quantity,
-g.partner_pricing,
+end as billable_quantity,
+
 
 ----------------------------------------------------------------------------------------
                                     -- Plans --
 ----------------------------------------------------------------------------------------
 -- Non NFR Plans --
 case 
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 7500 then quantity * EP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 3500 then quantity * EP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 1000 then quantity * EP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 1000 then quantity * EP_1
+WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 7500 then billable_quantity * EP_7500
+WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 3500 then billable_quantity * EP_3500
+WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 1000 then billable_quantity * EP_1000
+WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity < 1000 then billable_quantity * EP_1
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 7500 then quantity * CORE_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 3500 then quantity * CORE_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 1000 then quantity * CORE_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity < 1000 then quantity * CORE_1
+WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 7500 then billable_quantity * CORE_7500
+WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 3500 then billable_quantity * CORE_3500
+WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 1000 then billable_quantity * CORE_1000
+WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity < 1000 then billable_quantity * CORE_1
 -- end
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 7500 then quantity * IP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 3500 then quantity * IP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 1000 then quantity * IP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity < 1000 then quantity * IP_1
+WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 7500 then billable_quantity * IP_7500
+WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 3500 then billable_quantity * IP_3500
+WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 1000 then billable_quantity * IP_1000
+WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity < 1000 then billable_quantity * IP_1
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 7500 then quantity * CP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 3500 then quantity * CP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 1000 then quantity * CP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity < 1000 then quantity * CP_1
+WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 7500 then billable_quantity * CP_7500
+WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 3500 then billable_quantity * CP_3500
+WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 1000 then billable_quantity * CP_1000
+WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity < 1000 then billable_quantity * CP_1
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and quantity >= 7500 then quantity * PST_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and quantity >= 3500 then quantity * PST_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and quantity >= 1000 then quantity * PST_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and quantity < 1000 then quantity * PST_1
+WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 7500 then billable_quantity * PST_7500
+WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 3500 then billable_quantity * PST_3500
+WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 1000 then billable_quantity * PST_1000
+WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity < 1000 then billable_quantity * PST_1
 
 -- NFR Plans Only --
 
-WHEN g.partner_pricing = True and plan_name = 'Email Protect' then quantity * EPNFR_1 
-WHEN g.partner_pricing = True and plan_name = 'Core' then quantity * CORENFR_1
-WHEN g.partner_pricing = True and plan_name = 'IRONSCALES Protect' then quantity * IPNFR_1
-WHEN g.partner_pricing = True and plan_name = 'Complete Protect' then quantity * CPNFR_1
-WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' then quantity * PSTNFR_1   
+WHEN g.partner_pricing = True and plan_name = 'Email Protect' then billable_quantity * EPNFR_1 
+WHEN g.partner_pricing = True and plan_name = 'Core' then billable_quantity * CORENFR_1
+WHEN g.partner_pricing = True and plan_name = 'IRONSCALES Protect' then billable_quantity * IPNFR_1
+WHEN g.partner_pricing = True and plan_name = 'Complete Protect' then billable_quantity * CPNFR_1
+WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' then billable_quantity * PSTNFR_1   
 
 END as amount
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id 
+left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp 
+                                            and g.plan_name = i.item
+                                            and g.partner_pricing = i.partner_pricing
+
 where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
     and FIRST_LAYER_ID not in ('US-11100','US-733','EU-25') -- exclude ofek & pax8
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,   
-    plan_name,
-    profile_type,
-    -- premium_name, --- need to think of a way to remove this ----
-    g.partner_pricing,
-    p.EP_7500,
-    p.EP_3500,
-    p.EP_1000,
-    p.EP_1,
-    p.Core_10000,
-    p.CORE_7500,
-    p.CORE_3500,
-    p.CORE_1000,
-    p.CORE_1,
-    p.IP_7500,
-    p.IP_3500,
-    p.IP_1000,
-    p.IP_1,
-    p.CP_7500,
-    p.CP_3500,
-    p.CP_1000,
-    p.CP_1,
-    p.PST_7500,
-    p.PST_3500,
-    p.PST_1000,
-    p.PST_1,
-    p.EPNFR_1,
-    p.CORENFR_1,
-    IPNFR_1,
-    CPNFR_1,
-    PSTNFR_1
+
 
         ----------------------------------------------------------------------------------------
                                             -- Add Ons --
@@ -123,25 +104,29 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 premium_name as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
 case
     premium_name
-    when 'NINJIO' then quantity * PSCP_1
-    when 'Cybermaniacs Videos' then quantity * PSCP_1
-    when 'Habitu8' then quantity * PSCP_1
+    when 'NINJIO' then billable_quantity * PSCP_1
+    when 'Cybermaniacs Videos' then billable_quantity * PSCP_1
+    when 'Habitu8' then billable_quantity * PSCP_1
 end as amount,
 
 from current_global_tenant_by_layer g
@@ -151,15 +136,7 @@ approved = true
 and billing_status = 'Active'
 and FIRST_LAYER_ID not in ('US-11100','US-733','EU-25') -- exclude ofek & pax8
 and premium_name != 'No Premium'
-group by                              
-g.record_date,
-FIRST_LAYER_ID,
-SECOND_LAYER_ID,   
-item,
-profile_type,
--- g.partner_pricing,
-premium_name,
-PSCP_1
+
 
 -------------------------
 -- incident management --
@@ -168,21 +145,25 @@ PSCP_1
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'Incident Management' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * IM_1 as amount,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * IM_1 as amount,
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -191,14 +172,7 @@ where
     and billing_status = 'Active'
     and FIRST_LAYER_ID not in ('US-11100','US-733','EU-25') -- exclude ofek & pax8
     and incident_management = true
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,   
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    IM_1
+
 
 -------------------------
 ---- themis co-pilot ----
@@ -207,21 +181,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'themis co-pilot' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * THEMIS_1 as amount,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * THEMIS_1 as amount,
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -233,14 +211,7 @@ where
     and AI_EMPOWER_BUNDLE = false
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,   
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    THEMIS_1
+
 
 -------------------------
 ------ url scans --------
@@ -249,21 +220,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'url scans' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * URL_1 as amount,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * URL_1 as amount,
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -275,14 +250,7 @@ where
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,   
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    URL_1
+
 
 --------------------------------
 ------ attachment scans --------
@@ -291,21 +259,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'attachment scans' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * AS_1 as amount,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * AS_1 as amount,
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -317,14 +289,7 @@ where
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,   
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    AS_1
+
 
 --------------------------------
 ------ attachment scans --------
@@ -333,21 +298,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'attachment scans' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * AS_1 as amount,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * AS_1 as amount,
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -359,14 +328,7 @@ where
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    AS_1
+
 
 
 -----------------------------------------
@@ -377,21 +339,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'Security Awareness Training' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * PSTSAT_1 as amount
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * PSTSAT_1 as amount
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
@@ -402,34 +368,31 @@ where
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    PSTSAT_1
+
     
 -- plan name is not 'Phishing Simulation and Training' --    
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'Security Awareness Training' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * SAT_1
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * SAT_1
  as amount
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -442,14 +405,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    SAT_1
+
 
 -----------------------------------------
 ------ S&T Bundle ------
@@ -459,21 +415,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'S&T Bundle' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * PSTSTB_1 as amount
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * PSTSTB_1 as amount
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
@@ -484,35 +444,32 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
     and partner_pricing = false
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    PSTSTB_1
+
 
     
 -- plan name is not 'Phishing Simulation and Training' --    
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'S&T Bundle' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * STB_1 as amount
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * STB_1 as amount
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
@@ -524,14 +481,7 @@ where
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
     and partner_pricing = false
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    STB_1
+
 
 --------------------------------
 ------ AI Empower Bundle -------
@@ -540,21 +490,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'AI Empower Bundle' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * AIEB_1
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * AIEB_1
  as amount,
 
 from current_global_tenant_by_layer g
@@ -567,14 +521,7 @@ where
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = false
     and plan_name != 'Complete Protect'
     and partner_pricing = false
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    AIEB_1
+
 
 --------------------------------
 ------- S&T Plus Bundle --------
@@ -583,21 +530,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'S&T Plus Bundle' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * STBP_1 as amount,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * STBP_1 as amount,
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -608,14 +559,7 @@ where
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
     and partner_pricing = false
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    STBP_1
+
 
 --------------------------------
 ------- Account Takeover -------
@@ -624,21 +568,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'Account Takeover' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * ATO_1 as amount,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * ATO_1 as amount,
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -649,14 +597,7 @@ where
     and ATO = true
     and plan_name != 'Complete Protect'
     and partner_pricing = false
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    ATO_1
+
 
 --------------------------------
 --------- Multi Tenant ---------
@@ -665,21 +606,25 @@ group by
 UNION
 
 select
-g.record_date,
-g.FIRST_LAYER_ID as FIRST_LAYER_ID,
-g.SECOND_LAYER_ID as SECOND_LAYER_ID,
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 'Multi Tenant' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
 null as partner_pricing,
-quantity * MT_1 as amount,
+CASE profile_type
+    when 'active' then Active_profiles
+    when 'license' then licensed_profiles
+    when 'shared' then 
+                    case 
+                        when SHARED_PROFILES is null then Active_profiles
+                        else Active_profiles - SHARED_PROFILES
+                    end
+end as billable_quantity,
+
+billable_quantity * MT_1 as amount,
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -690,11 +635,3 @@ where
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
     and partner_pricing = false
-group by
-    g.record_date,
-    FIRST_LAYER_ID,
-    SECOND_LAYER_ID,     
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    MT_1
