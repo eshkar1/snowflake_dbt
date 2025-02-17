@@ -14,7 +14,7 @@ ltp_pricing_list as (
                                     -- Plans --
 ----------------------------------------------------------------------------------------
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 g.plan_name as item,    
 -- p.profile_type,
@@ -77,7 +77,7 @@ where
     and profile_type is not NULL
     and ltp not in ('US-11100','US-733','EU-25') -- exclude ofek & pax8
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     plan_name,
     profile_type,
@@ -121,7 +121,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 premium_name as item,
 CASE p.profile_type
@@ -149,7 +149,7 @@ and billing_status = 'Active'
 and ltp not in ('US-11100','US-733','EU-25') -- exclude ofek & pax8
 and premium_name != 'No Premium'
 group by                              
-g.record_date,
+g.DATE_RECORDED,
 root,   
 item,
 profile_type,
@@ -164,7 +164,7 @@ PSCP_1
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'Incident Management' as item,
 CASE p.profile_type
@@ -187,7 +187,7 @@ where
     and ltp not in ('US-11100','US-733','EU-25') -- exclude ofek & pax8
     and incident_management = true
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -201,7 +201,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'themis co-pilot' as item,
 CASE p.profile_type
@@ -227,7 +227,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -241,7 +241,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'url scans' as item,
 CASE p.profile_type
@@ -267,7 +267,7 @@ where
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -281,7 +281,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'attachment scans' as item,
 CASE p.profile_type
@@ -307,7 +307,7 @@ where
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -321,7 +321,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'attachment scans' as item,
 CASE p.profile_type
@@ -347,7 +347,7 @@ where
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -363,7 +363,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'Security Awareness Training' as item,
 CASE p.profile_type
@@ -388,7 +388,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -399,7 +399,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'Security Awareness Training' as item,
 CASE p.profile_type
@@ -426,7 +426,7 @@ where
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -441,7 +441,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'S&T Bundle' as item,
 CASE p.profile_type
@@ -466,7 +466,7 @@ where
     and plan_name = 'Phishing Simulation and Training'
     and partner_pricing = false
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -478,7 +478,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'S&T Bundle' as item,
 CASE p.profile_type
@@ -504,7 +504,7 @@ where
     and plan_name != 'Phishing Simulation and Training'
     and partner_pricing = false
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -518,7 +518,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'AI Empower Bundle' as item,
 CASE p.profile_type
@@ -545,7 +545,7 @@ where
     and plan_name != 'Complete Protect'
     and partner_pricing = false
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -559,7 +559,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'S&T Plus Bundle' as item,
 CASE p.profile_type
@@ -584,7 +584,7 @@ where
     and plan_name != 'Complete Protect'
     and partner_pricing = false
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -598,7 +598,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'Account Takeover' as item,
 CASE p.profile_type
@@ -623,7 +623,7 @@ where
     and plan_name != 'Complete Protect'
     and partner_pricing = false
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
@@ -637,7 +637,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.DATE_RECORDED,
 g.root as ltp,
 'Multi Tenant' as item,
 CASE p.profile_type
@@ -662,7 +662,7 @@ where
     and plan_name != 'Complete Protect'
     and partner_pricing = false
 group by
-    g.record_date,
+    g.DATE_RECORDED,
     root,   
     item,
     profile_type,
