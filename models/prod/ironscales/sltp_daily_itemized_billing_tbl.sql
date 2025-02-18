@@ -8,11 +8,12 @@ sltp_pricing_function_all_ltps as (
 )
 
 
--- SELECT
--- *
--- from PROD_CONFORM.DBT_PROD_DB.SLTP_DAILY_ITEMIZED_BILLING_TBL
+SELECT
+*
+from PROD_CONFORM.DBT_PROD_DB.SLTP_DAILY_ITEMIZED_BILLING_TBL
+ 
 
--- union all 
+union all 
 
 
 SELECT

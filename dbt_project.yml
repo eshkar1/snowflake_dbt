@@ -41,7 +41,8 @@ models:
     prod:
       +schema: dbt_prod_db
       +materialized: table
-      
+      +grants:
+        select: ['RIVERY_ROLE']
 
     conform:
       +schema: dbt_stage_db
@@ -49,3 +50,5 @@ models:
     stage:
       +schema: dbt_raw_db
       +materialized: table
+      +grants:
+        select: ['RIVERY_ROLE']

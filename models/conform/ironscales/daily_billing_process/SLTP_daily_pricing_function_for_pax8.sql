@@ -43,16 +43,22 @@ end as billable_quantity,
 -- Non NFR Plans --
 CASE 
 
-    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 160000 then billable_quantity * EP_3500
-    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 150000 then billable_quantity * EP_1000
-    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity < 150000 then billable_quantity * EP_1
+    -- WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 160000 then billable_quantity * EP_3500
+    -- WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 150000 then billable_quantity * EP_1000
+    -- WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity < 150000 then billable_quantity * EP_1
+
+    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity  --try a new way to calc--
+
     
-    WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 50000 then billable_quantity * CORE_10000
-    WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 25000 then billable_quantity * CORE_7500
-    WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 10000 then billable_quantity * CORE_3500
-    WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 5000 then billable_quantity * CORE_1000
-    WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity < 5000 then billable_quantity * CORE_1
-    -- end
+    -- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 50000 then billable_quantity * CORE_10000
+    -- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 25000 then billable_quantity * CORE_7500
+    -- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 10000 then billable_quantity * CORE_3500
+    -- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 5000 then billable_quantity * CORE_1000
+    -- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity < 5000 then billable_quantity * CORE_1
+
+    WHEN g.partner_pricing = FALSE and plan_name = 'Core' then billable_quantity * i.amount/i.quantity
+
+
     WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' then billable_quantity * IP_1
 
     WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' then billable_quantity * CP_1
