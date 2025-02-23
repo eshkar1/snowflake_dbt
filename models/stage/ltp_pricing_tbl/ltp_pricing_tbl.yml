@@ -2,7 +2,7 @@ version: 2
 sources:
   - name: ltp_pricing_table
     description: pricing and info about LTPs
-    database: prod_raw
+    database: prod_mart
     schema: upload_tables
     tables:
       
