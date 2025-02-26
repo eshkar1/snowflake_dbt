@@ -8,3 +8,8 @@ models:
     config:
       grants:
         select: ['RIVERY_ROLE']
+  
+  - name: daily_billable_mailbox_tbl
+    config:
+      grants:
+        select: ['RIVERY_ROLE']
