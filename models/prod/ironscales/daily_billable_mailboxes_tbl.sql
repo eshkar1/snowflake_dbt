@@ -12,8 +12,8 @@ ltp_pricing_list as (
 
 
 select
-g.date_recorded as date_of_billing,
--- '?' as daily_billing,
+g.date_recorded as date_of_report,
+g.date_recorded-1 as date_of_billing,
 g.tenant_global_id as customer_id,
 g.tenant_name as customer_name,
 g.parent_global_id as parent_id,
