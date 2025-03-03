@@ -20,7 +20,7 @@ pricing_function_disti as (
 
 
 SELECT
-current_date as billing_date,
+last_day(dateadd(month,-1,current_date)) as billing_date,
 ltp,
 item,
 partner_pricing,

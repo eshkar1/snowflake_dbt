@@ -25,18 +25,8 @@ profile_metrics AS (
     LEFT JOIN ltp_pricing_list p 
         ON g.root = p.tenant_global_id
     WHERE 
-        record_date BETWEEN 
-            CASE 
-                WHEN current_date = last_day(current_date, 'month')
-                THEN date_trunc('month', current_date)  -- First day of current month
-                ELSE date_trunc('month', dateadd('month', -1, current_date))  -- First day of previous month
-            END
-            AND
-            CASE 
-                WHEN current_date = last_day(current_date, 'month')
-                THEN date_trunc('month', dateadd('month', 1, current_date))  -- First day of next month
-                ELSE date_trunc('month', current_date)  -- First day of current month
-            END
+       record_date BETWEEN  date_trunc('month', dateadd('month', -1, current_date))  -- First day of previous month
+        AND dateadd('day', -1, date_trunc('month', current_date))
         AND approved = true
         AND billing_status = 'Active'
         AND root IN (
