@@ -1,4 +1,4 @@
-with global_tenant_history_daily as (
+with global_tenant_history_monthly as (
     select * from {{ ref('global_tenant_history_monthly_billing_tbl')}} 
 ),
 
@@ -56,7 +56,7 @@ CASE
                      
 end as amount        
 -- my_record_date as record_date
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -107,7 +107,7 @@ CASE
     WHEN g.partner_pricing = True then  quantity * PSTNFR_1
     WHEN g.partner_pricing = False then  quantity * PST_1
 end as amount,
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -147,7 +147,7 @@ case
     when 'Habitu8' then quantity * PSCP_1
 end as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -177,7 +177,7 @@ sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * IM_1 as amount
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -207,7 +207,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * PSTSTB_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -234,7 +234,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * STB_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -268,7 +268,7 @@ null as partner_pricing,
 quantity * PSTSAT_1
 
  as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -297,7 +297,7 @@ sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * SAT_1
  as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -329,7 +329,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * THEMIS_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -360,7 +360,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * URL_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -392,7 +392,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * AS_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -424,7 +424,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * AIEB_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -454,7 +454,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * STBP_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -483,7 +483,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * ATO_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -512,7 +512,7 @@ g.root as ltp,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * MT_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true

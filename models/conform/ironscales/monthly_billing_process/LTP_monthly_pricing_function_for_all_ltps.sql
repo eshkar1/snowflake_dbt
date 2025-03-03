@@ -1,4 +1,4 @@
-with global_tenant_history_daily as (
+with global_tenant_history_monthly as (
     select * from {{ ref('global_tenant_history_monthly_billing_tbl')}} 
 ),
 
@@ -69,7 +69,7 @@ WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training'
 
 END as amount
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -141,7 +141,7 @@ case
     when 'Habitu8' then quantity * PSCP_1
 end as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
 approved = true
@@ -179,7 +179,7 @@ end as quantity,
 null as partner_pricing,
 quantity * IM_1 as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -216,7 +216,7 @@ end as quantity,
 null as partner_pricing,
 quantity * THEMIS_1 as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -256,7 +256,7 @@ end as quantity,
 null as partner_pricing,
 quantity * URL_1 as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -296,47 +296,7 @@ end as quantity,
 null as partner_pricing,
 quantity * AS_1 as amount,
 
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
-where
-    approved = true
-    and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25') -- exclude ofek & pax8
-    and file_scanning = true
-    and plan_name != 'Complete Protect'
-    and plan_name != 'Core'
-    and plan_name != 'Email Protect'
-group by
-    g.record_date,
-    root,   
-    item,
-    profile_type,
-    -- g.partner_pricing,
-    AS_1
-
---------------------------------
------- attachment scans --------
---------------------------------
-
-UNION
-
-select
-g.record_date,
-g.root as ltp,
-'attachment scans' as item,
-CASE p.profile_type
-    when 'active' then sum(Active_profiles)
-    when 'license' then sum(licensed_profiles)
-    when 'shared' then 
-        case 
-            when sum(SHARED_PROFILES) is null then sum(Active_profiles)
-            else (sum(Active_profiles) - sum(SHARED_PROFILES))
-        end
-end as quantity,
-null as partner_pricing,
-quantity * AS_1 as amount,
-
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -377,7 +337,7 @@ CASE p.profile_type
 end as quantity,
 null as partner_pricing,
 quantity * PSTSAT_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -414,7 +374,7 @@ end as quantity,
 null as partner_pricing,
 quantity * SAT_1
  as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -455,7 +415,7 @@ CASE p.profile_type
 end as quantity,
 null as partner_pricing,
 quantity * PSTSTB_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -492,7 +452,7 @@ CASE p.profile_type
 end as quantity,
 null as partner_pricing,
 quantity * STB_1 as amount
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -534,7 +494,7 @@ null as partner_pricing,
 quantity * AIEB_1
  as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -574,7 +534,7 @@ end as quantity,
 null as partner_pricing,
 quantity * STBP_1 as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -613,7 +573,7 @@ end as quantity,
 null as partner_pricing,
 quantity * ATO_1 as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
@@ -652,7 +612,7 @@ end as quantity,
 null as partner_pricing,
 quantity * MT_1 as amount,
 
-from global_tenant_history_daily g
+from global_tenant_history_monthly g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
