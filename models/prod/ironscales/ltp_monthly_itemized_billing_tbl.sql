@@ -1,10 +1,14 @@
 
 with pricing_function_pax8 as (
-    select * from {{ ref('monthly_pricing_function_for_pax8')}} 
+    select * from {{ ref('LTP_monthly_pricing_function_for_pax8')}} 
 ),
 
 pricing_function_all_ltps as (
-    select * from {{ ref('monthly_pricing_function_for_all_ltps')}}
+    select * from {{ ref('LTP_monthly_pricing_function_for_all_ltps')}}
+),
+
+pricing_function_disti as (
+    select * from {{ ref('LTP_monthly_pricing_function_for_Disti')}}
 )
 
 
@@ -44,3 +48,19 @@ group by
     ltp,
     item,
     partner_pricing    
+
+union all
+
+select
+current_date as billing_date,
+ltp,
+item,
+partner_pricing,
+sum(quantity) as quantity,
+sum(amount) as amount
+from pricing_function_disti
+group by 
+    billing_date,
+    ltp,
+    item,
+    partner_pricing  
