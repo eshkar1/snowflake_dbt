@@ -36,7 +36,7 @@ group by
 union all
 
 select
-current_date as billing_date,
+last_day(dateadd(month,-1,current_date)) as billing_date,
 ltp,
 item,
 partner_pricing,
@@ -52,7 +52,7 @@ group by
 union all
 
 select
-current_date as billing_date,
+last_day(dateadd(month,-1,current_date)) as billing_date,
 ltp,
 item,
 partner_pricing,
