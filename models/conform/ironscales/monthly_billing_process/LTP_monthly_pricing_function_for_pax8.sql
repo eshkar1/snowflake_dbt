@@ -14,7 +14,7 @@ ltp_pricing_list as (
 ----------------------------------------------------------------------------------------
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 g.plan_name as item,    
 -- p.profile_type,
@@ -67,7 +67,7 @@ where
     and licensed_profiles is not NULL
 
 group by
-g.record_date,
+g.date_recorded,
 root,   
 plan_name,
 profile_type,
@@ -97,7 +97,7 @@ STARTERNFR_1
 UNION
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 g.plan_name as item,    
 -- p.profile_type,
@@ -117,7 +117,7 @@ where
     and plan_name = 'Phishing Simulation and Training'
     and premium_name = 'No Premium'
 group by 
-g.record_date,
+g.date_recorded,
 root,   
 plan_name,
 g.partner_pricing,
@@ -135,7 +135,7 @@ PST_1
 UNION
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 premium_name as item, 
 sum(licensed_profiles) as quantity,
@@ -155,7 +155,7 @@ where
     and ltp in ('US-733','EU-25') 
     and premium_name != 'No Premium'
 group by                              
-g.record_date,
+g.date_recorded,
 root,   
 item,
 profile_type,
@@ -170,7 +170,7 @@ PSCP_1
 UNION
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'Incident Management' as item,
 sum(licensed_profiles) as quantity,
@@ -185,7 +185,7 @@ where
     and ltp in ('US-733','EU-25') 
     and incident_management = true
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -201,7 +201,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'S&T Bundle' as item,
 sum(licensed_profiles) as quantity,
@@ -217,7 +217,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -228,7 +228,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'S&T Bundle' as item,
 sum(licensed_profiles) as quantity,
@@ -245,7 +245,7 @@ where
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -260,7 +260,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'Security Awareness Training' as item,
 sum(licensed_profiles) as quantity,
@@ -279,7 +279,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -290,7 +290,7 @@ group by
 UNION
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'Security Awareness Training' as item,
 sum(licensed_profiles) as quantity,
@@ -309,7 +309,7 @@ where
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -323,7 +323,7 @@ group by
 UNION 
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'Themis Co-Pilot' as item,
 sum(licensed_profiles) as quantity,
@@ -340,7 +340,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -354,7 +354,7 @@ group by
 UNION 
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'URL Scans' as item,
 sum(licensed_profiles) as quantity,
@@ -371,7 +371,7 @@ where
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -386,7 +386,7 @@ group by
 UNION 
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'Attachment Scans' as item,
 sum(licensed_profiles) as quantity,
@@ -403,7 +403,7 @@ where
     and plan_name != 'Core'
     and plan_name != 'Email Protect'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -418,7 +418,7 @@ group by
 UNION 
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'AI Empower Bundle' as item,
 sum(licensed_profiles) as quantity,
@@ -434,7 +434,7 @@ where
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = false
     and plan_name != 'Complete Protect'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -448,7 +448,7 @@ group by
 UNION 
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'S&T Plus Bundle' as item,
 sum(licensed_profiles) as quantity,
@@ -463,7 +463,7 @@ where
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -477,7 +477,7 @@ group by
 UNION 
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'Account Takeover' as item,
 sum(licensed_profiles) as quantity,
@@ -492,7 +492,7 @@ where
     and ATO = true
     and plan_name != 'Complete Protect'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,
@@ -506,7 +506,7 @@ group by
 UNION 
 
 select
-g.record_date,
+g.date_recorded,
 g.root as ltp,
 'Multi Tenant' as item,
 sum(licensed_profiles) as quantity,
@@ -521,7 +521,7 @@ where
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
 group by
-    g.record_date,
+    g.date_recorded,
     root,   
     item,
     profile_type,

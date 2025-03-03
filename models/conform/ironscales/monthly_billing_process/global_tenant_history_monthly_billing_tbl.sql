@@ -1,5 +1,5 @@
 
-with current_month_ltp_roundup_tbl as (
+with previous_month_ltp_roundup_tbl as (
     select * from {{ ref('previous_month_ltp_roundup_tbl_updated')}} 
 ),
 
@@ -46,5 +46,5 @@ SELECT
     g.record_date,
     g.billing_status
 FROM
-    current_month_ltp_roundup_tbl r
+    previous_month_ltp_roundup_tbl r
     JOIN global_tenant_history g ON g.tenant_global_id = r.tenant_global_id AND g.record_date = r.record_date
