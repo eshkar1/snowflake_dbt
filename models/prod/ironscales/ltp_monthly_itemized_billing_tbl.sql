@@ -23,6 +23,7 @@ SELECT
 last_day(dateadd(month,-1,current_date)) as billing_date,
 ltp,
 item,
+sku,
 partner_pricing,
 sum(quantity) as quantity,
 sum(amount) as amount
@@ -31,6 +32,7 @@ group by
     billing_date,
     ltp,
     item,
+    sku,
     partner_pricing
 
 union all
@@ -39,6 +41,7 @@ select
 last_day(dateadd(month,-1,current_date)) as billing_date,
 ltp,
 item,
+sku,
 partner_pricing,
 sum(quantity) as quantity,
 sum(amount) as amount
@@ -47,6 +50,7 @@ group by
     billing_date,
     ltp,
     item,
+    sku,
     partner_pricing    
 
 union all
@@ -55,6 +59,7 @@ select
 last_day(dateadd(month,-1,current_date)) as billing_date,
 ltp,
 item,
+sku,
 partner_pricing,
 sum(quantity) as quantity,
 sum(amount) as amount
@@ -63,4 +68,5 @@ group by
     billing_date,
     ltp,
     item,
+    sku,
     partner_pricing  
