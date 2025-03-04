@@ -12,17 +12,18 @@ pricing_function_disti as (
 )
 
 
-SELECT
-*
-from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_TBL
+-- SELECT
+-- *
+-- from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_TBL
 
-union all 
+-- union all 
 
 
 SELECT
 current_date as billing_date,
 ltp,
 item,
+sku,
 partner_pricing,
 sum(quantity) as quantity,
 sum(amount) as amount
@@ -31,6 +32,7 @@ group by
     billing_date,
     ltp,
     item,
+    sku,
     partner_pricing
 
 union all
@@ -39,6 +41,7 @@ select
 current_date as billing_date,
 ltp,
 item,
+sku,
 partner_pricing,
 sum(quantity) as quantity,
 sum(amount) as amount
@@ -47,6 +50,7 @@ group by
     billing_date,
     ltp,
     item,
+    sku,
     partner_pricing    
 
 union all
@@ -55,6 +59,7 @@ select
 current_date as billing_date,
 ltp,
 item,
+sku,
 partner_pricing,
 sum(quantity) as quantity,
 sum(amount) as amount
@@ -63,4 +68,5 @@ group by
     billing_date,
     ltp,
     item,
+    sku,
     partner_pricing    

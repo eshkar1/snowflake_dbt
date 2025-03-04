@@ -27,6 +27,27 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 g.plan_name as item, 
+CASE g.partner_pricing
+    WHEN FALSE then 
+        CASE plan_name
+            WHEN 'Starter'                          THEN 'IS-LTP-STARTER'
+            WHEN 'Email Protect'                    THEN 'IS-LTP-EP'
+            WHEN 'Complete Protect'                 THEN 'IS-LTP-CP'
+            WHEN 'Core'                             THEN 'IS-LTP-CORE'
+            WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IP'
+            WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PST'
+        end
+    WHEN TRUE THEN
+        CASE plan_name
+            WHEN 'Starter'                          THEN 'IS-LTP-STARTERNFR'
+            WHEN 'Email Protect'                    THEN 'IS-LTP-EPNFR'
+            WHEN 'Complete Protect'                 THEN 'IS-LTP-CPNFR'
+            WHEN 'Core'                             THEN 'IS-LTP-CORENFR'
+            WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IPNFR'
+            WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PSTNFR'
+        end    
+else null
+end as sku,
 g.partner_pricing,   
 -- p.profile_type,
 CASE profile_type
@@ -111,6 +132,12 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 premium_name as item,
+case
+    premium_name
+    when 'NINJIO'              then 'IS-LTP-PSCP'
+    when 'Cybermaniacs Videos' then 'IS-LTP-PSCP'
+    when 'Habitu8'             then 'IS-LTP-PSCP'
+end as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -152,6 +179,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'Incident Management' as item,
+'IS-LTP-IM' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -188,6 +216,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'themis co-pilot' as item,
+'IS-LTP-THEMIS' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -227,6 +256,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'url scans' as item,
+'IS-LTP-URL' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -266,6 +296,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'attachment scans' as item,
+'IS-LTP-AS' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -306,6 +337,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'Security Awareness Training' as item,
+'IS-LTP-PSTSAT' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -341,6 +373,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'Security Awareness Training' as item,
+'IS-LTP-SAT' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -382,6 +415,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'S&T Bundle' as item,
+'IS-LTP-PSTSTB' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -418,6 +452,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'S&T Bundle' as item,
+'IS-LTP-STB' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -457,6 +492,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'AI Empower Bundle' as item,
+'IS-LTP-AIEB' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -497,6 +533,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'S&T Plus Bundle' as item,
+'IS-LTP-STBP' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -535,6 +572,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'Account Takeover' as item,
+'IS-LTP-ATO' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles
@@ -573,6 +611,7 @@ THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'Multi Tenant' as item,
+'IS-LTP-MT' as sku,
 null as partner_pricing,
 CASE profile_type
     when 'active' then Active_profiles

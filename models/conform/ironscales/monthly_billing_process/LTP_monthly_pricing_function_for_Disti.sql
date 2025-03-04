@@ -17,7 +17,27 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 g.plan_name as item,    
--- p.profile_type,
+CASE partner_pricing
+    WHEN FALSE then 
+        CASE plan_name
+            WHEN 'Starter'                          THEN 'IS-LTP-STARTER'
+            WHEN 'Email Protect'                    THEN 'IS-LTP-EP'
+            WHEN 'Complete Protect'                 THEN 'IS-LTP-CP'
+            WHEN 'Core'                             THEN 'IS-LTP-CORE'
+            WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IP'
+            WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PST'
+        end
+    WHEN TRUE THEN
+        CASE plan_name
+            WHEN 'Starter'                          THEN 'IS-LTP-STARTERNFR'
+            WHEN 'Email Protect'                    THEN 'IS-LTP-EPNFR'
+            WHEN 'Complete Protect'                 THEN 'IS-LTP-CPNFR'
+            WHEN 'Core'                             THEN 'IS-LTP-CORENFR'
+            WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IPNFR'
+            WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PSTNFR'
+        end    
+else null
+end as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -89,6 +109,7 @@ group by
 g.DATE_RECORDED,
 root,   
 plan_name,
+sku,
 profile_type,
 -- premium_name,
 g.partner_pricing,
@@ -133,6 +154,12 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 premium_name as item, 
+case
+    premium_name
+    when 'NINJIO'              then 'IS-LTP-PSCP'
+    when 'Cybermaniacs Videos' then 'IS-LTP-PSCP'
+    when 'Habitu8'             then 'IS-LTP-PSCP'
+end as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -161,6 +188,7 @@ group by
 g.DATE_RECORDED,
 root,   
 item,
+sku,
 profile_type,
 -- g.partner_pricing,
 premium_name,
@@ -176,6 +204,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Incident Management' as item,
+'IS-LTP-IM' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -203,6 +232,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     IM_1,
@@ -222,6 +252,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'S&T Bundle' as item,
+'IS-LTP-STB' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -252,6 +283,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     STB_1,
@@ -270,6 +302,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Security Awareness Training' as item,
+'IS-LTP-SAT' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -297,6 +330,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     SAT_1
@@ -311,6 +345,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Themis Co-Pilot' as item,
+'IS-LTP-THEMIS' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -336,6 +371,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     THEMIS_1
@@ -350,6 +386,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'URL Scans' as item,
+'IS-LTP-URL' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -375,6 +412,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     URL_1
@@ -390,6 +428,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Attachment Scans' as item,
+'IS-LTP-AS' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -415,6 +454,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     AS_1
@@ -430,6 +470,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'AI Empower Bundle' as item,
+'IS-LTP-AIEB' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -454,6 +495,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     AIEB_1
@@ -468,6 +510,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'S&T Plus Bundle' as item,
+'IS-LTP-STBP' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -491,6 +534,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     STBP_1
@@ -505,6 +549,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Account Takeover' as item,
+'IS-LTP-ATO' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -528,6 +573,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     ATO_1
@@ -542,6 +588,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Multi Tenant' as item,
+'IS-LTP-MT' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
     when 'license' then sum(licensed_profiles)
@@ -565,6 +612,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     MT_1

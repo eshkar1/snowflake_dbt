@@ -16,8 +16,26 @@ ltp_pricing_list as (
 select
 g.DATE_RECORDED,
 g.root as ltp,
-g.plan_name as item,    
--- p.profile_type,
+g.plan_name as item,  
+CASE partner_pricing
+    WHEN FALSE then 
+        CASE plan_name
+            WHEN 'Starter'                          THEN 'IS-LTP-STARTER'
+            WHEN 'Email Protect'                    THEN 'IS-LTP-EP'
+            WHEN 'Complete Protect'                 THEN 'IS-LTP-CP'
+            WHEN 'Core'                             THEN 'IS-LTP-CORE'
+            WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IP'
+        end
+    WHEN TRUE THEN
+        CASE plan_name
+            WHEN 'Starter'                          THEN 'IS-LTP-STARTERNFR'
+            WHEN 'Email Protect'                    THEN 'IS-LTP-EPNFR'
+            WHEN 'Complete Protect'                 THEN 'IS-LTP-CPNFR'
+            WHEN 'Core'                             THEN 'IS-LTP-CORENFR'
+            WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IPNFR'
+        end    
+else null
+end as sku,
 sum(licensed_profiles) as quantity,
 g.partner_pricing,
 
@@ -70,6 +88,7 @@ group by
 g.DATE_RECORDED,
 root,   
 plan_name,
+sku,
 profile_type,
 -- premium_name,
 g.partner_pricing,
@@ -100,7 +119,10 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 g.plan_name as item,    
--- p.profile_type,
+CASE
+    WHEN g.partner_pricing = True then  'IS-LTP-PSTNFR'
+    WHEN g.partner_pricing = False then  'IS-LTP-PST'
+end as sku,
 sum(licensed_profiles) as quantity,
 g.partner_pricing,
 CASE
@@ -120,6 +142,7 @@ group by
 g.DATE_RECORDED,
 root,   
 plan_name,
+sku,
 g.partner_pricing,
 PSTNFR_1,
 PST_1
@@ -137,7 +160,13 @@ UNION
 select
 g.DATE_RECORDED,
 g.root as ltp,
-premium_name as item, 
+premium_name as item,
+case
+    premium_name
+    when 'NINJIO'              then 'IS-LTP-PSCP'
+    when 'Cybermaniacs Videos' then 'IS-LTP-PSCP'
+    when 'Habitu8'             then 'IS-LTP-PSCP'
+end as sku, 
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 case
@@ -158,6 +187,7 @@ group by
 g.DATE_RECORDED,
 root,   
 item,
+sku,
 profile_type,
 -- g.partner_pricing,
 premium_name,
@@ -173,6 +203,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Incident Management' as item,
+'IS-LTP-IM' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * IM_1 as amount
@@ -188,6 +219,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     IM_1
@@ -204,6 +236,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'S&T Bundle' as item,
+'IS-LTP-PSTSTB' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * PSTSTB_1 as amount
@@ -220,6 +253,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     PSTSTB_1
@@ -231,6 +265,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'S&T Bundle' as item,
+'IS-LTP-STB' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * STB_1 as amount
@@ -248,6 +283,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     STB_1
@@ -263,6 +299,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Security Awareness Training' as item,
+'IS-LTP-PSTSAT' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * PSTSAT_1
@@ -282,6 +319,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     PSTSAT_1
@@ -293,6 +331,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Security Awareness Training' as item,
+'IS-LTP-SAT' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * SAT_1
@@ -312,6 +351,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     SAT_1
@@ -326,6 +366,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Themis Co-Pilot' as item,
+'IS-LTP-THEMIS' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * THEMIS_1 as amount
@@ -343,6 +384,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     THEMIS_1
@@ -357,6 +399,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'URL Scans' as item,
+'IS-LTP-URL' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * URL_1 as amount
@@ -374,6 +417,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     URL_1
@@ -389,6 +433,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Attachment Scans' as item,
+'IS-LTP-AS' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * AS_1 as amount
@@ -406,6 +451,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     AS_1
@@ -421,6 +467,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'AI Empower Bundle' as item,
+'IS-LTP-AIEB' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * AIEB_1 as amount
@@ -437,6 +484,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     AIEB_1
@@ -451,6 +499,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'S&T Plus Bundle' as item,
+'IS-LTP-STBP' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * STBP_1 as amount
@@ -466,6 +515,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     STBP_1
@@ -480,6 +530,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Account Takeover' as item,
+'IS-LTP-ATO' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * ATO_1 as amount
@@ -495,6 +546,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     ATO_1
@@ -509,6 +561,7 @@ select
 g.DATE_RECORDED,
 g.root as ltp,
 'Multi Tenant' as item,
+'IS-LTP-MT' as sku,
 sum(licensed_profiles) as quantity,
 null as partner_pricing,
 quantity * MT_1 as amount
@@ -524,6 +577,7 @@ group by
     g.DATE_RECORDED,
     root,   
     item,
+    sku,
     profile_type,
     -- g.partner_pricing,
     MT_1
