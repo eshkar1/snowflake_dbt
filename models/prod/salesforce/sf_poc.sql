@@ -68,6 +68,11 @@ and u.name in (
                                         'Carlos Casanova',
                                         'Jaime Munoz',
                                         'Diego Val',
-                                        'Zachary Alexander'
+                                        'Zachary Alexander',
+                                        'Robin Clothier',
+                                        'Paul Clark',
+                                        'Charlie Mather',
+                                        'Evan Poses'
                                         )
 and stagename in ('Closed Lost', 'Closed Won')
+
