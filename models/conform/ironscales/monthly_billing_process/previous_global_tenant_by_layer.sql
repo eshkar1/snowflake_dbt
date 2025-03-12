@@ -1,11 +1,11 @@
 with global_tenant_history as (
-    select * from {{ ref('global_tenant_history_monthlu_billing_tbl')}}
+    select * from {{ ref('global_tenant_history_monthly_billing_tbl')}}
 ),
 
 main_data as (
     with extracted_data AS (
                 WITH global_tenant_history_main as (
-                        select * from {{ ref('global_tenant_history_monthlu_billing_tbl')}}
+                        select * from {{ ref('global_tenant_history_monthly_billing_tbl')}}
                                                     ),
                 ltp_pricing_list as (
                         select * from {{ ref('ltp_pricing_tbl')}}
