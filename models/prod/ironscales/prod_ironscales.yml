@@ -8,7 +8,12 @@ models:
     config:
       grants:
         select: ['RIVERY_ROLE']
-  
+ 
+  - name: ltp_monthly_itemized_billing_tbl
+    config:
+      grants:
+        select: ['RIVERY_ROLE']
+
   - name: daily_billable_mailbox_tbl
     config:
       grants:

@@ -26,7 +26,7 @@ main_data as (
                 FROM global_tenant_history_main g
                 left join ltp_pricing_list l on g.root = l.tenant_global_id
                 WHERE
-                    date_recorded = current_date
+                    date_recorded = LAST_DAY(DATEADD('MONTH', -1, CURRENT_DATE()))
                     AND billing_status = 'Active'
                     AND approved = true
             )

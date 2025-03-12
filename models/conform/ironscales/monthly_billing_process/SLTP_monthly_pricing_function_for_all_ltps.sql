@@ -1,5 +1,5 @@
-with current_global_tenant_by_layer as (
-    select * from {{ ref('current_global_tenant_by_layer')}} 
+with previous_global_tenant_by_layer as (
+    select * from {{ ref('previous_global_tenant_by_layer')}} 
 ),
 
 ltp_pricing_list as (
@@ -8,10 +8,10 @@ ltp_pricing_list as (
     tenant_global_id not in ('US-11100','US-733','EU-25','EU-49000')
 ),
 
-LTP_DAILY_ITEMIZED_BILLING_TBL as (
-    select * from {{ ref('ltp_daily_itemized_billing_tbl')}}
+LTP_MONTHLY_ITEMIZED_BILLING_TBL as (
+    select * from {{ ref('ltp_monthly_itemized_billing_tbl')}}
     where
-    billing_date = current_date
+    billing_date = LAST_DAY(DATEADD('MONTH', -1, CURRENT_DATE()))
 )
 
 
@@ -66,30 +66,17 @@ end as billable_quantity,
 ----------------------------------------------------------------------------------------
 -- Non NFR Plans --
 case 
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 7500 then billable_quantity * EP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 3500 then billable_quantity * EP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 1000 then billable_quantity * EP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity < 1000 then billable_quantity * EP_1
+    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
+    
+    WHEN g.partner_pricing = FALSE and plan_name = 'Core' then billable_quantity * i.amount/i.quantity
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 7500 then billable_quantity * CORE_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 3500 then billable_quantity * CORE_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 1000 then billable_quantity * CORE_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity < 1000 then billable_quantity * CORE_1
--- end
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 7500 then billable_quantity * IP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 3500 then billable_quantity * IP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 1000 then billable_quantity * IP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity < 1000 then billable_quantity * IP_1
+    WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' then billable_quantity * i.amount/i.quantity
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 7500 then billable_quantity * CP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 3500 then billable_quantity * CP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 1000 then billable_quantity * CP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity < 1000 then billable_quantity * CP_1
+    WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' then billable_quantity * i.amount/i.quantity
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 7500 then billable_quantity * PST_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 3500 then billable_quantity * PST_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 1000 then billable_quantity * PST_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity < 1000 then billable_quantity * PST_1
+    WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' then billable_quantity * i.amount/i.quantity
+    
+    WHEN g.partner_pricing = FALSE and plan_name = 'Starter' then billable_quantity * i.amount/i.quantity
 
 -- NFR Plans Only --
 
@@ -101,9 +88,9 @@ WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training'
 
 END as amount
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id 
-left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp 
+left join LTP_MONTHLY_ITEMIZED_BILLING_TBL i on g.FIRST_LAYER_ID = i.ltp 
                                             and g.plan_name = i.item
                                             and g.partner_pricing = i.partner_pricing
 
@@ -156,7 +143,7 @@ case
     when 'Habitu8' then billable_quantity * PSCP_1
 end as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
 approved = true
@@ -193,7 +180,7 @@ end as billable_quantity,
 
 billable_quantity * IM_1 as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -230,7 +217,7 @@ end as billable_quantity,
 
 billable_quantity * THEMIS_1 as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -270,7 +257,7 @@ end as billable_quantity,
 
 billable_quantity * URL_1 as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -310,7 +297,7 @@ end as billable_quantity,
 
 billable_quantity * AS_1 as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -350,7 +337,7 @@ CASE profile_type
 end as billable_quantity,
 
 billable_quantity * PSTSAT_1 as amount
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -387,7 +374,7 @@ end as billable_quantity,
 
 billable_quantity * SAT_1
  as amount
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -428,7 +415,7 @@ CASE profile_type
 end as billable_quantity,
 
 billable_quantity * PSTSTB_1 as amount
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -465,7 +452,7 @@ CASE profile_type
 end as billable_quantity,
 
 billable_quantity * STB_1 as amount
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -507,7 +494,7 @@ end as billable_quantity,
 billable_quantity * AIEB_1
  as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -547,7 +534,7 @@ end as billable_quantity,
 
 billable_quantity * STBP_1 as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -586,7 +573,7 @@ end as billable_quantity,
 
 billable_quantity * ATO_1 as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
@@ -625,7 +612,7 @@ end as billable_quantity,
 
 billable_quantity * MT_1 as amount,
 
-from current_global_tenant_by_layer g
+from previous_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
