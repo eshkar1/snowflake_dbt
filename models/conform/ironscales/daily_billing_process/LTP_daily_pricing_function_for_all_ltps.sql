@@ -5,7 +5,7 @@ with global_tenant_history_daily as (
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
-    tenant_global_id not in ('US-11100','US-733','EU-25')
+    tenant_global_id not in ('US-11100','US-733','EU-25','EU-49000')
 )
 
 
