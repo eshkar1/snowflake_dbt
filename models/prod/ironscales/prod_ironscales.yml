@@ -12,4 +12,9 @@ models:
   - name: daily_billable_mailbox_tbl
     config:
       grants:
-        select: ['RIVERY_ROLE']
+        select: ['RIVERY_ROLE_UPDATED']
+
+  - name: monthly_billable_mailbox_tbl
+    config:
+      grants:
+        select: ['RIVERY_ROLE_UPDATED']
