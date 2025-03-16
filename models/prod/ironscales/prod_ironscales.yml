@@ -1,25 +1,40 @@
-models:
-  - name: global_tenant_history
-    config:
-      grants:
-        select: ['RIVERY_ROLE']
+version: 2
+sources:
+  - name: ironscales_prod
+    # description: ironscales_us raw tables
+    database: prod_conform
+    schema: DBT_PROD_DB
+    # config:
+    #   grants:
+    #     select: ['RIVERY_ROLE']
+            
+    tables:
 
-  - name: ltp_daily_itemized_billing_tbl
-    config:
-      grants:
-        select: ['RIVERY_ROLE']
- 
-  - name: ltp_monthly_itemized_billing_tbl
-    config:
-      grants:
-        select: ['RIVERY_ROLE']
+      - name: daily_billable_mailbox_tbl
+        config:
+          grants:
+            select: ['RIVERY_ROLE_UPDATED']
 
-  - name: daily_billable_mailbox_tbl
-    config:
-      grants:
-        select: ['RIVERY_ROLE_UPDATED']
+      - name: monthly_billable_mailbox_tbl
+        columns:
+          - name: non_profit_flag
+            data_type: boolean 
+        config:
+          grants:
+            select: ['RIVERY_ROLE_UPDATED']
 
-  - name: monthly_billable_mailbox_tbl
-    config:
-      grants:
-        select: ['RIVERY_ROLE_UPDATED']
+      - name: global_tenant_history
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+
+      - name: ltp_daily_itemized_billing_tbl
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+    
+      - name: ltp_monthly_itemized_billing_tbl
+        config:
+          grants:
+            select: ['RIVERY_ROLE']      
+                  
