@@ -19,9 +19,7 @@ sources:
         columns:
           - name: non_profit_flag
             data_type: boolean 
-        config:
-          grants:
-            select: ['RIVERY_ROLE_UPDATED']
+
 
       - name: global_tenant_history
         config:

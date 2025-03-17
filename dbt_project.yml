@@ -42,13 +42,16 @@ models:
       +schema: dbt_prod_db
       +materialized: table
       +grants:
-        select: ['RIVERY_ROLE']
+        select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED']
 
     conform:
       +schema: dbt_stage_db
       +materialized: view
+      +grants:
+        select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED']
+    
     stage:
       +schema: dbt_raw_db
       +materialized: table
       +grants:
-        select: ['RIVERY_ROLE']
+        select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED']
