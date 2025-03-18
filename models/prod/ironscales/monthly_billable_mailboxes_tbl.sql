@@ -14,13 +14,13 @@ ltp_pricing_list as (
 select
 current_date as record_date,
 g.date_recorded as billing_date,
-g.tenant_global_id as tenant_global_id,
+REGEXP_REPLACE(g.tenant_global_id, '[^0-9]', '') as tenant_global_id,
 g.tenant_name as tenant_name,
-g.parent_global_id as parent_global_id,
+REGEXP_REPLACE(g.parent_global_id, '[^0-9]', '')  as parent_global_id,
 g.parent_name as parent_name,
-g.licensed_profiles as licensed_profiles,
-g.active_profiles as active_profiles,
-g.shared_profiles as shared_profiles,
+ifnull(g.licensed_profiles,0) as licensed_profiles,
+ifnull(g.active_profiles,0) as active_profiles,
+ifnull(g.shared_profiles,0) as shared_profiles,
 CASE profile_type
     when 'active' then g.active_profiles
     when 'license' then g.licensed_profiles
