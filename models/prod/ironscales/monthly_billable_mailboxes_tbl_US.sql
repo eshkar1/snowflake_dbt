@@ -22,12 +22,12 @@ ifnull(g.licensed_profiles,0) as licensed_profiles,
 ifnull(g.active_profiles,0) as active_profiles,
 ifnull(g.shared_profiles,0) as shared_profiles,
 CASE profile_type
-    when 'active' then g.active_profiles
-    when 'license' then g.licensed_profiles
+    when 'active' then ifnull(g.active_profiles,0)
+    when 'license' then ifnull(g.licensed_profiles,0)
     when 'shared' then 
                     case 
-                        when g.shared_profiles is null then g.active_profiles
-                        else g.active_profiles - g.shared_profiles
+                        when g.shared_profiles is null then ifnull(g.active_profiles,0)
+                        else ifnull(g.active_profiles - g.shared_profiles,0)
                     end
 end as billable_profiles,
 g.plan_id as plan_id,
@@ -58,3 +58,6 @@ left join global_tenant_history gh on g.record_date = gh.record_date
                                                         and g.tenant_global_id = gh.tenant_global_id
                                                         
 left join ltp_pricing_list p on g.root = p.tenant_global_id
+
+WHERE
+REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'US'
