@@ -14,6 +14,7 @@ ltp_pricing_list as (
 select
 current_date as record_date,
 g.date_recorded as billing_date,
+-- g.tenant_global_id,
 REGEXP_REPLACE(g.tenant_global_id, '[^0-9]', '') as tenant_global_id,
 g.tenant_name as tenant_name,
 REGEXP_REPLACE(g.parent_global_id, '[^0-9]', '')  as parent_global_id,

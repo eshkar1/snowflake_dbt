@@ -4,7 +4,7 @@ with pricing_function_pax8 as (
 ),
 
 pricing_function_all_ltps as (
-    select * from {{ ref('LTP_daily_pricing_function_for_all_ltps')}}
+    select * from {{ ref('LTP_daily_pricing_tier_function_for_all_ltps')}} --this include tier or incremental--
 ),
 
 pricing_function_disti as (
