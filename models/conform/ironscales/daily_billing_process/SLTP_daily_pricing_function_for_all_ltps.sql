@@ -66,38 +66,45 @@ end as billable_quantity,
 ----------------------------------------------------------------------------------------
 -- Non NFR Plans --
 case 
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 7500 then billable_quantity * EP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 3500 then billable_quantity * EP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 1000 then billable_quantity * EP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity < 1000 then billable_quantity * EP_1
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 7500 then billable_quantity * EP_7500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 3500 then billable_quantity * EP_3500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity >= 1000 then billable_quantity * EP_1000
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and i.quantity < 1000 then billable_quantity * EP_1
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 7500 then billable_quantity * CORE_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 3500 then billable_quantity * CORE_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 1000 then billable_quantity * CORE_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity < 1000 then billable_quantity * CORE_1
--- end
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 7500 then billable_quantity * IP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 3500 then billable_quantity * IP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 1000 then billable_quantity * IP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity < 1000 then billable_quantity * IP_1
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 7500 then billable_quantity * CORE_7500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 3500 then billable_quantity * CORE_3500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity >= 1000 then billable_quantity * CORE_1000
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Core' and i.quantity < 1000 then billable_quantity * CORE_1
+-- -- end
+-- WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 7500 then billable_quantity * IP_7500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 3500 then billable_quantity * IP_3500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity >= 1000 then billable_quantity * IP_1000
+-- WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and i.quantity < 1000 then billable_quantity * IP_1
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 7500 then billable_quantity * CP_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 3500 then billable_quantity * CP_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 1000 then billable_quantity * CP_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity < 1000 then billable_quantity * CP_1
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 7500 then billable_quantity * CP_7500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 3500 then billable_quantity * CP_3500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity >= 1000 then billable_quantity * CP_1000
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and i.quantity < 1000 then billable_quantity * CP_1
 
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 7500 then billable_quantity * PST_7500
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 3500 then billable_quantity * PST_3500
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 1000 then billable_quantity * PST_1000
-WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity < 1000 then billable_quantity * PST_1
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 7500 then billable_quantity * PST_7500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 3500 then billable_quantity * PST_3500
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity >= 1000 then billable_quantity * PST_1000
+-- WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and i.quantity < 1000 then billable_quantity * PST_1
+    
+    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
+    WHEN g.partner_pricing = FALSE and plan_name = 'Core' then billable_quantity * i.amount/i.quantity
+    WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' then billable_quantity * i.amount/i.quantity
+    WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' then billable_quantity * i.amount/i.quantity
+    WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' then billable_quantity * i.amount/i.quantity    
+    WHEN g.partner_pricing = FALSE and plan_name = 'Starter' then billable_quantity * i.amount/i.quantity
 
 -- NFR Plans Only --
 
-WHEN g.partner_pricing = True and plan_name = 'Email Protect' then billable_quantity * EPNFR_1 
-WHEN g.partner_pricing = True and plan_name = 'Core' then billable_quantity * CORENFR_1
-WHEN g.partner_pricing = True and plan_name = 'IRONSCALES Protect' then billable_quantity * IPNFR_1
-WHEN g.partner_pricing = True and plan_name = 'Complete Protect' then billable_quantity * CPNFR_1
-WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' then billable_quantity * PSTNFR_1   
+    WHEN g.partner_pricing = True and plan_name = 'Email Protect' then billable_quantity * EPNFR_1 
+    WHEN g.partner_pricing = True and plan_name = 'Core' then billable_quantity * CORENFR_1
+    WHEN g.partner_pricing = True and plan_name = 'IRONSCALES Protect' then billable_quantity * IPNFR_1
+    WHEN g.partner_pricing = True and plan_name = 'Complete Protect' then billable_quantity * CPNFR_1
+    WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' then billable_quantity * PSTNFR_1   
 
 END as amount
 
