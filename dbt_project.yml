@@ -42,13 +42,13 @@ models:
       +schema: dbt_prod_db
       +materialized: table
       +grants:
-        select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED']
+        select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED','SNOWFLAKE_FINANCE_ANALYST_ROLE']
 
     conform:
       +schema: dbt_stage_db
       +materialized: view
       +grants:
-        select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED']
+        select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED','SNOWFLAKE_FINANCE_ANALYST_ROLE']
     
     stage:
       +schema: dbt_raw_db
