@@ -5,7 +5,7 @@ with current_global_tenant_by_layer as (
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
-    tenant_global_id in ('EU-49000')
+    tenant_global_id in ('EU-49000','EU-51541','US-11100')
 ),
 
 LTP_DAILY_ITEMIZED_BILLING_TBL as (
@@ -95,7 +95,7 @@ where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and plan_name != 'Phishing Simulation and Training'
     and licensed_profiles is not NULL
 
@@ -148,7 +148,7 @@ left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and premium_name != 'No Premium'
 
 
@@ -186,7 +186,7 @@ left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and incident_management = true
 
 
@@ -228,7 +228,7 @@ left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
@@ -270,7 +270,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and security_awareness_training = true
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
@@ -309,7 +309,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and themis_co_pilot = true
     and AI_EMPOWER_BUNDLE = false
     and simulation_and_training_bundle_plus = false
@@ -348,7 +348,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and link_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
@@ -388,7 +388,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and file_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
@@ -428,7 +428,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and AI_EMPOWER_BUNDLE = true
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = false
     and plan_name != 'Complete Protect'
@@ -466,7 +466,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
 
@@ -503,7 +503,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and ATO = true
     and plan_name != 'Complete Protect'
 
@@ -540,6 +540,6 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and g.FIRST_LAYER_ID in ('EU-49000') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and multi_tenancy = true
     and plan_name != 'Complete Protect'

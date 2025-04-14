@@ -5,7 +5,7 @@ with global_tenant_history_daily as (
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
-    tenant_global_id in ('EU-49000')
+    tenant_global_id in ('EU-49000','EU-51541','US-11100')
 )
 
 
@@ -50,9 +50,13 @@ end as quantity,
 g.partner_pricing,
 CASE 
 
-    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 25000 then (15000 * EP_1) + ((25000-15000) * EP_1000) + (quantity - 25000) * EP_3500
-    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 15000 then (15000 * EP_1) + (quantity-15000) * EP_1000
-    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 15000 then quantity * EP_1
+    WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 25000 then (15000 * EP_1) + ((25000-15000) * EP_1000) + (quantity - 25000) * EP_3500
+    WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 15000 then (15000 * EP_1) + (quantity-15000) * EP_1000
+    WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 15000 then quantity * EP_1
+    
+    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 25000 then (11000 * EP_1) + ((25000-11000) * EP_1000) + (quantity - 25000) * EP_3500
+    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 11000 then (11000 * EP_1) + (quantity-11000) * EP_1000
+    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 11000 then quantity * EP_1
     
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 25000 then (15000 * CORE_1) + ((25000-15000) * CORE_1000) + (quantity - 25000) * CORE_3500
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 15000 then (15000 * CORE_1) + (quantity-15000) * CORE_1000
@@ -98,7 +102,7 @@ where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and plan_name != 'Phishing Simulation and Training'
     and licensed_profiles is not NULL
 
@@ -179,7 +183,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and premium_name != 'No Premium'
 group by                              
 g.DATE_RECORDED,
@@ -223,7 +227,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and incident_management = true
 group by
     g.DATE_RECORDED,
@@ -271,7 +275,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
@@ -317,7 +321,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and security_awareness_training = true
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
@@ -359,7 +363,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and themis_co_pilot = true
     and AI_EMPOWER_BUNDLE = false
     and simulation_and_training_bundle_plus = false
@@ -400,7 +404,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and link_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
@@ -442,7 +446,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and file_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
@@ -484,7 +488,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100') 
     and AI_EMPOWER_BUNDLE = true
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = false
     and plan_name != 'Complete Protect'
@@ -524,7 +528,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
 group by
@@ -563,7 +567,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and ATO = true
     and plan_name != 'Complete Protect'
 group by
@@ -602,7 +606,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in ('EU-49000') 
+    and ltp in ('EU-49000','EU-51541','US-11100')
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
 group by
