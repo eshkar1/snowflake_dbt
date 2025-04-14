@@ -48,7 +48,9 @@ OBJECT_CONSTRUCT(
   'TEAMS_PROTECTION', g.TEAMS_PROTECTION,
   'FILE_SCANNING', g.FILE_SCANNING,
   'LINK_SCANNING', g.LINK_SCANNING,
-  'MULTI_TENANCY', g.MULTI_TENANCY
+  'MULTI_TENANCY', g.MULTI_TENANCY,
+  'SAT_CONTENT_PACK',g.premium_name,
+  'DMARC', g.DMARC_MANAGEMENT
                 ) as active_add_ons,
 p.is_highwatermark as high_water_mark,
 null as non_profit_flag,
