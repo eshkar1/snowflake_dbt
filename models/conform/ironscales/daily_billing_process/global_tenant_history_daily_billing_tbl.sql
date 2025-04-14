@@ -44,7 +44,8 @@ SELECT
     g.approved,
     g.tree_key,
     g.record_date,
-    g.billing_status
+    g.billing_status,
+    g.DMARC_MANAGEMENT
 FROM
     current_month_ltp_roundup_tbl r
     JOIN global_tenant_history g ON g.tenant_global_id = r.tenant_global_id AND g.record_date = r.record_date
