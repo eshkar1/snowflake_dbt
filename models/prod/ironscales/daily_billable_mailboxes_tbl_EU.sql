@@ -10,11 +10,11 @@ ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
 )
 
-select
-*
-from PROD_CONFORM.DBT_PROD_DB.DAILY_BILLABLE_MAILBOXES_TBL_EU
+-- select
+-- *
+-- from PROD_CONFORM.DBT_PROD_DB.DAILY_BILLABLE_MAILBOXES_TBL_EU
 
-union 
+-- union 
 
 
 select
@@ -60,7 +60,8 @@ OBJECT_CONSTRUCT(
 p.is_highwatermark as high_water_mark,
 null as non_profit_flag,
 g.partner_pricing as not_for_resale_flag,
-null as price_per_mailbox
+null as price_per_mailbox,
+gh.tree_key
 from global_tenant_history_daily_agg_billing_tbl g
 left join global_tenant_history gh on g.record_date = gh.record_date 
                                                         and g.tenant_global_id = gh.tenant_global_id
