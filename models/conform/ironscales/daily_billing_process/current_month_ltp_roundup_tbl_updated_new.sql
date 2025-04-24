@@ -25,7 +25,9 @@ profile_metrics AS (
     FROM global_tenant_history g
     LEFT JOIN ltp_pricing_list p 
         ON g.root = p.tenant_global_id
-    WHERE record_date BETWEEN DATE_TRUNC('MONTH', current_date) AND current_date
+    WHERE 
+    -- record_date BETWEEN DATE_TRUNC('MONTH', current_date) AND current_date
+    record_date BETWEEN DATEADD('day', 1, DATE_TRUNC('MONTH', current_date)) AND current_date -- change from 2nd of month until current day
         AND approved = true
         AND billing_status = 'Active'
         AND root IN (
