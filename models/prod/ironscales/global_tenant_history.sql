@@ -88,9 +88,20 @@ select
     tree_key,
     date(roundup_timestamp) as record_date,
     -- finance_db.billing_sch.billing_status_fn(plan_id, trial_plan_id, plan_expiry, trial_plan_expiry, roundup_timestamp) as billing_status,
-    iff(plan_id is not null and plan_expiry >= roundup_timestamp,'Active',
-        iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
-        ) as billing_status
+    -- iff(plan_id is not null and plan_expiry >= roundup_timestamp ,'Active',
+    --     iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
+    --     ) as billing_status,
+
+    CASE
+        -- Check for POC first (active trial plan takes precedence)
+        WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
+        
+        -- Then check for active regular plan
+        WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
+        
+        -- Everyone else is inactive
+        ELSE 'Inactive'
+    END AS billing_status
 from
     tenants_us_final
     -- ironscales_us_db.rr_prod_sch.tenants_vw
@@ -170,9 +181,19 @@ select
     tree_key,
     date(roundup_timestamp) as record_date,
     -- finance_db.billing_sch.billing_status_fn(plan_id, trial_plan_id, plan_expiry, trial_plan_expiry, roundup_timestamp) as billing_status,
-    iff(plan_id is not null and plan_expiry >= roundup_timestamp,'Active',
-        iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
-        ) as billing_status
+    -- iff(plan_id is not null and plan_expiry >= roundup_timestamp,'Active',
+    --     iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
+    --     ) as billing_status
+    CASE
+        -- Check for POC first (active trial plan takes precedence)
+        WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
+        
+        -- Then check for active regular plan
+        WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
+        
+        -- Everyone else is inactive
+        ELSE 'Inactive'
+    END AS billing_status
 from
     -- secondary_eu_db.tenants_sch.tenants_tbl
     tenants_eu_final
