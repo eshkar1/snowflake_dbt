@@ -1,14 +1,15 @@
 with global_tenant_history as (
     select * from 
-    -- prod_mart.operation.global_tenant_history
-    {{ ref('global_tenant_history')}} 
+    prod_mart.operation.global_tenant_history
+    -- {{ ref('global_tenant_history')}} 
 ),
 
 ltp_pricing_list as (
     select * from 
     -- prod_mart.upload_tables.ltp_pricing_list 
     {{ ref('ltp_pricing_tbl')}}
-),
+)
+,
 
 profile_metrics AS (
     SELECT 
@@ -27,7 +28,8 @@ profile_metrics AS (
         ON g.root = p.tenant_global_id
     WHERE 
     -- record_date BETWEEN DATE_TRUNC('MONTH', current_date) AND current_date
-    record_date BETWEEN DATEADD('day', 1, DATE_TRUNC('MONTH', current_date)) AND current_date -- change from 2nd of month until current day
+    -- record_date BETWEEN DATEADD('day', 1, DATE_TRUNC('MONTH', current_date)) AND current_date -- change from 2nd of month until current day
+    record_date BETWEEN DATEADD('day', 1, DATE_TRUNC('MONTH', DATEADD('month', -1, current_date))) AND current_date
         AND approved = true
         AND billing_status = 'Active'
         AND root IN (
@@ -35,7 +37,7 @@ profile_metrics AS (
             FROM ltp_pricing_list
             -- WHERE is_highwatermark = true
         )
-)
+    )
 ,
 
 intermediate_results AS (
