@@ -1,7 +1,7 @@
 with global_tenant_history as (
     select * from 
-    prod_mart.operation.global_tenant_history
-    -- {{ ref('global_tenant_history')}} 
+    -- prod_mart.operation.global_tenant_history
+    {{ ref('global_tenant_history')}} 
 ),
 
 ltp_pricing_list as (
