@@ -180,6 +180,9 @@ select
     approved,
     tree_key,
     date(roundup_timestamp) as record_date,
+
+    -- current_date-2 as record_date,
+
     -- finance_db.billing_sch.billing_status_fn(plan_id, trial_plan_id, plan_expiry, trial_plan_expiry, roundup_timestamp) as billing_status,
     -- iff(plan_id is not null and plan_expiry >= roundup_timestamp,'Active',
     --     iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
