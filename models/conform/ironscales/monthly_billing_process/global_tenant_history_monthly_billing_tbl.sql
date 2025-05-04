@@ -4,7 +4,9 @@ with previous_month_ltp_roundup_tbl as (
 ),
 
 global_tenant_history as (
-    select * from {{ ref('global_tenant_history')}}
+    select * from 
+    -- {{ ref('global_tenant_history')}}
+    PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
 )
 
 SELECT
