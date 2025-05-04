@@ -1,8 +1,8 @@
 
 with global_tenant_history as (
     select * from 
-    -- {{ ref('global_tenant_history')}} 
-    PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
+    {{ ref('global_tenant_history')}} 
+    -- PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
 ),
 
 ltp_pricing_list as (
