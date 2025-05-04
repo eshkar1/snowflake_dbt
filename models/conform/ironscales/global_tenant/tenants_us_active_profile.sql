@@ -1,13 +1,13 @@
 with profiles_profile as (
     select * from {{ ref('stg_ironscales_profiles_profile_table')}}
     where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    date(_RIVERY_LAST_UPDATE) = current_date()-2
 ),
 
 campaigns_companylicense as (
     select * from {{ ref('stg_ironscales_campaigns_companylicense_table')}}
     where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    date(_RIVERY_LAST_UPDATE) = current_date()-2
 )
 
 
