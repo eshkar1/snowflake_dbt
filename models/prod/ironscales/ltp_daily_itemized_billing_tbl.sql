@@ -12,11 +12,11 @@ pricing_function_disti as (
 )
 
 
-SELECT
-*
-from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_TBL
+-- SELECT
+-- *
+-- from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_TBL
 
-union all 
+-- union all 
 
 
 SELECT
