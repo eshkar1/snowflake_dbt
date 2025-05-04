@@ -5,7 +5,7 @@ with previous_global_tenant_by_layer as (
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
-    tenant_global_id in ('EU-49000')
+    tenant_global_id in ('EU-49000','EU-51541','US-11100')
 ),
 
 LTP_MONTHLY_ITEMIZED_BILLING_TBL as (
