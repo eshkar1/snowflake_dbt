@@ -1,19 +1,19 @@
 with profiles_profile as (
     select * from {{ ref('stg_ironscales_profiles_profile_table')}}
     where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    date(_RIVERY_LAST_UPDATE) = current_date()-2
 ),
 
 profiles_profile_tags as (
     select * from {{ ref('stg_ironscales_profiles_profile_tags_table')}}
     where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    date(_RIVERY_LAST_UPDATE) = current_date()-2
 ),
 
 profiles_tag as (
     select * from {{ ref('stg_ironscales_profiles_tag_table')}}
     where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    date(_RIVERY_LAST_UPDATE) = current_date()-2
 )
 
 
