@@ -7,7 +7,7 @@ with campaigns_brand as (
 campaigns_company as (
     select * from {{ ref('stg_ironscales_campaigns_company_table')}}
     where
-    date(_RIVERY_LAST_UPDATE) = current_date()-2
+    date(_RIVERY_LAST_UPDATE) = current_date()
 ),
 
 higher_tree as (

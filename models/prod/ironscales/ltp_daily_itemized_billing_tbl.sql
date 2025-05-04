@@ -20,7 +20,7 @@ pricing_function_disti as (
 
 
 SELECT
-current_date-2 as billing_date,
+current_date as billing_date,
 ltp,
 item,
 sku,
@@ -38,7 +38,7 @@ group by
 union all
 
 select
-current_date-2 as billing_date,
+current_date as billing_date,
 ltp,
 item,
 sku,
@@ -56,7 +56,7 @@ group by
 union all
 
 select
-current_date-2 as billing_date,
+current_date as billing_date,
 ltp,
 item,
 sku,

@@ -8,7 +8,7 @@ global_tenant_history as (
 )
 
 SELECT
-    current_date()-2 as date_recorded,
+    current_date() as date_recorded,
     g.root,
     g.parent_global_id,
     g.parent_name,
