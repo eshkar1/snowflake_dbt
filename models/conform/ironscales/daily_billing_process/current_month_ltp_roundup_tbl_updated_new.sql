@@ -15,7 +15,7 @@ date_bounds AS (
             WHEN DATE_PART('day', CURRENT_DATE) = 2 THEN CURRENT_DATE  -- 2nd of current month
             ELSE DATEADD(day, 1, DATE_TRUNC('month', CURRENT_DATE))  -- 2nd of current month
         END AS start_date,
-        CURRENT_DATE AS end_date
+        CURRENT_DATE -2 AS end_date
 ),
 profile_metrics AS (
     SELECT 
