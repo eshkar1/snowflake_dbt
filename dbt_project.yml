@@ -41,12 +41,14 @@ models:
     prod:
       +schema: dbt_prod_db
       +materialized: table
+      +tags: p1
       +grants:
         select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED','SNOWFLAKE_FINANCE_ANALYST_ROLE']
 
     conform:
       +schema: dbt_stage_db
       +materialized: view
+      +tags: p1
       +grants:
         select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED','SNOWFLAKE_FINANCE_ANALYST_ROLE']
     
