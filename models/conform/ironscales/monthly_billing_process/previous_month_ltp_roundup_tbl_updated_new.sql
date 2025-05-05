@@ -1,15 +1,13 @@
 
 with global_tenant_history as (
     select * from 
-    {{ ref('global_tenant_history')}} 
-    -- PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
+    -- {{ ref('global_tenant_history')}} 
+    PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
 ),
 
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
 ),
-
-
 
 profile_metrics AS (
     SELECT 
@@ -26,6 +24,7 @@ profile_metrics AS (
     FROM global_tenant_history g
     LEFT JOIN ltp_pricing_list p 
         ON g.root = p.tenant_global_id
+
     WHERE 
     --    record_date BETWEEN  date_trunc('month', dateadd('month', -1, current_date))  -- First day of previous month
         -- AND dateadd('day', -1, date_trunc('month', current_date))
@@ -35,8 +34,7 @@ profile_metrics AS (
         AND billing_status = 'Active'
         AND root IN (
             SELECT tenant_global_id
-            FROM ltp_pricing_list
-        )
+            FROM ltp_pricing_list)
 ),
 
 intermediate_results AS (

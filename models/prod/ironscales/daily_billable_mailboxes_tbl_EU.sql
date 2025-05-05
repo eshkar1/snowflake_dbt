@@ -1,9 +1,13 @@
 with global_tenant_history_daily_agg_billing_tbl as (
     select * from {{ ref('global_tenant_history_daily_agg_billing_tbl')}} 
+    WHERE
+    DATE_RECORDED = current_date
 ),
 
 global_tenant_history as (
     select * from {{ ref('global_tenant_history')}}
+    WHERE
+    record_date = current_date
 ),
 
 ltp_pricing_list as (
