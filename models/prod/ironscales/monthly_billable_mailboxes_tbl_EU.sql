@@ -3,7 +3,10 @@ with global_tenant_history_daily_agg_billing_tbl as (
 ),
 
 global_tenant_history as (
-    select * from {{ ref('global_tenant_history')}}
+    select * from 
+    PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY
+    -- {{ ref('global_tenant_history')}}
+    
 ),
 
 ltp_pricing_list as (
