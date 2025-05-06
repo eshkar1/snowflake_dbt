@@ -80,5 +80,5 @@ SELECT
 FROM ranked_results_filter
 WHERE 
     rn = 1
-    OR
-    (rn = 2 AND is_highwatermark = true)
+    -- OR
+    -- (rn = 2 AND is_highwatermark = true)

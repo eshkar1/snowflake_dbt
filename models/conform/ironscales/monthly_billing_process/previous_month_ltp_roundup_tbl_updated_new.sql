@@ -28,8 +28,10 @@ profile_metrics AS (
     WHERE 
     --    record_date BETWEEN  date_trunc('month', dateadd('month', -1, current_date))  -- First day of previous month
         -- AND dateadd('day', -1, date_trunc('month', current_date))
-        (record_date BETWEEN dateadd('day', 1, date_trunc('month', dateadd('month', -1, current_date)))  -- 2nd day of previous month
-        AND date_trunc('month', current_date) ) -- 1st day of current month 
+        -- (record_date BETWEEN dateadd('day', 1, date_trunc('month', dateadd('month', -1, current_date)))  -- 2nd day of previous month
+        -- AND date_trunc('month', current_date) ) -- 1st day of current month 
+        (record_date BETWEEN date_trunc('month', dateadd('month', -1, current_date))
+             AND date_trunc('month', current_date))
         AND approved = true
         AND billing_status = 'Active'
         AND root IN (
@@ -82,5 +84,5 @@ SELECT
 FROM ranked_results_filter
 WHERE 
 rn = 1
-or
-(rn = 2 and is_highwatermark = true)
+-- or
+-- (rn = 2 and is_highwatermark = true)
