@@ -72,3 +72,5 @@ left join global_tenant_history gh on g.record_date = gh.record_date
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 WHERE
 REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'US'
+and g.billing_status = 'Active'
+and g.approved = true
