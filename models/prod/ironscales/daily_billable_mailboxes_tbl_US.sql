@@ -14,11 +14,11 @@ ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
 )
 
-select
-*
-from PROD_CONFORM.DBT_PROD_DB.DAILY_BILLABLE_MAILBOXES_TBL_US
+-- select
+-- *
+-- from PROD_CONFORM.DBT_PROD_DB.DAILY_BILLABLE_MAILBOXES_TBL_US
 
-union 
+-- union 
 
 select
 current_date as record_date,
