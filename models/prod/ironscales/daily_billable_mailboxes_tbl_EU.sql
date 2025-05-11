@@ -75,3 +75,4 @@ WHERE
 REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'EU'
 and g.billing_status = 'Active'
 and g.approved = true
+and g.record_date = current_date
