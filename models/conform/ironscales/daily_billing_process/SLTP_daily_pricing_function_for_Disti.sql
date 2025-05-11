@@ -63,8 +63,9 @@ end as billable_quantity,
 -- Non NFR Plans --
 CASE 
 
-    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
-    
+    WHEN FIRST_LAYER_ID in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
+    WHEN FIRST_LAYER_ID in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
+
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' then billable_quantity * i.amount/i.quantity
 
     WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' then billable_quantity * i.amount/i.quantity
