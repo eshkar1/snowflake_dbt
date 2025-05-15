@@ -1,13 +1,13 @@
 with global_tenant_history_daily as (
     select * from 
-    prod
-    -- {{ ref('global_tenant_history_daily_billing_tbl')}} 
+    -- prod_conform.dbt_stage_db.global_tenant_history_daily_billing_tbl
+    {{ ref('global_tenant_history_daily_billing_tbl')}} 
 ),
 
 ltp_pricing_list as (
-    select * from {{ ref('ltp_pricing_tbl')}}
-    where
-    tenant_global_id in (US-211815) -- only Shareweb
+    select * from 
+    -- prod_mart.upload_tables.ltp_pricing_list
+    {{ ref('ltp_pricing_tbl')}}
 )
 
 
@@ -85,8 +85,8 @@ where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
-    and ltp in (US-211815)
-    and plan_name != 'Phishing Simulation and Training'
+    and ltp in ('US-211815')
+    -- and plan_name != 'Phishing Simulation and Training'
     and licensed_profiles is not NULL
 
 group by
@@ -166,7 +166,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and premium_name != 'No Premium'
 group by                              
 g.DATE_RECORDED,
@@ -199,18 +199,18 @@ CASE p.profile_type
                     end
 end as quantity,
 null as partner_pricing,
--- quantity * IM_1 as amount,
-CASE
-    WHEN quantity >= 25000 then (15000 * IM_1) + ((25000-15000) * IM_1000) + (quantity - 25000) * IM_3500
-    WHEN quantity >= 15000 then (15000 * IM_1) + (quantity-15000) * IM_1000
-    WHEN quantity < 15000 then quantity * IM_1
-end as amount
+quantity * IM_1 as amount,
+-- CASE
+--     WHEN quantity >= 25000 then (15000 * IM_1) + ((25000-15000) * IM_1000) + (quantity - 25000) * IM_3500
+--     WHEN quantity >= 15000 then (15000 * IM_1) + (quantity-15000) * IM_1000
+--     WHEN quantity < 15000 then quantity * IM_1
+-- end as amount
 from global_tenant_history_daily g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and incident_management = true
 group by
     g.DATE_RECORDED,
@@ -247,18 +247,18 @@ CASE p.profile_type
                     end
 end as quantity,
 null as partner_pricing,
-CASE
-    WHEN quantity >= 25000 then (15000 * STB_1) + ((25000-15000) * STB_1000) + (quantity - 25000) * STB_3500
-    WHEN quantity >= 15000 then (15000 * STB_1) + (quantity-15000) * STB_1000
-    WHEN quantity < 15000 then quantity * STB_1
-end as amount
--- quantity * STB_1 as amount
+-- CASE
+--     WHEN quantity >= 25000 then (15000 * STB_1) + ((25000-15000) * STB_1000) + (quantity - 25000) * STB_3500
+--     WHEN quantity >= 15000 then (15000 * STB_1) + (quantity-15000) * STB_1000
+--     WHEN quantity < 15000 then quantity * STB_1
+-- end as amount
+quantity * STB_1 as amount
 from global_tenant_history_daily g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
@@ -304,7 +304,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and security_awareness_training = true
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
@@ -346,7 +346,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and themis_co_pilot = true
     and AI_EMPOWER_BUNDLE = false
     and simulation_and_training_bundle_plus = false
@@ -387,7 +387,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and link_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
@@ -429,7 +429,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and file_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
@@ -471,7 +471,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815) 
+    and ltp in ('US-211815') 
     and AI_EMPOWER_BUNDLE = true
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = false
     and plan_name != 'Complete Protect'
@@ -511,7 +511,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
 group by
@@ -550,7 +550,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and ATO = true
     and plan_name != 'Complete Protect'
 group by
@@ -589,7 +589,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp in (US-211815)
+    and ltp in ('US-211815')
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
 group by
