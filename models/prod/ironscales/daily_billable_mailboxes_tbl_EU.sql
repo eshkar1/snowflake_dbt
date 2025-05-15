@@ -67,12 +67,12 @@ g.partner_pricing as not_for_resale_flag,
 null as price_per_mailbox,
 gh.tree_key
 from global_tenant_history_daily_agg_billing_tbl g
-left join global_tenant_history gh on g.record_date = gh.record_date 
+left join global_tenant_history gh on g.DATE_RECORDED = gh.record_date 
                                                         and g.tenant_global_id = gh.tenant_global_id
                                                         
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 WHERE
 REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'EU'
-and g.billing_status = 'Active'
-and g.approved = true
+and gh.billing_status = 'Active'
+and gh.approved = true
 -- and g.record_date = current_date
