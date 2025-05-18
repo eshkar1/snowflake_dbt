@@ -9,6 +9,10 @@ sltp_pricing_function_all_ltps as (
 
 sltp_pricing_function_disti as (
     select * from {{ ref('SLTP_daily_pricing_function_for_Disti')}}
+),
+
+sltp_pricing_function_shareweb as (
+    select * from {{ ref('SLTP_daily_pricing_function_for_shareweb')}}
 )
 
 
