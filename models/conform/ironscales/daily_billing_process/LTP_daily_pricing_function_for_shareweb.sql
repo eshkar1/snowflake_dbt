@@ -86,7 +86,7 @@ where
     and billing_status = 'Active'
     and profile_type is not NULL
     and ltp in ('US-211815')
-    -- and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'Phishing Simulation and Training'
     and licensed_profiles is not NULL
 
 group by
