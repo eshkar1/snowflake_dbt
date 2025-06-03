@@ -6,6 +6,7 @@ ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
     tenant_global_id in ('EU-49000','EU-51541','US-11100')
+    and IS_TRACKED = true
 ),
 
 LTP_MONTHLY_ITEMIZED_BILLING_TBL as (
