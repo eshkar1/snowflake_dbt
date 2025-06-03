@@ -6,6 +6,7 @@ ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
     tenant_global_id not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815')
+    and IS_TRACKED = true
 ),
 
 LTP_DAILY_ITEMIZED_BILLING_TBL as (

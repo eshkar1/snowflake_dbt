@@ -6,6 +6,7 @@ ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
     tenant_global_id in ('US-733','EU-25')
+    and IS_TRACKED = true
 )
 
 
