@@ -8,7 +8,8 @@ ltp_pricing_list as (
     select * from 
     -- prod_mart.upload_tables.ltp_pricing_list
     {{ ref('ltp_pricing_tbl')}}
-    and IS_TRACKED = true
+    where
+    IS_TRACKED = true
 )
 
 
