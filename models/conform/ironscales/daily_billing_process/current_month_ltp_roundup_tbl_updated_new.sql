@@ -27,7 +27,7 @@ profile_metrics AS (
         CASE p.profile_type
             WHEN 'active' THEN g.active_profiles
             WHEN 'license' THEN g.licensed_profiles
-            WHEN 'shared' THEN g.active_profiles - g.shared_profiles
+            WHEN 'shared' THEN g.active_profiles - ifnull(g.shared_profiles,0)
         END AS profile_count
     FROM global_tenant_history g
     LEFT JOIN ltp_pricing_list p 
