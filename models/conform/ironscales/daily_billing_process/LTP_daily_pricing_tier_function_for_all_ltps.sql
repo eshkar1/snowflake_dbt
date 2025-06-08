@@ -5,7 +5,7 @@ with global_tenant_history_daily as (
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
-    tenant_global_id not in ('US-11100','US-733','EU-25','EU-49000','EU-51541')
+    tenant_global_id not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815')
     and IS_TRACKED = true
 )
 
@@ -96,7 +96,7 @@ where
     approved = true
     and billing_status = 'Active'
     and profile_type is not NULL
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
 group by
     g.DATE_RECORDED,
     root,   
@@ -174,7 +174,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
 approved = true
 and billing_status = 'Active'
-and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
 and premium_name != 'No Premium'
 group by                              
 g.DATE_RECORDED,
@@ -214,7 +214,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and incident_management = true
 group by
     g.DATE_RECORDED,
@@ -253,7 +253,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and themis_co_pilot = true
     and AI_EMPOWER_BUNDLE = false
     and simulation_and_training_bundle_plus = false
@@ -295,7 +295,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and link_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
@@ -337,7 +337,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and file_scanning = true
     and plan_name != 'Complete Protect'
     and plan_name != 'Core'
@@ -380,7 +380,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and security_awareness_training = true
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
@@ -419,7 +419,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and security_awareness_training = true
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
@@ -462,7 +462,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
@@ -501,7 +501,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
@@ -545,7 +545,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and AI_EMPOWER_BUNDLE = true
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = false
     and plan_name != 'Complete Protect'
@@ -587,7 +587,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
     and partner_pricing = false
@@ -628,7 +628,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and ATO = true
     and plan_name != 'Complete Protect'
     and partner_pricing = false
@@ -669,7 +669,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status = 'Active'
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
     and partner_pricing = false

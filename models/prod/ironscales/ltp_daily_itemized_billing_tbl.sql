@@ -75,20 +75,20 @@ group by
     sku,
     partner_pricing    
 
--- union all
+union all
 
--- select
--- current_date as billing_date,
--- ltp,
--- item,
--- sku,
--- partner_pricing,
--- sum(quantity) as quantity,
--- sum(amount) as amount
--- from pricing_function_shareweb
--- group by 
---     billing_date,
---     ltp,
---     item,
---     sku,
---     partner_pricing    
+select
+current_date as billing_date,
+ltp,
+item,
+sku,
+partner_pricing,
+sum(quantity) as quantity,
+sum(amount) as amount
+from pricing_function_shareweb
+group by 
+    billing_date,
+    ltp,
+    item,
+    sku,
+    partner_pricing    
