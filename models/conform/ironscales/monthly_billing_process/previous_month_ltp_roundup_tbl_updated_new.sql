@@ -1,8 +1,8 @@
 
 with global_tenant_history as (
     select * from 
-    -- {{ ref('global_tenant_history')}} 
-    PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
+    {{ ref('global_tenant_history')}} 
+    -- PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
 ),
 
 ltp_pricing_list as (
@@ -47,7 +47,8 @@ intermediate_results AS (
         END AS tenant_global_id,
         CASE is_highwatermark
             WHEN true THEN MAX_BY(record_date, COALESCE(profile_count, 0))
-            WHEN false THEN MAX(record_date)
+            -- WHEN false THEN MAX(record_date)
+            WHEN false then date_trunc('month', current_date) --1st day of current month 
         END AS record_date,
         is_highwatermark
     FROM profile_metrics
