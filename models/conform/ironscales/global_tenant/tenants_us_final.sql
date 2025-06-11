@@ -65,6 +65,8 @@ select
     l.trial_premium_vendor as trial_premium_id,
     l.trial_plan_expiry_date as trial_plan_expiry,
     l.DMARC_MANAGEMENT,
+    l.dmarc_domains_number,
+    l.dmarc_plan_name,
     t.depth as depth,
     t.approved as approved,
     t.tree_key as tree_key,
