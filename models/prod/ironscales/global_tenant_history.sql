@@ -6,11 +6,11 @@ tenants_eu_final as (
     select * from {{ ref('stg_ironscales_tenants_eu')}}
 )
 
-select
-*
-from PROD_CONFORM.DBT_PROD_DB.GLOBAL_TENANT_HISTORY
+-- select
+-- *
+-- from PROD_CONFORM.DBT_PROD_DB.GLOBAL_TENANT_HISTORY
 
-union 
+-- union 
 
 
 select
@@ -83,6 +83,8 @@ select
     end as trial_premium_name,
     date(trial_plan_expiry) as trial_plan_expiry_date ,
     DMARC_MANAGEMENT,
+    dmarc_domains_number,
+    dmarc_plan_name,
     depth,
     approved,
     tree_key,
@@ -176,6 +178,8 @@ select
     end as trial_premium_name,
     date(trial_plan_expiry) as trial_plan_expiry_date,
     DMARC_MANAGEMENT,
+    dmarc_domains_number,
+    dmarc_plan_name,
     depth,
     approved,
     tree_key,
