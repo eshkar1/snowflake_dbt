@@ -6,7 +6,7 @@ with current_month_ltp_roundup_tbl as (
 global_tenant_history as (
     select * from 
     prod_mart.operation.global_tenant_history
-    {{ ref('global_tenant_history')}}
+    -- {{ ref('global_tenant_history')}}
 )
 
 SELECT
