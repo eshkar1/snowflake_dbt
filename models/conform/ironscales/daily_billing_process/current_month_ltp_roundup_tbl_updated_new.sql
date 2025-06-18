@@ -26,9 +26,9 @@ profile_metrics AS (
         p.profile_type,
         p.is_highwatermark,
         CASE p.profile_type
-            WHEN 'active' THEN g.active_profiles
-            WHEN 'license' THEN g.licensed_profiles
-            WHEN 'shared' THEN g.active_profiles - IFNULL(g.shared_profiles, 0)
+            WHEN 'active' THEN ifnull(g.active_profiles,0)
+            WHEN 'license' THEN ifnull(g.licensed_profiles,0)
+            WHEN 'shared' THEN ifnull(g.active_profiles - IFNULL(g.shared_profiles, 0),0)
         END AS profile_count
     FROM global_tenant_history g
     JOIN date_bounds d ON g.record_date BETWEEN d.start_date AND d.end_date
