@@ -34,6 +34,7 @@ select
         when 4 then 'Email Protect'
         when 5 then 'Complete Protect'
         when 6 then 'IRONSCALES Protect'
+        when 7 then 'SAT Suite'
         else ifnull(to_varchar(plan_id), 'No_Plan')
     end as plan_name,
     premium_id,
@@ -70,6 +71,7 @@ select
         when 4 then 'Email Protect'
         when 5 then 'Complete Protect'
         when 6 then 'IRONSCALES Protect'
+        when 7 then 'SAT Suite'
         else ifnull(to_varchar(trial_plan_id), 'No_Plan')
     end as trial_plan_name,
     trial_premium_id,
@@ -129,6 +131,7 @@ select
         when 4 then 'Email Protect'
         when 5 then 'Complete Protect'
         when 6 then 'IRONSCALES Protect'
+        when 7 then 'SAT Suite'
         else ifnull(to_varchar(plan_id), 'No_Plan')
     end as plan_name,
     premium_id,
@@ -165,6 +168,7 @@ select
         when 4 then 'Email Protect'
         when 5 then 'Complete Protect'
         when 6 then 'IRONSCALES Protect'
+        when 7 then 'SAT Suite'
         else ifnull(to_varchar(trial_plan_id), 'No_Plan')
     end as trial_plan_name,
     trial_premium_id,
