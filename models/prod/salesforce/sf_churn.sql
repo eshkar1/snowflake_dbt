@@ -21,7 +21,7 @@ user_table as (
 
 
 select
-churn_date__c,
+o.churn_date__c,
 u.name as csm_owner,
 a.name as account_name,
 o.name as opportunity_name,
@@ -60,7 +60,7 @@ left join account_table a on o.account_master_id__c = a.account_master_id__c
 left join user_table u on o.csm_owner__c = u.id
 left join account_table at on a.id = at.id
 where
-YEAR (TO_DATE (churn_date__c)) >= 2024
+YEAR (TO_DATE (o.churn_date__c)) >= 2024
 and (o.type in ('Renewal', 'Renewal/Upsell')
 or (o.type = 'Terminated' and o.stagename = 'Closed Won'))
 and change_in_arr_in_usd__c < 0 
