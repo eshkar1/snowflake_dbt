@@ -11,4 +11,27 @@ sources:
         config:
           grants:
             select: ['RIVERY_ROLE']
+        columns:
+          - name: LTP_TYPE
+            tests:
+              - not_null
+
+          # - name: TENANT_GLOBAL_ID
+          #   tests:
+          #     - not_null
+          #     - unique
+          
+          # - name: PROFILE_TYPE
+          #   tests:
+          #     - accepted_values:
+          #       values: ['active', 'shared', 'license']
+
+          # - name: SFDC_ID
+          #   tests:
+          #     - not_null
+          #     - unique
+          
+          - name: SNAPSHOT_DATE
+            tests:
+              - not_null
       
