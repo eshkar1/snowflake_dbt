@@ -58,7 +58,8 @@ highwater_selected AS (
 non_highwater_selected AS (
     SELECT
         TENANT_GLOBAL_ID,
-        RECORD_DATE,
+        -- RECORD_DATE,
+        current_date as RECORD_DATE, -- the last day for all non highwater should be always the current/last day of the month   
         IS_HIGHWATERMARK
     FROM profile_metrics
     WHERE IS_HIGHWATERMARK = 0
