@@ -179,7 +179,8 @@ CASE p.profile_type
                         else (Active_profiles - SHARED_PROFILES)
                     end
 end as billable_quantity,
-billable_quantity * i.amount/i.quantity as amount
+-- billable_quantity * i.amount/i.quantity as amount
+billable_quantity * IM_1
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp 
@@ -220,7 +221,8 @@ CASE p.profile_type
                         else (Active_profiles - SHARED_PROFILES)
                     end
 end as billable_quantity,
-billable_quantity * i.amount/i.quantity as amount
+-- billable_quantity * i.amount/i.quantity as amount
+billable_quantity * STB_1
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
