@@ -37,11 +37,14 @@ profile_metrics AS (
     WHERE 
         g.approved = TRUE
         AND g.billing_status = 'Active'
-        AND EXISTS (
-            SELECT 1 
-            FROM prod_mart.upload_tables.ltp_pricing_list l
-            WHERE l.tenant_global_id = g.root
-        )
+        and g.root in (select 
+                        tenant_global_id
+                        from ltp_pricing_list)
+        -- AND EXISTS (
+        --     SELECT 1 
+        --     FROM prod_mart.upload_tables.ltp_pricing_list l
+        --     WHERE l.tenant_global_id = g.root
+        -- )
 ),
 highwater_selected AS (
     SELECT
