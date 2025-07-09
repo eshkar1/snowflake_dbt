@@ -55,10 +55,11 @@ CASE
     WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 15000 then (15000 * EP_1) + (quantity-15000) * EP_1000
     WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 15000 then quantity * EP_1
     
-    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 25000 then (11000 * EP_1) + ((25000-11000) * EP_1000) + (quantity - 25000) * EP_3500
-    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 11000 then (11000 * EP_1) + (quantity-11000) * EP_1000
-    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 11000 then quantity * EP_1
-    
+    -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 25000 then (11000 * EP_1) + ((25000-11000) * EP_1000) + (quantity - 25000) * EP_3500
+    -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 11000 then (11000 * EP_1) + (quantity-11000) * EP_1000  once 
+    -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 11000 then quantity * EP_1
+    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then GREATEST(quantity,13750) * EP_1
+
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 25000 then (15000 * CORE_1) + ((25000-15000) * CORE_1000) + (quantity - 25000) * CORE_3500
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 15000 then (15000 * CORE_1) + (quantity-15000) * CORE_1000
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity < 15000 then quantity * CORE_1
