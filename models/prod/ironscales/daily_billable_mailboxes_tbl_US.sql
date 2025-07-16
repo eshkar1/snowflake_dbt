@@ -159,26 +159,26 @@ null as parent_type,
 OBJECT_CONSTRUCT(
     -- Premium SAT Pack - Habitu8
     CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'PREMIUM_SAT_PACK' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN sltp_bill.Premium_Content_Habitu8 ELSE NULL END,
-    CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'PREMIUM_SAT_PACK_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN sltp_bill.Premium_Content_Habitu8_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'PREMIUM_SAT_PACK_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN ifnull(sltp_bill.Premium_Content_Habitu8_of_Licenses,0) ELSE NULL END,
     CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'PREMIUM_SAT_PACK_NAME' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'Habitu8' ELSE NULL END,
 
     -- Premium SAT Pack - NINJIO
     CASE WHEN sltp_bill.Premium_Content_NINJIO THEN 'PREMIUM_SAT_PACK' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_NINJIO THEN sltp_bill.Premium_Content_NINJIO ELSE NULL END,
-    CASE WHEN sltp_bill.Premium_Content_NINJIO THEN 'PREMIUM_SAT_PACK_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_NINJIO THEN sltp_bill.Premium_Content_NINJIO_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Premium_Content_NINJIO THEN 'PREMIUM_SAT_PACK_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_NINJIO THEN ifnull(sltp_bill.Premium_Content_NINJIO_of_Licenses,0) ELSE NULL END,
     CASE WHEN sltp_bill.Premium_Content_NINJIO THEN 'PREMIUM_SAT_PACK_NAME' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_NINJIO THEN 'NINJIO' ELSE NULL END,
 
     -- Premium SAT Pack - Cybermaniacs
     CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN 'PREMIUM_SAT_PACK' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN sltp_bill.Premium_Content_Cybermaniacs ELSE NULL END,
-    CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN 'PREMIUM_SAT_PACK_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN sltp_bill.Premium_Content_Cybermaniacs_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN 'PREMIUM_SAT_PACK_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN ifnull(sltp_bill.Premium_Content_Cybermaniacs_of_Licenses,0) ELSE NULL END,
     CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN 'PREMIUM_SAT_PACK_NAME' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN 'Cybermaniacs Videos' ELSE NULL END,
 
     -- Account Takeover
     CASE WHEN sltp_bill.Account_Takeover THEN 'ATO' ELSE NULL END, CASE WHEN sltp_bill.Account_Takeover THEN sltp_bill.Account_Takeover ELSE NULL END,
-    CASE WHEN sltp_bill.Account_Takeover THEN 'ATO_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Account_Takeover THEN sltp_bill.Account_Takeover_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Account_Takeover THEN 'ATO_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Account_Takeover THEN ifnull(sltp_bill.Account_Takeover_of_Licenses,0) ELSE NULL END,
 
     -- Incident Management
     CASE WHEN sltp_bill.Incident_Management THEN 'IINCIDENT_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN sltp_bill.Incident_Management ELSE NULL END,
-    CASE WHEN sltp_bill.Incident_Management THEN 'INCIDENT_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN Incident_Management_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Incident_Management THEN 'INCIDENT_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN ifnull(Incident_Management_of_Licenses,0) ELSE NULL END,
 
     -- Multi-Tenant
     -- CASE WHEN sltp_bill.Multi_Tenant THEN 'Multi_Tenant' ELSE NULL END, CASE WHEN sltp_bill.Multi_Tenant THEN sltp_bill.Multi_Tenant ELSE NULL END,
@@ -186,15 +186,15 @@ OBJECT_CONSTRUCT(
 
     -- S&T Bundle
     CASE WHEN sltp_bill.ST_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle THEN sltp_bill.ST_Bundle ELSE NULL END,
-    CASE WHEN sltp_bill.ST_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle THEN sltp_bill.ST_Bundle_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle THEN ifnull(sltp_bill.ST_Bundle_of_Licenses,0) ELSE NULL END,
 
     -- S&T Plus Bundle
-    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN ST_Plus_Bundle ELSE NULL END,
-    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN ST_Plus_Bundle_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN sltp_bill.ST_Plus_Bundle ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN ifnull(sltp_bill.ST_Plus_Bundle_of_Licenses,0) ELSE NULL END,
 
     -- Security Awareness Training
     CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN sltp_bill.Security_Awareness_Training ELSE NULL END,
-    CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN sltp_bill.SAT_of_Licenses ELSE NULL END
+    CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN ifnull(sltp_bill.SAT_of_Licenses,0) ELSE NULL END
 ) as billable_items,
 
 OBJECT_CONSTRUCT(
