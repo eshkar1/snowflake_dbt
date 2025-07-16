@@ -186,8 +186,8 @@ OBJECT_CONSTRUCT(
     CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN 'IRONSCALES_Protect_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN sltp_bill.Ironscales_Protect_NFR_of_Licenses ELSE NULL END,
 
     -- Phishing Simulation and Training
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and_Training_NFR' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.Phishing_Simulation_and_Training ELSE NULL END,
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and_Training_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.PST_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and_Training' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.Phishing_Simulation_and_Training ELSE NULL END,
+    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and_Training_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.PST_of_Licenses ELSE NULL END,
 
     CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN 'Phishing_Simulation_and_Training_NFR' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN sltp_bill.Phishing_Simulation_and_Training_NFR ELSE NULL END,
     CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN 'Phishing_Simulation_and_Training_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN sltp_bill.PST_NFR_of_Licenses ELSE NULL END,
