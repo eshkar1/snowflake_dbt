@@ -182,15 +182,15 @@ OBJECT_CONSTRUCT(
     CASE WHEN sltp_bill.Ironscales_Protect THEN 'IRONSCALES_Protect' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect THEN sltp_bill.Ironscales_Protect ELSE NULL END,
     CASE WHEN sltp_bill.Ironscales_Protect THEN 'IRONSCALES_Protect_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect THEN sltp_bill.Ironscales_Protect_of_Licenses ELSE NULL END,
 
-    CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN 'IRONSCALES_Protect' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN sltp_bill.Ironscales_Protect_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN 'IRONSCALES_Protect_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN sltp_bill.Ironscales_Protect_NFR_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN 'IRONSCALES_Protect_NFR' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN sltp_bill.Ironscales_Protect_NFR ELSE NULL END,
+    CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN 'IRONSCALES_Protect_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN sltp_bill.Ironscales_Protect_NFR_of_Licenses ELSE NULL END,
 
     -- Phishing Simulation and Training
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and__Training' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.Phishing_Simulation_and_Training ELSE NULL END,
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and__Training_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.PST_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and_Training' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.Phishing_Simulation_and_Training ELSE NULL END,
+    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and_Training_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.PST_of_Licenses ELSE NULL END,
 
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN 'Phishing_Simulation_and__Training' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN sltp_bill.Phishing_Simulation_and_Training_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN 'Phishing_Simulation_and__Training_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN sltp_bill.PST_NFR_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN 'Phishing_Simulation_and_Training_NFR' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN sltp_bill.Phishing_Simulation_and_Training_NFR ELSE NULL END,
+    CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN 'Phishing_Simulation_and_Training_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN sltp_bill.PST_NFR_of_Licenses ELSE NULL END,
     
     -- Starter
     CASE WHEN sltp_bill.Starter THEN 'Starter' ELSE NULL END, CASE WHEN sltp_bill.Starter THEN sltp_bill.Starter ELSE NULL END,
@@ -240,8 +240,8 @@ OBJECT_CONSTRUCT(
     CASE WHEN sltp_bill.Security_Awareness_Training_Suite THEN 'Secuity_Awareness_Training_Suite_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite THEN sltp_bill.SAT_Suite_of_Licenses ELSE NULL END,
 
 
-    CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN 'Secuity_Awareness_Training_Suite' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN sltp_bill.Security_Awareness_Training_Suite_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN 'Secuity_Awareness_Training_Suite_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN sltp_bill.SAT_Suite_NFR_of_Licenses ELSE NULL END
+    CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN 'Secuity_Awareness_Training_Suite_NFR' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN sltp_bill.Security_Awareness_Training_Suite_NFR ELSE NULL END,
+    CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN 'Secuity_Awareness_Training_Suite_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN sltp_bill.SAT_Suite_NFR_of_Licenses ELSE NULL END
 ) as billable_items,
 
 OBJECT_CONSTRUCT(
