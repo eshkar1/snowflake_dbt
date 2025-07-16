@@ -157,46 +157,7 @@ gh.trial_plan_expiry_date as trial_plan_expiry_date,
 gh.registration_date as registration_date,
 null as parent_type,
 OBJECT_CONSTRUCT(
-    -- Email Protect
-    CASE WHEN sltp_bill.Email_Protect THEN 'Email_Protect' ELSE NULL END, CASE WHEN sltp_bill.Email_Protect THEN sltp_bill.Email_Protect ELSE NULL END,
-    CASE WHEN sltp_bill.Email_Protect THEN 'Email_Protect_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Email_Protect THEN sltp_bill.Email_Protect_of_Licenses ELSE NULL END,
-
-    CASE WHEN sltp_bill.Email_Protect_NFR THEN 'Email_Protect_NFR' ELSE NULL END, CASE WHEN sltp_bill.Email_Protect_NFR THEN sltp_bill.Email_Protect_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Email_Protect_NFR THEN 'Email_Protect_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Email_Protect_NFR THEN sltp_bill.Email_Protect_NFR_of_Licenses ELSE NULL END,
-    
-    -- Complete Protect
-    CASE WHEN sltp_bill.Complete_Protect THEN 'Complete_Protect' ELSE NULL END, CASE WHEN sltp_bill.Complete_Protect THEN sltp_bill.Complete_Protect ELSE NULL END,
-    CASE WHEN sltp_bill.Complete_Protect THEN 'Complete_Protect_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Complete_Protect THEN sltp_bill.Complete_Protect_of_Licenses ELSE NULL END,
-
-    CASE WHEN sltp_bill.Complete_Protect_NFR THEN 'Complete_Protect_NFR' ELSE NULL END, CASE WHEN sltp_bill.Complete_Protect_NFR THEN sltp_bill.Complete_Protect_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Complete_Protect_NFR THEN 'Complete_Protect_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Complete_Protect_NFR THEN sltp_bill.Complete_Protect_NFR_of_Licenses ELSE NULL END,
-    
-    -- Core
-    CASE WHEN sltp_bill.Core THEN 'Core' ELSE NULL END, CASE WHEN sltp_bill.Core THEN sltp_bill.Core ELSE NULL END,
-    CASE WHEN sltp_bill.Core THEN 'Core_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Core THEN sltp_bill.Core_of_Licenses ELSE NULL END,
-
-    CASE WHEN sltp_bill.Core_NFR THEN 'Core_NFR' ELSE NULL END, CASE WHEN sltp_bill.Core_NFR THEN sltp_bill.Core_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Core_NFR THEN 'Core_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Core_NFR THEN sltp_bill.Core_NFR_of_Licenses ELSE NULL END,
-    
-    -- IRONSCALES Protect
-    CASE WHEN sltp_bill.Ironscales_Protect THEN 'IRONSCALES_Protect' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect THEN sltp_bill.Ironscales_Protect ELSE NULL END,
-    CASE WHEN sltp_bill.Ironscales_Protect THEN 'IRONSCALES_Protect_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect THEN sltp_bill.Ironscales_Protect_of_Licenses ELSE NULL END,
-
-    CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN 'IRONSCALES_Protect_NFR' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN sltp_bill.Ironscales_Protect_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN 'IRONSCALES_Protect_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Ironscales_Protect_NFR THEN sltp_bill.Ironscales_Protect_NFR_of_Licenses ELSE NULL END,
-
-    -- Phishing Simulation and Training
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and_Training' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.Phishing_Simulation_and_Training ELSE NULL END,
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN 'Phishing_Simulation_and_Training_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training THEN sltp_bill.PST_of_Licenses ELSE NULL END,
-
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN 'Phishing_Simulation_and_Training_NFR' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN sltp_bill.Phishing_Simulation_and_Training_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN 'Phishing_Simulation_and_Training_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Phishing_Simulation_and_Training_NFR THEN sltp_bill.PST_NFR_of_Licenses ELSE NULL END,
-    
-    -- Starter
-    CASE WHEN sltp_bill.Starter THEN 'Starter' ELSE NULL END, CASE WHEN sltp_bill.Starter THEN sltp_bill.Starter ELSE NULL END,
-    CASE WHEN sltp_bill.Starter THEN 'Starter_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Starter THEN sltp_bill.Starter_of_Licenses ELSE NULL END,
-
-    -- Premium SAT Pack - Habitu8
+     -- Premium SAT Pack - Habitu8
     CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'PREMIUM_SAT_PACK' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN sltp_bill.Premium_Content_Habitu8 ELSE NULL END,
     CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'PREMIUM_SAT_PACK_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN sltp_bill.Premium_Content_Habitu8_of_Licenses ELSE NULL END,
     CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'PREMIUM_SAT_PACK_NAME' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Habitu8 THEN 'Habitu8' ELSE NULL END,
@@ -212,36 +173,28 @@ OBJECT_CONSTRUCT(
     CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN 'PREMIUM_SAT_PACK_NAME' ELSE NULL END, CASE WHEN sltp_bill.Premium_Content_Cybermaniacs THEN 'Cybermaniacs Videos' ELSE NULL END,
 
     -- Account Takeover
-    CASE WHEN sltp_bill.Account_Takeover THEN 'Account_Takeover' ELSE NULL END, CASE WHEN sltp_bill.Account_Takeover THEN sltp_bill.Account_Takeover ELSE NULL END,
-    CASE WHEN sltp_bill.Account_Takeover THEN 'Account_Takeover_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Account_Takeover THEN sltp_bill.Account_Takeover_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Account_Takeover THEN 'ATO' ELSE NULL END, CASE WHEN sltp_bill.Account_Takeover THEN sltp_bill.Account_Takeover ELSE NULL END,
+    CASE WHEN sltp_bill.Account_Takeover THEN 'ATO_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Account_Takeover THEN sltp_bill.Account_Takeover_of_Licenses ELSE NULL END,
 
     -- Incident Management
-    CASE WHEN sltp_bill.Incident_Management THEN 'Incident_Management' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN sltp_bill.Incident_Management ELSE NULL END,
-    CASE WHEN sltp_bill.Incident_Management THEN 'Incident_Management_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN Incident_Management_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.Incident_Management THEN 'IINCIDENT_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN sltp_bill.Incident_Management ELSE NULL END,
+    CASE WHEN sltp_bill.Incident_Management THEN 'INCIDENT_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN Incident_Management_of_Licenses ELSE NULL END,
 
     -- Multi-Tenant
-    CASE WHEN sltp_bill.Multi_Tenant THEN 'Multi_Tenant' ELSE NULL END, CASE WHEN sltp_bill.Multi_Tenant THEN sltp_bill.Multi_Tenant ELSE NULL END,
-    CASE WHEN sltp_bill.Multi_Tenant THEN 'Multi_Tenant_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Multi_Tenant THEN sltp_bill.Multi_Tenant_of_Licenses ELSE NULL END,
+    -- CASE WHEN sltp_bill.Multi_Tenant THEN 'Multi_Tenant' ELSE NULL END, CASE WHEN sltp_bill.Multi_Tenant THEN sltp_bill.Multi_Tenant ELSE NULL END,
+    -- CASE WHEN sltp_bill.Multi_Tenant THEN 'Multi_Tenant_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Multi_Tenant THEN sltp_bill.Multi_Tenant_of_Licenses ELSE NULL END,
 
     -- S&T Bundle
-    CASE WHEN sltp_bill.ST_Bundle THEN 'S&T_Bundle' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle THEN sltp_bill.ST_Bundle ELSE NULL END,
-    CASE WHEN sltp_bill.ST_Bundle THEN 'S&T_Bundle_Quantity' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle THEN sltp_bill.ST_Bundle_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle THEN sltp_bill.ST_Bundle ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle THEN sltp_bill.ST_Bundle_of_Licenses ELSE NULL END,
 
     -- S&T Plus Bundle
-    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'S&T_Plus_Bundle' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN ST_Plus_Bundle ELSE NULL END,
-    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'S&T_Plus_Bundle_Quantity' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN ST_Plus_Bundle_of_Licenses ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN ST_Plus_Bundle ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN ST_Plus_Bundle_of_Licenses ELSE NULL END,
 
     -- Security Awareness Training
-    CASE WHEN sltp_bill.Security_Awareness_Training THEN 'Security_Awareness_Training' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN sltp_bill.Security_Awareness_Training ELSE NULL END,
-    CASE WHEN sltp_bill.Security_Awareness_Training THEN 'Security_Awareness_Training_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN sltp_bill.SAT_of_Licenses ELSE NULL END,
-
-    -- Security Awareness Training Suite
-    CASE WHEN sltp_bill.Security_Awareness_Training_Suite THEN 'Secuity_Awareness_Training_Suite' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite THEN sltp_bill.Security_Awareness_Training_Suite ELSE NULL END,
-    CASE WHEN sltp_bill.Security_Awareness_Training_Suite THEN 'Secuity_Awareness_Training_Suite_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite THEN sltp_bill.SAT_Suite_of_Licenses ELSE NULL END,
-
-
-    CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN 'Secuity_Awareness_Training_Suite_NFR' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN sltp_bill.Security_Awareness_Training_Suite_NFR ELSE NULL END,
-    CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN 'Secuity_Awareness_Training_Suite_NFR_Quantity' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training_Suite_NFR THEN sltp_bill.SAT_Suite_NFR_of_Licenses ELSE NULL END
+    CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN sltp_bill.Security_Awareness_Training ELSE NULL END,
+    CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN sltp_bill.SAT_of_Licenses ELSE NULL END
 ) as billable_items,
 
 
