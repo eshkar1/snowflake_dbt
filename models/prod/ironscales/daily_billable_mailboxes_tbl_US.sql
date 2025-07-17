@@ -1,23 +1,23 @@
 with global_tenant_history_daily_agg_billing_tbl as (
     select * from 
-    prod_conform.dbt_prod_db.global_tenant_history_daily_agg_billing_tbl
-    -- {{ ref('global_tenant_history_daily_agg_billing_tbl')}} 
+    -- prod_conform.dbt_prod_db.global_tenant_history_daily_agg_billing_tbl
+    {{ ref('global_tenant_history_daily_agg_billing_tbl')}} 
     WHERE
     DATE_RECORDED = current_date
 ),
 
 global_tenant_history as (
     select * from 
-    prod_mart.operation.global_tenant_history
-    -- {{ ref('global_tenant_history')}}
+    -- prod_mart.operation.global_tenant_history
+    {{ ref('global_tenant_history')}}
     WHERE
     record_date = current_date
 ),
 
 ltp_pricing_list as (
     select * from 
-    prod_mart.upload_tables.ltp_pricing_list_today
-    -- {{ ref('ltp_pricing_tbl')}}
+    -- prod_mart.upload_tables.ltp_pricing_list_today
+    {{ ref('ltp_pricing_tbl')}}
 ),
 
 sltp_daily_itemized_billing_tbl as (
