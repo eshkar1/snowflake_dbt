@@ -20,6 +20,13 @@ ltp_pricing_list as (
     {{ ref('ltp_pricing_tbl')}}
 ),
 
+sltp_daily_itemized_billing_tbl as (
+    select * from 
+    {{ ref('sltp_daily_itemized_billing_tbl')}}
+    WHERE
+    billing_date = current_date
+),
+
 billing_base AS (
   SELECT
     CASE
@@ -32,8 +39,8 @@ billing_base AS (
     item,
     partner_pricing,
     billable_quantity
-  FROM prod_conform.dbt_prod_db.sltp_daily_itemized_billing_tbl
-  WHERE billing_date = CURRENT_DATE
+  FROM sltp_daily_itemized_billing_tbl
+--   WHERE billing_date = CURRENT_DATE
 ),
 
 sltp_bill AS (
