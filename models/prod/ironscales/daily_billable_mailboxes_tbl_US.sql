@@ -184,7 +184,7 @@ OBJECT_CONSTRUCT(
     CASE WHEN sltp_bill.Account_Takeover THEN 'ATO_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Account_Takeover THEN ifnull(sltp_bill.Account_Takeover_of_Licenses,0) ELSE NULL END,
 
     -- Incident Management
-    CASE WHEN sltp_bill.Incident_Management THEN 'IINCIDENT_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN sltp_bill.Incident_Management ELSE NULL END,
+    CASE WHEN sltp_bill.Incident_Management THEN 'INCIDENT_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN sltp_bill.Incident_Management ELSE NULL END,
     CASE WHEN sltp_bill.Incident_Management THEN 'INCIDENT_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Incident_Management THEN ifnull(Incident_Management_of_Licenses,0) ELSE NULL END,
 
     -- Multi-Tenant
