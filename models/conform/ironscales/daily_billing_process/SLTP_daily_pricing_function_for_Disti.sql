@@ -9,6 +9,10 @@ ltp_pricing_list as (
     and IS_TRACKED = true
 ),
 
+hwm_dmarc_count as (
+    select * from {{ ref('current_month_hwm_dmarc_domains_number')}}
+),
+
 LTP_DAILY_ITEMIZED_BILLING_TBL as (
     select * from {{ ref('ltp_daily_itemized_billing_tbl')}}
     where
@@ -547,3 +551,31 @@ where
     and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
+
+
+-----------------------------------------
+----------------- DMARC -----------------
+-----------------------------------------
+
+union
+
+select
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
+'DMARC' as item,
+'IS-LTP-DMARC' as sku,
+dmarc_domains_number as quantity,
+null as partner_pricing,
+quantity * DMARC_1 as amount
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
+left join hwm_dmarc_count d on COALESCE(NULLIF(TRIM(fifth_layer_id), ''),NULLIF(TRIM(fourth_layer_id), '') , NULLIF(TRIM(third_layer_id), ''), NULLIF(TRIM(second_layer_id), ''), NULLIF(TRIM(first_layer_id), '')) = d.tenant_global_id
+where
+    approved = true
+    and billing_status = 'Active'
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
+    and DMARC_MANAGEMENT = true

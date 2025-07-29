@@ -10,6 +10,10 @@ ltp_pricing_list as (
     {{ ref('ltp_pricing_tbl')}}
     where
     IS_TRACKED = true
+),
+
+hwm_dmarc_count as (
+    select * from {{ ref('current_month_hwm_dmarc_domains_number')}}
 )
 
 
@@ -602,3 +606,36 @@ group by
     profile_type,
     -- g.partner_pricing,
     MT_1
+
+
+-----------------------------------------
+----------------- DMARC -----------------
+-----------------------------------------
+
+union
+
+select
+g.DATE_RECORDED,
+g.root as ltp,
+'DMARC' as item,
+'IS-LTP-DMARC' as sku,
+sum(dmarc_domains_number) as quantity,
+null as partner_pricing,
+quantity * DMARC_1 as amount
+from global_tenant_history_daily g
+left join ltp_pricing_list p on g.root = p.tenant_global_id
+left join hwm_dmarc_count d on g.tenant_global_id = d.tenant_global_id
+where
+    approved = true
+    and billing_status = 'Active'
+    and ltp in ('US-211815')
+    and DMARC_MANAGEMENT = true
+
+group by
+    g.DATE_RECORDED,
+    root,   
+    item,
+    sku,
+    profile_type,
+    -- g.partner_pricing,
+    DMARC_1
