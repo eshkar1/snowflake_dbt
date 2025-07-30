@@ -636,7 +636,7 @@ g.DATE_RECORDED,
 g.root as ltp,
 'DMARC' as item,
 'IS-LTP-DMARC' as sku,
-sum(dmarc_domains_number) as quantity,
+sum(g.dmarc_domains_number) as quantity,
 null as partner_pricing,
 quantity * DMARC_1 as amount
 from global_tenant_history_daily g
