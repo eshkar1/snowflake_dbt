@@ -662,7 +662,7 @@ FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'DMARC' as item,
 'IS-LTP-DMARC' as sku,
-g.dmarc_domains_number as quantity,
+d.dmarc_domains_number as quantity,
 null as partner_pricing,
 quantity * DMARC_1 as amount
 from current_global_tenant_by_layer g
@@ -672,5 +672,5 @@ where
     approved = true
     and billing_status = 'Active'
     and FIRST_LAYER_ID not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
-    and DMARC_MANAGEMENT = true
+    -- and DMARC_MANAGEMENT = true
 

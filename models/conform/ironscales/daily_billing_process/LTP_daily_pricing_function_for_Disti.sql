@@ -636,7 +636,7 @@ g.DATE_RECORDED,
 g.root as ltp,
 'DMARC' as item,
 'IS-LTP-DMARC' as sku,
-sum(g.dmarc_domains_number) as quantity,
+sum(d.dmarc_domains_number) as quantity,
 null as partner_pricing,
 quantity * DMARC_1 as amount
 from global_tenant_history_daily g
@@ -646,7 +646,7 @@ where
     approved = true
     and billing_status = 'Active'
     and ltp in ('EU-49000','EU-51541','US-11100')
-    and DMARC_MANAGEMENT = true
+    -- and DMARC_MANAGEMENT = true
 
 group by
     g.DATE_RECORDED,
