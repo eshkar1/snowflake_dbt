@@ -40,6 +40,7 @@ profile_metrics AS (
             SELECT tenant_global_id
             FROM ltp_pricing_list
         )
+        and g.DMARC_MANAGEMENT = true
 ),
 
 highwater_selected AS (

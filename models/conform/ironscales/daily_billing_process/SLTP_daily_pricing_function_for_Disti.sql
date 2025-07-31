@@ -568,7 +568,7 @@ FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'DMARC' as item,
 'IS-LTP-DMARC' as sku,
-g.dmarc_domains_number as quantity,
+d.dmarc_domains_number as quantity,
 null as partner_pricing,
 quantity * DMARC_1 as amount
 from current_global_tenant_by_layer g
@@ -578,4 +578,4 @@ where
     approved = true
     and billing_status = 'Active'
     and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
-    and DMARC_MANAGEMENT = true
+    -- and DMARC_MANAGEMENT = true
