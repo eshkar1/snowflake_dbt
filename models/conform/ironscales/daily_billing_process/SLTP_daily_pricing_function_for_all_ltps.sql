@@ -673,4 +673,5 @@ where
     and billing_status = 'Active'
     and FIRST_LAYER_ID not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     -- and DMARC_MANAGEMENT = true
-
+having
+    quantity is not null

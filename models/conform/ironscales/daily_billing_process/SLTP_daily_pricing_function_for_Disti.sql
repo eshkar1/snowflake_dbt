@@ -579,3 +579,5 @@ where
     and billing_status = 'Active'
     and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     -- and DMARC_MANAGEMENT = true
+having
+    quantity is not null
