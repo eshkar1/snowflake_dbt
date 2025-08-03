@@ -619,3 +619,5 @@ group by
     profile_type,
     -- g.partner_pricing,
     DMARC_1
+having
+    quantity is not null
