@@ -672,9 +672,9 @@ FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
 'DMARC' as item,
 'IS-LTP-DMARC' as sku,
-d.dmarc_domains_number as quantity,
 null as partner_pricing,
-quantity * DMARC_1 as amount
+d.dmarc_domains_number as billable_quantity,
+billable_quantity * DMARC_1 as amount
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 left join hwm_dmarc_count d on COALESCE(NULLIF(TRIM(fifth_layer_id), ''),NULLIF(TRIM(fourth_layer_id), '') , NULLIF(TRIM(third_layer_id), ''), NULLIF(TRIM(second_layer_id), ''), NULLIF(TRIM(first_layer_id), '')) = d.tenant_global_id
@@ -684,4 +684,4 @@ where
     and FIRST_LAYER_ID in ('US-733','EU-25') 
     -- and DMARC_MANAGEMENT = true
 having
-    quantity is not null
+    billable_quantity is not null
