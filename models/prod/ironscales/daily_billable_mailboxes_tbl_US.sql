@@ -126,7 +126,11 @@ sltp_bill AS (
       MAX(CASE WHEN item = 'SAT Suite' AND partner_pricing = false THEN billable_quantity ELSE 0 END) as SAT_Suite_of_Licenses,
 
       MAX(CASE WHEN item = 'SAT Suite' AND partner_pricing = true THEN true ELSE false END) as Security_Awareness_Training_Suite_NFR,
-      MAX(CASE WHEN item = 'SAT Suite' AND partner_pricing = true THEN billable_quantity ELSE 0 END) as SAT_Suite_NFR_of_Licenses,  
+      MAX(CASE WHEN item = 'SAT Suite' AND partner_pricing = true THEN billable_quantity ELSE 0 END) as SAT_Suite_NFR_of_Licenses, 
+
+      -- DMARC ---
+      MAX(CASE WHEN item = 'DMARC' THEN true ELSE false END) as DMARC_Management,
+      MAX(CASE WHEN item = 'DMARC' THEN billable_quantity ELSE 0 END) as DMARC_Management_of_Licenses
     
     FROM billing_base
     GROUP BY tenant_global_id
@@ -201,7 +205,14 @@ OBJECT_CONSTRUCT(
 
     -- Security Awareness Training
     CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN sltp_bill.Security_Awareness_Training ELSE NULL END,
-    CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN ifnull(sltp_bill.SAT_of_Licenses,0) ELSE NULL END
+    CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN ifnull(sltp_bill.SAT_of_Licenses,0) ELSE NULL END,
+
+        
+    -- DMARC
+    CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC Management' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN sltp_bill.DMARC_Management ELSE NULL END,
+    CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_Management_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN ifnull(DMARC_Management_of_Licenses,0) ELSE NULL END
+
+
 ) as billable_items,
 
 OBJECT_CONSTRUCT(
