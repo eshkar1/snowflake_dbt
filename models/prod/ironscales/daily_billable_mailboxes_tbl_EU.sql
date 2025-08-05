@@ -209,8 +209,8 @@ OBJECT_CONSTRUCT(
 
             
     -- DMARC
-    CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC Management' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN sltp_bill.DMARC_Management ELSE NULL END,
-    CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_Management_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN ifnull(DMARC_Management_of_Licenses,0) ELSE NULL END
+    CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN sltp_bill.DMARC_Management ELSE NULL END,
+    CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN ifnull(DMARC_Management_of_Licenses,0) ELSE NULL END
 
 ) as billable_items,
 
