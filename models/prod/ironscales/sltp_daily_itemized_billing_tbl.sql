@@ -13,6 +13,10 @@ sltp_pricing_function_disti as (
 
 sltp_pricing_function_shareweb as (
     select * from {{ ref('SLTP_daily_pricing_function_for_shareweb')}}
+),
+
+sltp_pricing_function_pax8_updated as (
+    select * from {{ ref('SLTP_daily_pricing_function_for_pax8_updated')}} 
 )
 
 
@@ -36,8 +40,8 @@ sku,
 partner_pricing,
 billable_quantity,
 amount
-from sltp_pricing_function_pax8 
-
+-- from sltp_pricing_function_pax8 
+from sltp_pricing_function_pax8_updated
 
 union all
 
