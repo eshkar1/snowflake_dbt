@@ -69,7 +69,7 @@ CASE
     WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 150000 then quantity * EP_1
     
     
-    WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 120000 then (5000 * CORE_1) + ((10000-5000) * CORE_1000) + ((25000-10000) * CORE_3500) + ((50000-25000) * CORE_7500) + ((quantity-50000) * CORE_10000) + (quantity-120000) * CORE_120000
+    WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 120000 then (5000 * CORE_1) + ((10000-5000) * CORE_1000) + ((25000-10000) * CORE_3500) + ((50000-25000) * CORE_7500) + ((120000-50000) * CORE_10000) + (quantity-120000) * CORE_120000
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 50000 then (5000 * CORE_1) + ((10000-5000) * CORE_1000) + ((25000-10000) * CORE_3500) + ((50000-25000) * CORE_7500) + (quantity-50000) * CORE_10000
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 25000 then (5000 * CORE_1) + ((10000-5000) * CORE_1000) + ((25000-10000) * CORE_3500) + (quantity-25000) * CORE_7500
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 10000 then (5000 * CORE_1) + ((10000-5000) * CORE_1000) + (quantity-10000) * CORE_3500
