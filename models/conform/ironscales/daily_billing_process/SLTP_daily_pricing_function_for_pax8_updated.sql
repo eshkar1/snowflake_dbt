@@ -584,6 +584,7 @@ where
     approved = true
     and billing_status = 'Active'
     and FIRST_LAYER_ID in ('US-733','EU-25') 
+    and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name not in  ('Complete Protect','SAT Suite')
     -- and plan_name != 'Complete Protect'
 
