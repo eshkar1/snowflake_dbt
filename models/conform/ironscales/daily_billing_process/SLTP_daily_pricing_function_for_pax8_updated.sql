@@ -91,7 +91,7 @@ CASE
 
     WHEN g.partner_pricing = FALSE and plan_name = 'Starter' then billable_quantity * STARTER_1
 
-    WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' then billable_quantity * SAT_SUITE_1
+    WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' then billable_quantity * i.amount/i.quantity
 
     -- WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and premium_name = 'No Premium' then quantity * PST_1
 
@@ -102,7 +102,7 @@ CASE
     WHEN g.partner_pricing = True and plan_name = 'IRONSCALES Protect' then billable_quantity * IPNFR_1
     WHEN g.partner_pricing = True and plan_name = 'Complete Protect' then billable_quantity * CPNFR_1
     WHEN g.partner_pricing = True and plan_name = 'Starter' then billable_quantity * STARTERNFR_1
-    WHEN g.partner_pricing = True and plan_name = 'Starter' then billable_quantity * SAT_SUITENFR_1
+    WHEN g.partner_pricing = True and plan_name = 'SAT Suite' then billable_quantity * SAT_SUITENFR_1
 
     -- WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' and premium_name = 'No Premium' then quantity * PSTNFR_1    
                      
