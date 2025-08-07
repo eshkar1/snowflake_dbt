@@ -191,9 +191,9 @@ select
     depth,
     approved,
     tree_key,
-    pillar,
-    type,
-    business_type,
+    business_pillar as pillar,
+    affiliation_type as type,
+    business_type as business_type,
     date(roundup_timestamp) as record_date,
 
     -- current_date-2 as record_date,
