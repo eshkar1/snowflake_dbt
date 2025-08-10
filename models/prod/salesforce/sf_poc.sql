@@ -1,26 +1,26 @@
 
 with opp_table as (
     select * from {{ ref('stg_salesforce_opp_table')}}
-    where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    -- where
+    -- date(_RIVERY_LAST_UPDATE) = current_date()
 ),
 
 account_table as (
     select * from {{ ref('stg_salesforce_account_table')}}
-    where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    -- where
+    -- date(_RIVERY_LAST_UPDATE) = current_date()
 ),
 
 user_table as (
     select * from {{ ref('stg_salesforce_user_table')}}
-    where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    -- where
+    -- date(_RIVERY_LAST_UPDATE) = current_date()
 ),
 
 poc_table as (
     select * from {{ ref('stg_salesforce_poc')}}
-    where
-    date(_RIVERY_LAST_UPDATE) = current_date()
+    -- where
+    -- date(_RIVERY_LAST_UPDATE) = current_date()
 )
 
 
