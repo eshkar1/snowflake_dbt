@@ -85,11 +85,11 @@ sltp_bill AS (
       MAX(CASE WHEN item = 'Starter' THEN billable_quantity ELSE 0 END) as Starter_of_Licenses,
     
       -- Premium Content
-      MAX(CASE WHEN item IN ('Habitu8') THEN billable_quantity ELSE 0 END) as Premium_Content_Habitu8_of_Licenses,
+      MAX(CASE WHEN item IN ('Habitu8','NINJIO','Cybermaniacs Videos') THEN billable_quantity ELSE 0 END) as Premium_Content_of_Licenses,
 
-      MAX(CASE WHEN item IN ('NINJIO') THEN billable_quantity ELSE 0 END) as Premium_Content_NINJIO_of_Licenses,
+    --   MAX(CASE WHEN item IN ('NINJIO') THEN billable_quantity ELSE 0 END) as Premium_Content_NINJIO_of_Licenses,
 
-      MAX(CASE WHEN item IN ('Cybermaniacs Videos') THEN billable_quantity ELSE 0 END) as Premium_Content_Cybermaniacs_of_Licenses,
+    --   MAX(CASE WHEN item IN ('Cybermaniacs Videos') THEN billable_quantity ELSE 0 END) as Premium_Content_Cybermaniacs_of_Licenses,
       
       -- Account Takeover
       MAX(CASE WHEN item = 'Account Takeover' THEN billable_quantity ELSE 0 END) as Account_Takeover_of_Licenses,
@@ -137,9 +137,9 @@ main_with_revenue as (
     sum(PST_of_Licenses),
     sum(PST_NFR_of_Licenses),
     sum(Starter_of_Licenses),
-    sum(Premium_Content_Habitu8_of_Licenses),
-    sum(Premium_Content_NINJIO_of_Licenses),
-    sum(Premium_Content_Cybermaniacs_of_Licenses),
+    sum(Premium_Content_of_Licenses),
+    -- sum(Premium_Content_NINJIO_of_Licenses),
+    -- sum(Premium_Content_Cybermaniacs_of_Licenses),
     sum(Account_Takeover_of_Licenses),
     sum(Incident_Management_of_Licenses),
     sum(Multi_Tenant_of_Licenses),
@@ -167,9 +167,9 @@ main_with_revenue_direct as (
     sum(PST_of_Licenses),
     sum(PST_NFR_of_Licenses),
     sum(Starter_of_Licenses),
-    sum(Premium_Content_Habitu8_of_Licenses),
-    sum(Premium_Content_NINJIO_of_Licenses),
-    sum(Premium_Content_Cybermaniacs_of_Licenses),
+    sum(Premium_Content_of_Licenses),
+    -- sum(Premium_Content_NINJIO_of_Licenses),
+    -- sum(Premium_Content_Cybermaniacs_of_Licenses),
     sum(Account_Takeover_of_Licenses),
     sum(Incident_Management_of_Licenses),
     sum(Multi_Tenant_of_Licenses),
@@ -200,9 +200,9 @@ second_tier_msp as (
     sum(PST_of_Licenses)                          as PST_of_Licenses,
     sum(PST_NFR_of_Licenses)                      as PST_NFR_of_Licenses,
     sum(Starter_of_Licenses)                      as Starter_of_Licenses,
-    sum(Premium_Content_Habitu8_of_Licenses)      as Premium_Content_Habitu8_of_Licenses,
-    sum(Premium_Content_NINJIO_of_Licenses)       as Premium_Content_NINJIO_of_Licenses,
-    sum(Premium_Content_Cybermaniacs_of_Licenses) as Premium_Content_Cybermaniacs_of_Licenses,
+    sum(Premium_Content_of_Licenses)             as Premium_Content_of_Licenses,
+    -- sum(Premium_Content_NINJIO_of_Licenses)       as Premium_Content_NINJIO_of_Licenses,
+    -- sum(Premium_Content_Cybermaniacs_of_Licenses) as Premium_Content_Cybermaniacs_of_Licenses,
     sum(Account_Takeover_of_Licenses)             as Account_Takeover_of_Licenses,
     sum(Incident_Management_of_Licenses)          as Incident_Management_of_Licenses,
     sum(Multi_Tenant_of_Licenses)                 as Multi_Tenant_of_Licenses,
@@ -216,6 +216,7 @@ second_tier_msp as (
     left join global_tenant_history g on s.FIRST_LAYER_ID = g.tenant_global_id
     left join global_tenant_history gt on s.SECOND_LAYER_ID = gt.tenant_global_id
     where ltp_type in ('disti','oem')
+    and s.partner_pricing = true
     group by 1,2,3,4
 ),
 
@@ -236,9 +237,9 @@ direct_msp as (
     sum(PST_of_Licenses)                          as PST_of_Licenses,
     sum(PST_NFR_of_Licenses)                      as PST_NFR_of_Licenses,
     sum(Starter_of_Licenses)                      as Starter_of_Licenses,
-    sum(Premium_Content_Habitu8_of_Licenses)      as Premium_Content_Habitu8_of_Licenses,
-    sum(Premium_Content_NINJIO_of_Licenses)       as Premium_Content_NINJIO_of_Licenses,
-    sum(Premium_Content_Cybermaniacs_of_Licenses) as Premium_Content_Cybermaniacs_of_Licenses,
+    sum(Premium_Content_of_Licenses)                as Premium_Content_of_Licenses,
+    -- sum(Premium_Content_NINJIO_of_Licenses)       as Premium_Content_NINJIO_of_Licenses,
+    -- sum(Premium_Content_Cybermaniacs_of_Licenses) as Premium_Content_Cybermaniacs_of_Licenses,
     sum(Account_Takeover_of_Licenses)             as Account_Takeover_of_Licenses,
     sum(Incident_Management_of_Licenses)          as Incident_Management_of_Licenses,
     sum(Multi_Tenant_of_Licenses)                 as Multi_Tenant_of_Licenses,
@@ -250,7 +251,8 @@ direct_msp as (
     sum(DMARC_Management_of_Licenses)             as DMARC_Management_of_Licenses
     from sltp_bill s
     left join global_tenant_history g on s.FIRST_LAYER_ID = g.tenant_global_id
-    where ltp_type = 'msp'
+    where ltp_type = 'msp' 
+    and s.partner_pricing = true
     group by 1,2,3,4
 )
 
