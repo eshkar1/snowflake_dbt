@@ -1,8 +1,8 @@
 
 with global_tenant_history as (
     select * from 
-    -- {{ ref('global_tenant_history')}} 
-    PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
+    {{ ref('global_tenant_history')}} 
+    -- PROD_MART.OPERATION.GLOBAL_TENANT_HISTORY -- need to adjust to ref
 ),
 
 ltp_pricing_list as (
@@ -19,7 +19,7 @@ profile_metrics AS (
         CASE p.profile_type
             WHEN 'active' THEN g.active_profiles
             WHEN 'license' THEN g.licensed_profiles
-            WHEN 'shared' THEN g.active_profiles - g.shared_profiles
+            WHEN 'shared' THEN g.active_profiles - ifnull(g.shared_profiles,0)
         END AS profile_count
     FROM global_tenant_history g
     LEFT JOIN ltp_pricing_list p 
@@ -30,6 +30,8 @@ profile_metrics AS (
         -- AND dateadd('day', -1, date_trunc('month', current_date))
         (record_date BETWEEN dateadd('day', 1, date_trunc('month', dateadd('month', -1, current_date)))  -- 2nd day of previous month
         AND date_trunc('month', current_date) ) -- 1st day of current month 
+        -- (record_date BETWEEN date_trunc('month', dateadd('month', -1, current_date))
+            --  AND date_trunc('month', current_date))
         AND approved = true
         AND billing_status = 'Active'
         AND root IN (
@@ -46,6 +48,7 @@ intermediate_results AS (
         CASE is_highwatermark
             WHEN true THEN MAX_BY(record_date, COALESCE(profile_count, 0))
             WHEN false THEN MAX(record_date)
+            -- WHEN false then date_trunc('month', current_date) --1st day of current month 
         END AS record_date,
         is_highwatermark
     FROM profile_metrics
@@ -82,5 +85,5 @@ SELECT
 FROM ranked_results_filter
 WHERE 
 rn = 1
-or
-(rn = 2 and is_highwatermark = true)
+-- or
+-- (rn = 2 and is_highwatermark = true)

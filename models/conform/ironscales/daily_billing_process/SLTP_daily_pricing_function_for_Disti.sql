@@ -6,6 +6,11 @@ ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
     tenant_global_id in ('EU-49000','EU-51541','US-11100')
+    and IS_TRACKED = true
+),
+
+hwm_dmarc_count as (
+    select * from {{ ref('current_month_hwm_dmarc_domains_number')}}
 ),
 
 LTP_DAILY_ITEMIZED_BILLING_TBL as (
@@ -63,8 +68,9 @@ end as billable_quantity,
 -- Non NFR Plans --
 CASE 
 
-    WHEN g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
-    
+    WHEN FIRST_LAYER_ID in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
+    WHEN FIRST_LAYER_ID in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
+
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' then billable_quantity * i.amount/i.quantity
 
     WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' then billable_quantity * i.amount/i.quantity
@@ -177,7 +183,8 @@ CASE p.profile_type
                         else (Active_profiles - SHARED_PROFILES)
                     end
 end as billable_quantity,
-billable_quantity * i.amount/i.quantity as amount
+-- billable_quantity * i.amount/i.quantity as amount
+billable_quantity * IM_1
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp 
@@ -218,7 +225,8 @@ CASE p.profile_type
                         else (Active_profiles - SHARED_PROFILES)
                     end
 end as billable_quantity,
-billable_quantity * i.amount/i.quantity as amount
+-- billable_quantity * i.amount/i.quantity as amount
+billable_quantity * STB_1
 
 from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
@@ -543,3 +551,33 @@ where
     and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and multi_tenancy = true
     and plan_name != 'Complete Protect'
+
+
+-----------------------------------------
+----------------- DMARC -----------------
+-----------------------------------------
+
+union
+
+select
+g.DATE_RECORDED,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
+'DMARC' as item,
+'IS-LTP-DMARC' as sku,
+null as partner_pricing,
+d.dmarc_domains_number as billable_quantity,
+billable_quantity * DMARC_1 as amount
+from current_global_tenant_by_layer g
+left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
+left join hwm_dmarc_count d on COALESCE(NULLIF(TRIM(fifth_layer_id), ''),NULLIF(TRIM(fourth_layer_id), '') , NULLIF(TRIM(third_layer_id), ''), NULLIF(TRIM(second_layer_id), ''), NULLIF(TRIM(first_layer_id), '')) = d.tenant_global_id
+where
+    approved = true
+    and billing_status = 'Active'
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
+    -- and DMARC_MANAGEMENT = true
+having
+    billable_quantity is not null

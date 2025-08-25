@@ -6,6 +6,11 @@ ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
     tenant_global_id in ('EU-49000','EU-51541','US-11100')
+    and IS_TRACKED = true
+),
+
+hwm_dmarc_count as (
+    select * from {{ ref('current_month_hwm_dmarc_domains_number')}}
 )
 
 
@@ -54,10 +59,11 @@ CASE
     WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 15000 then (15000 * EP_1) + (quantity-15000) * EP_1000
     WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 15000 then quantity * EP_1
     
-    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 25000 then (11000 * EP_1) + ((25000-11000) * EP_1000) + (quantity - 25000) * EP_3500
-    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 11000 then (11000 * EP_1) + (quantity-11000) * EP_1000
-    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 11000 then quantity * EP_1
-    
+    -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 25000 then (11000 * EP_1) + ((25000-11000) * EP_1000) + (quantity - 25000) * EP_3500
+    -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 11000 then (11000 * EP_1) + (quantity-11000) * EP_1000  once 
+    -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 11000 then quantity * EP_1
+    WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then GREATEST(quantity,13750) * EP_1
+
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 25000 then (15000 * CORE_1) + ((25000-15000) * CORE_1000) + (quantity - 25000) * CORE_3500
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity >= 15000 then (15000 * CORE_1) + (quantity-15000) * CORE_1000
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' and quantity < 15000 then quantity * CORE_1
@@ -617,3 +623,38 @@ group by
     profile_type,
     -- g.partner_pricing,
     MT_1
+
+
+-----------------------------------------
+----------------- DMARC -----------------
+-----------------------------------------
+
+union
+
+select
+g.DATE_RECORDED,
+g.root as ltp,
+'DMARC' as item,
+'IS-LTP-DMARC' as sku,
+sum(d.dmarc_domains_number) as quantity,
+null as partner_pricing,
+quantity * DMARC_1 as amount
+from global_tenant_history_daily g
+left join ltp_pricing_list p on g.root = p.tenant_global_id
+left join hwm_dmarc_count d on g.tenant_global_id = d.tenant_global_id
+where
+    approved = true
+    and billing_status = 'Active'
+    and ltp in ('EU-49000','EU-51541','US-11100')
+    -- and DMARC_MANAGEMENT = true
+
+group by
+    g.DATE_RECORDED,
+    root,   
+    item,
+    sku,
+    profile_type,
+    -- g.partner_pricing,
+    DMARC_1
+having
+    quantity is not null

@@ -1,10 +1,14 @@
 
 with current_month_ltp_roundup_tbl as (
     select * from {{ ref('current_month_ltp_roundup_tbl_updated_new')}} 
+    WHERE
+    tenant_global_id not in ('US-315501','US-314610') -- Manually excluding two tenants from AMSYS (US-311247)
 ),
 
 global_tenant_history as (
-    select * from {{ ref('global_tenant_history')}}
+    select * from 
+    -- prod_mart.operation.global_tenant_history
+    {{ ref('global_tenant_history')}}
 )
 
 SELECT
@@ -45,7 +49,8 @@ SELECT
     g.tree_key,
     g.record_date,
     g.billing_status,
-    g.DMARC_MANAGEMENT
+    g.DMARC_MANAGEMENT,
+    g.dmarc_domains_number
 FROM
     current_month_ltp_roundup_tbl r
     JOIN global_tenant_history g ON g.tenant_global_id = r.tenant_global_id AND g.record_date = r.record_date

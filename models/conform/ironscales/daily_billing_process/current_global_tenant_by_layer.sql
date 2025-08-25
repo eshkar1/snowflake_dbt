@@ -84,7 +84,9 @@ SELECT
     a.FILE_SCANNING,
     a.LINK_SCANNING,
     a.SHARED_PROFILES,
-    a.date_recorded
+    a.date_recorded,
+    a.DMARC_MANAGEMENT,
+    a.dmarc_domains_number
 FROM main_data a
 LEFT JOIN global_tenant_history b ON a.record_date = b.record_date AND a.first_layer = b.tenant_global_id
 LEFT JOIN global_tenant_history c ON a.record_date = c.record_date AND a.second_layer = c.tenant_global_id

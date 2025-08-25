@@ -9,6 +9,10 @@ sltp_pricing_function_all_ltps as (
 
 sltp_pricing_function_disti as (
     select * from {{ ref('SLTP_monthly_pricing_function_for_Disti')}}
+),
+
+sltp_pricing_function_shareweb as (
+    select * from {{ ref('SLTP_monthly_pricing_function_for_shareweb')}}
 )
 
 -- SELECT
@@ -65,3 +69,19 @@ partner_pricing,
 billable_quantity,
 amount
 from sltp_pricing_function_disti  
+
+union all
+
+SELECT
+last_day(dateadd(month,-1,current_date)) as billing_date,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
+item,
+sku,
+partner_pricing,
+billable_quantity,
+amount
+from sltp_pricing_function_shareweb  
