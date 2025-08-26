@@ -287,6 +287,7 @@ select
         when 4 then 'Email Protect'
         when 5 then 'Complete Protect'
         when 6 then 'IRONSCALES Protect'
+        when 7 then 'SAT Suite'
         else ifnull(to_varchar(plan_id), 'No_Plan')
     end as plan_name,
     premium_id,
@@ -323,6 +324,7 @@ select
         when 4 then 'Email Protect'
         when 5 then 'Complete Protect'
         when 6 then 'IRONSCALES Protect'
+        when 7 then 'SAT Suite'
         else ifnull(to_varchar(trial_plan_id), 'No_Plan')
     end as trial_plan_name,
     trial_premium_id,
@@ -335,19 +337,22 @@ select
         when 6 then 'IRONSCALES'
         else ifnull(to_varchar(trial_premium_id), 'No Premium')
     end as trial_premium_name,
-    date(trial_plan_expiry) as trial_plan_expiry_date,
+    date(trial_plan_expiry) as trial_plan_expiry_date ,
     DMARC_MANAGEMENT,
+    dmarc_domains_number,
+    dmarc_plan_name,
     depth,
     approved,
     tree_key,
+    pillar,
+    type,
+    business_type,
     date(roundup_timestamp) as record_date,
-
-    -- current_date-2 as record_date,
-
     -- finance_db.billing_sch.billing_status_fn(plan_id, trial_plan_id, plan_expiry, trial_plan_expiry, roundup_timestamp) as billing_status,
-    -- iff(plan_id is not null and plan_expiry >= roundup_timestamp,'Active',
+    -- iff(plan_id is not null and plan_expiry >= roundup_timestamp ,'Active',
     --     iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
-    --     ) as billing_status
+    --     ) as billing_status,
+
     CASE
         -- Check for POC first (active trial plan takes precedence)
         WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
