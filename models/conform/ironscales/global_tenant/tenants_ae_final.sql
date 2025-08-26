@@ -65,10 +65,15 @@ select
     l.trial_premium_vendor as trial_premium_id,
     l.trial_plan_expiry_date as trial_plan_expiry,
     l.DMARC_MANAGEMENT,
+    l.dmarc_domains_number,
+    l.dmarc_plan_name,
     t.depth as depth,
     t.approved as approved,
     t.tree_key as tree_key,
-    l._rivery_last_update as roundup_timestamp
+    c.business_pillar as pillar,
+    c.affiliation_type as type,
+    c.business_type as business_type,
+    l._rivery_last_update as roundup_timestamp,
 from
     tenants_ae t
     left join active_profiles a on t.tenant_global_id = a.tenant_global_id 
