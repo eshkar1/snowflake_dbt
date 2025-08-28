@@ -41,6 +41,8 @@ CASE g.partner_pricing
             WHEN 'Core'                             THEN 'IS-LTP-CORE'
             WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IP'
             WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PST'
+            WHEN 'SAT Suite'                        THEN 'IS-SAT_SUITE_1'
+
         end
     WHEN TRUE THEN
         CASE plan_name
@@ -50,6 +52,7 @@ CASE g.partner_pricing
             WHEN 'Core'                             THEN 'IS-LTP-CORENFR'
             WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IPNFR'
             WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PSTNFR'
+            WHEN 'SAT Suite'                        THEN 'IS-SAT_SUITENFR_1'
         end    
 else null
 end as sku,
@@ -100,7 +103,8 @@ case
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' then billable_quantity * i.amount/i.quantity
     WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' then billable_quantity * i.amount/i.quantity
     WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' then billable_quantity * i.amount/i.quantity
-    WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' then billable_quantity * i.amount/i.quantity    
+    WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' then billable_quantity * i.amount/i.quantity  
+    WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' then billable_quantity * i.amount/i.quantity  
     WHEN g.partner_pricing = FALSE and plan_name = 'Starter' then billable_quantity * i.amount/i.quantity
 
 -- NFR Plans Only --
@@ -110,6 +114,7 @@ case
     WHEN g.partner_pricing = True and plan_name = 'IRONSCALES Protect' then billable_quantity * IPNFR_1
     WHEN g.partner_pricing = True and plan_name = 'Complete Protect' then billable_quantity * CPNFR_1
     WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' then billable_quantity * PSTNFR_1   
+    WHEN g.partner_pricing = True and plan_name = 'SAT Suite' then billable_quantity * SAT_SUITENFR_1
 
 END as amount
 

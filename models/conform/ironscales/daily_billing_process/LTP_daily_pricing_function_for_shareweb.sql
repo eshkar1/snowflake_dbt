@@ -34,6 +34,7 @@ CASE partner_pricing
             WHEN 'Core'                             THEN 'IS-LTP-CORE'
             WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IP'
             WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PST'
+            WHEN 'SAT Suite'                        THEN 'IS-SAT_SUITE_1'            
         end
     WHEN TRUE THEN
         CASE plan_name
@@ -43,6 +44,7 @@ CASE partner_pricing
             WHEN 'Core'                             THEN 'IS-LTP-CORENFR'
             WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IPNFR'
             WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PSTNFR'
+            WHEN 'SAT Suite'                        THEN 'IS-SAT_SUITENFR_1' 
         end    
 else null
 end as sku,
@@ -70,6 +72,8 @@ CASE
 
     WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' then quantity * PST_1
     
+    WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' then quantity * SAT_SUITE_1
+    
     WHEN g.partner_pricing = FALSE and plan_name = 'Starter' then quantity * STARTER_1
 
     -- NFR Plans Only --
@@ -80,6 +84,7 @@ CASE
     WHEN g.partner_pricing = True and plan_name = 'Complete Protect' then quantity * CPNFR_1
     WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' then quantity * PSTNFR_1
     WHEN g.partner_pricing = True and plan_name = 'Starter' then quantity * STARTERNFR_1
+    WHEN g.partner_pricing = True and plan_name = 'SAT Suite' then quantity * SAT_SUITENFR_1
 
     -- WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' and premium_name = 'No Premium' then quantity * PSTNFR_1    
                      
@@ -92,7 +97,8 @@ where
     and billing_status = 'Active'
     and profile_type is not NULL
     and ltp in ('US-211815')
-    and plan_name != 'Phishing Simulation and Training'
+    -- and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'SAT Suite'
     and licensed_profiles is not NULL
 
 group by
@@ -126,7 +132,9 @@ p.CORENFR_1,
 IPNFR_1,
 CPNFR_1,
 PSTNFR_1,
-STARTERNFR_1
+STARTERNFR_1,
+SAT_SUITE_1,
+SAT_SUITENFR_1
 
 
 
@@ -267,7 +275,8 @@ where
     and ltp in ('US-211815')
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
-    and plan_name = 'Phishing Simulation and Training'
+    -- and plan_name = 'Phishing Simulation and Training'
+    and plan_name = 'SAT Suite'
     and partner_pricing = false
 group by
     g.DATE_RECORDED,
@@ -315,7 +324,8 @@ where
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
-    and plan_name != 'Phishing Simulation and Training'
+    -- and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'SAT Suite'
 group by
     g.DATE_RECORDED,
     root,   
