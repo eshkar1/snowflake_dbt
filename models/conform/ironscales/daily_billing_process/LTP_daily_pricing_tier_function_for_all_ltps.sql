@@ -31,6 +31,7 @@ CASE partner_pricing
             WHEN 'Core'                             THEN 'IS-LTP-CORE'
             WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IP'
             WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PST'
+            WHEN 'SAT Suite'                        THEN 'IS-SAT_SUITE_1'
         end
     WHEN TRUE THEN
         CASE plan_name
@@ -40,6 +41,8 @@ CASE partner_pricing
             WHEN 'Core'                             THEN 'IS-LTP-CORENFR'
             WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IPNFR'
             WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PSTNFR'
+            WHEN 'SAT Suite'                        THEN 'IS-SAT_SUITENFR_1'
+    
         end    
 else null
 end as sku,
@@ -84,13 +87,19 @@ WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training
 WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and quantity >= 1000 then (1000 * PST_1) + (quantity - 1000) * PST_1000
 WHEN g.partner_pricing = FALSE and plan_name = 'Phishing Simulation and Training' and quantity < 1000 then quantity * PST_1
 
+-- WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' then quantity * SAT_SUITE_1
+WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity >= 7500 then (1000 * SAT_SUITE_1) + ((3500-1000)* SAT_SUITE_1000) + ((7500 - 3500) * SAT_SUITE_3500) + ((quantity - 7500)  * SAT_SUITE_7500)
+WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity >= 3500 then (1000 * SAT_SUITE_1) + ((3500-1000)* SAT_SUITE_1000) + ((quantity - 3500) * SAT_SUITE_3500)
+WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity >= 1000 then (1000 * SAT_SUITE_1) + (quantity - 1000) * SAT_SUITE_1000
+WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity < 1000 then quantity * SAT_SUITE_1
 -- NFR Plans Only --
 
 WHEN g.partner_pricing = True and plan_name = 'Email Protect' then quantity * EPNFR_1 
 WHEN g.partner_pricing = True and plan_name = 'Core' then quantity * CORENFR_1
 WHEN g.partner_pricing = True and plan_name = 'IRONSCALES Protect' then quantity * IPNFR_1
 WHEN g.partner_pricing = True and plan_name = 'Complete Protect' then quantity * CPNFR_1
-WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' then quantity * PSTNFR_1   
+WHEN g.partner_pricing = True and plan_name = 'Phishing Simulation and Training' then quantity * PSTNFR_1  
+WHEN g.partner_pricing = True and plan_name = 'SAT Suite' then quantity * SAT_SUITENFR_1 
 
 END as amount
 
@@ -134,7 +143,13 @@ group by
     p.CORENFR_1,
     IPNFR_1,
     CPNFR_1,
-    PSTNFR_1
+    PSTNFR_1,
+    SAT_SUITE_1,
+    SAT_SUITENFR_1,
+    SAT_SUITE_1000,
+    SAT_SUITE_3500,
+    SAT_SUITE_7500
+
 
         ----------------------------------------------------------------------------------------
                                             -- Add Ons --
@@ -389,6 +404,7 @@ where
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
+    and plan_name = 'SAT Suite'
 group by
     g.DATE_RECORDED,
     root,   
@@ -429,6 +445,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'SAT Suite'
 group by
     g.DATE_RECORDED,
     root,   
@@ -470,6 +487,7 @@ where
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
+    and plan_name = 'SAT Suite'
     and partner_pricing = false
 group by
     g.DATE_RECORDED,
@@ -510,6 +528,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'SAT Suite'
     and partner_pricing = false
 group by
     g.DATE_RECORDED,

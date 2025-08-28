@@ -41,6 +41,7 @@ CASE g.partner_pricing
             WHEN 'Core'                             THEN 'IS-LTP-CORE'
             WHEN 'IRONSCALES Protect'               THEN 'IS-LTP-IP'
             WHEN 'SAT Suite'                        THEN 'IS-SAT_SUITE_1'
+            
         end
     WHEN TRUE THEN
         CASE plan_name
