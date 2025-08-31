@@ -117,7 +117,7 @@ where
     and billing_status = 'Active'
     and profile_type is not NULL
     and ltp in ('EU-49000','EU-51541','US-11100')
-    -- and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'Phishing Simulation and Training'
     and plan_name != 'SAT Suite'
     and licensed_profiles is not NULL
 
@@ -298,7 +298,7 @@ where
     and ltp in ('EU-49000','EU-51541','US-11100')
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
-    -- and plan_name = 'Phishing Simulation and Training'
+    and plan_name = 'Phishing Simulation and Training'
     and plan_name = 'SAT Suite'
     and partner_pricing = false
 group by
@@ -347,7 +347,7 @@ where
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
-    -- and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'Phishing Simulation and Training'
     and plan_name != 'SAT Suite'
 group by
     g.DATE_RECORDED,

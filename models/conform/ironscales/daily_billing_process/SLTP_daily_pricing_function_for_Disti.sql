@@ -108,6 +108,7 @@ where
     and profile_type is not NULL
     and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'SAT Suite'
     and licensed_profiles is not NULL
 
 ----------------------------------------------------------------------------------------
@@ -245,6 +246,7 @@ where
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
+    and plan_name = 'SAT Suite'
     and g.partner_pricing = false
 
 
@@ -289,6 +291,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'SAT Suite'
 
 
 -----------------------------------------
