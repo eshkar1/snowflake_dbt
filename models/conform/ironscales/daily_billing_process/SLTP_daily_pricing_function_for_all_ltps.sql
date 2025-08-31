@@ -454,6 +454,7 @@ where
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
     and plan_name = 'Phishing Simulation and Training'
+    and plan_name = 'SAT Suite'
     and partner_pricing = false
 
 
@@ -492,6 +493,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'SAT Suite'
     and partner_pricing = false
 
 
