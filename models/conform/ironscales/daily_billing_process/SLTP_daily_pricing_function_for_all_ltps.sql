@@ -376,7 +376,7 @@ where
     and security_awareness_training = true
     and simulation_and_training_bundle = false
     and simulation_and_training_bundle_plus = false
-    and plan_name = 'Phishing Simulation and Training'
+    and (plan_name = 'Phishing Simulation and Training' or plan_name = 'SAT Suite')
 
     
 -- plan name is not 'Phishing Simulation and Training' --    
@@ -415,6 +415,7 @@ where
     and simulation_and_training_bundle_plus = false
     and plan_name != 'Complete Protect'
     and plan_name != 'Phishing Simulation and Training'
+    and plan_name != 'SAT Suite'
 
 
 -----------------------------------------
@@ -453,8 +454,8 @@ where
     and FIRST_LAYER_ID not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
     and simulation_and_training_bundle = true
     and simulation_and_training_bundle_plus = false
-    and plan_name = 'Phishing Simulation and Training'
-    and plan_name = 'SAT Suite'
+    and (plan_name = 'Phishing Simulation and Training' or plan_name = 'SAT Suite')
+    {# and plan_name = 'SAT Suite' #}
     and partner_pricing = false
 
 
