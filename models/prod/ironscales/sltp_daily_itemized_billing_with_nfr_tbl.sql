@@ -1,18 +1,13 @@
-
-with sltp_pricing_function_pax8 as (
-    select * from {{ ref('SLTP_daily_pricing_function_for_pax8')}} 
-),
-
-sltp_pricing_function_all_ltps as (
-    select * from {{ ref('SLTP_daily_pricing_function_for_all_ltps')}}
+with sltp_pricing_function_all_ltps as (
+    select * from {{ ref('SLTP_daily_pricing_function_for_all_ltps_updated')}}
 ),
 
 sltp_pricing_function_disti as (
-    select * from {{ ref('SLTP_daily_pricing_function_for_Disti')}}
+    select * from {{ ref('SLTP_daily_pricing_function_for_Disti_updated')}}
 ),
 
 sltp_pricing_function_shareweb as (
-    select * from {{ ref('SLTP_daily_pricing_function_for_shareweb')}}
+    select * from {{ ref('SLTP_daily_pricing_function_for_shareweb_updated')}}
 ),
 
 sltp_pricing_function_pax8_updated as (
@@ -24,12 +19,12 @@ ltp_nfr_calc as (
 )
 
 
-SELECT
-*
-from PROD_CONFORM.DBT_PROD_DB.SLTP_DAILY_ITEMIZED_BILLING_TBL
+-- SELECT
+-- *
+-- from PROD_CONFORM.DBT_PROD_DB.SLTP_DAILY_ITEMIZED_BILLING_TBL
  
 
-union all 
+-- union all 
 
 
 SELECT
