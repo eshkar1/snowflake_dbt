@@ -89,3 +89,4 @@ snapshot_date = current_date
 and ltp_type = 'msp'
 and registration_date <= dateadd(day, -90, current_date)
 and l.partner_pricing = true
+and billable_qty > 0
