@@ -92,7 +92,7 @@ highwater_selected AS (
 non_highwater_selected AS (
     SELECT
         p.tenant_global_id,
-        LAST_DAY(CURRENT_DATE) AS record_date,   --- the last day for all non highwater should be always the current/last day of the month  
+        CURRENT_DATE AS record_date,   --- the last day for all non highwater should be always the current/last day of the month  
         p.is_highwatermark
     FROM profile_metrics p
     /* Latest root per tenant derived inline from history */
