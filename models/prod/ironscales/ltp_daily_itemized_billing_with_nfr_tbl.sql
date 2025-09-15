@@ -22,11 +22,11 @@ ltp_nfr_calc as (
 
 
 
-{# SELECT
+SELECT
 *
 from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_WITH_NFR_TBL
 
-union all  #}
+union all  
 
 
 SELECT
