@@ -10,6 +10,10 @@ global_tenant_history as (
     -- prod_mart.operation.global_tenant_history
     -- PROD_CONFORM.DBT_PROD_DB.global_tenant_history
     {{ ref('global_tenant_history')}}
+),
+
+ltp_pricing_list as (
+    select * from {{ ref('ltp_pricing_tbl')}}
 )
 
 SELECT
@@ -58,3 +62,4 @@ FROM
     -- JOIN global_tenant_history g ON g.tenant_global_id = r.tenant_global_id AND g.record_date = r.record_date
 WHERE
 g.record_date = current_date
+and g.root in (select tenant_global_id from ltp_pricing_list )
