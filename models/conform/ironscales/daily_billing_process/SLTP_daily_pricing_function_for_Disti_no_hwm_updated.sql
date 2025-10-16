@@ -1,5 +1,5 @@
 with current_global_tenant_by_layer as (
-    select * from {{ ref('current_global_tenant_by_layer')}} 
+    select * from {{ ref('current_global_tenant_by_layer_no_hwm')}} 
 ),
 
 ltp_pricing_list as (
@@ -14,7 +14,7 @@ ltp_pricing_list as (
 -- ),
 
 LTP_DAILY_ITEMIZED_BILLING_TBL as (
-    select * from {{ ref('ltp_daily_itemized_billing_tbl')}}
+    select * from {{ ref('ltp_daily_itemized_billing_with_nfr_no_hwm_tbl')}}
     where
     billing_date = current_date
 )
@@ -296,4 +296,4 @@ where
     and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     -- and DMARC_MANAGEMENT = true
 having
-    billable_quantity is not null
+    billable_quantity > 0
