@@ -46,9 +46,7 @@ unioned AS (
         THEN s.quantity * s.EP_1
 
       /* CORE (non-NFR) */
-      WHEN s.partner_pricing = FALSE AND s.plan_name = 'Core' AND s.combined_quantity >= 120000 AND s.ltp = 'US-733'
-        THEN (5000 * s.CORE_1) + ((10000-5000) * s.CORE_1000) + ((25000-10000) * s.CORE_3500)
-           + ((50000-25000) * s.CORE_7500) + ((120000-50000) * s.CORE_10000) + (s.quantity-120000) * s.CORE_120000
+      WHEN s.partner_pricing = FALSE AND s.plan_name = 'Core' AND s.combined_quantity >= 120000 AND s.ltp = 'US-733' THEN (5000 * s.CORE_1) + ((10000-5000) * s.CORE_1000) + ((25000-10000) * s.CORE_3500) + ((50000-25000) * s.CORE_7500) + ((120000-50000) * s.CORE_10000) + (s.quantity-120000) * s.CORE_120000
       WHEN s.partner_pricing = FALSE AND s.plan_name = 'Core' AND s.combined_quantity >= 120000 AND s.ltp = 'EU-25'
         THEN s.quantity * s.CORE_120000
       WHEN s.partner_pricing = FALSE AND s.plan_name = 'Core' AND s.combined_quantity >= 50000 AND s.ltp = 'US-733'
@@ -85,9 +83,11 @@ unioned AS (
 
       /* Starter / SAT (non-NFR) */
       WHEN s.partner_pricing = FALSE AND s.plan_name = 'Starter'
-        THEN s.combined_quantity * s.STARTER_1
+        -- THEN s.combined_quantity * s.STARTER_1
+        then s.quantity * s.STARTER_1
       WHEN s.partner_pricing = FALSE AND s.plan_name = 'SAT Suite'
-        THEN s.combined_quantity * s.SAT_SUITE_1
+        -- THEN s.combined_quantity * s.SAT_SUITE_1
+        then s.quantity * s.SAT_SUITE_1
 
       /* NFR plans */
       WHEN s.partner_pricing = TRUE AND s.plan_name = 'Email Protect'          THEN s.quantity * s.EPNFR_1
