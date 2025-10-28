@@ -27,7 +27,7 @@ main_data as (
                 left join ltp_pricing_list l on g.root = l.tenant_global_id
                 WHERE
                     date_recorded = current_date
-                    AND billing_status = 'Active'
+                    AND billing_status in ('Active','Active-POC')
                     AND approved = true
             )
         SELECT

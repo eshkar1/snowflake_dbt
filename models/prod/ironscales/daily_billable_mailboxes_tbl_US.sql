@@ -243,7 +243,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 left join sltp_bill on g.tenant_global_id = sltp_bill.tenant_global_id
 WHERE
 REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'US'
-and gh.billing_status = 'Active'
+and gh.billing_status in ('Active','Active-POC')
 and gh.approved = true
 
 -- with global_tenant_history_daily_agg_billing_tbl as (
@@ -320,6 +320,6 @@ and gh.approved = true
 -- left join ltp_pricing_list p on g.root = p.tenant_global_id
 -- WHERE
 -- REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'US'
--- and gh.billing_status = 'Active'
+-- and gh.billing_status in ('Active','Active-POC')
 -- and gh.approved = true
 -- -- and g.record_date = current_date

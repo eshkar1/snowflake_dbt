@@ -67,5 +67,5 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 
 WHERE
 REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'EU'
-and g.billing_status = 'Active'
+and g.billing_status in ('Active','Active-POC')
 and g.approved = true
