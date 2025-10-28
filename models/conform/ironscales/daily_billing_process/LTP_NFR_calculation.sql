@@ -36,7 +36,7 @@ tenant_details as (
                     where
                     {# date_recorded = current_date #}
                     {# and  #}
-                    billing_status = 'Active'
+                    billing_status in ('Active','Active-POC')
                     and approved = true
                     and partner_pricing = false
                     and g.root in (select tenant_global_id from prod_mart.upload_tables.ltp_pricing_list where snapshot_date = current_date)

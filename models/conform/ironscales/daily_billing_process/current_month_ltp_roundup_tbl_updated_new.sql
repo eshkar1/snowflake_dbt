@@ -36,7 +36,7 @@ profile_metrics AS (
         ON g.root = p.tenant_global_id
     WHERE 
         g.approved = TRUE
-        AND g.billing_status = 'Active'
+        AND g.billing_status in ('Active','Active-POC')
         and g.root in (select 
                         tenant_global_id
                         from ltp_pricing_list)

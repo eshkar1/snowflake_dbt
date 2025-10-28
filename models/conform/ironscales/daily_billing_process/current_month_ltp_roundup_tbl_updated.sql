@@ -26,7 +26,7 @@ profile_metrics AS (
         ON g.root = p.tenant_global_id
     WHERE record_date BETWEEN DATE_TRUNC('MONTH', current_date) AND current_date
         AND approved = true
-        AND billing_status = 'Active'
+        AND billing_status in ('Active','Active-POC')
         AND root IN (
             SELECT tenant_global_id
             FROM ltp_pricing_list

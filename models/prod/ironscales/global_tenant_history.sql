@@ -148,19 +148,48 @@ select
     -- iff(plan_id is not null and plan_expiry >= roundup_timestamp ,'Active',
     --     iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
     --     ) as billing_status,
-
     CASE
-        -- Check for POC first (active trial plan takes precedence)
-        WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
-        
+        -- Check for POC first (active trial plan takes precedence, registered less than 30 days ago)
+        WHEN trial_plan_id IS NOT NULL
+            AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+            AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) < 30
+        THEN 'POC'
+
+        -- If trial plan is active but registered 30+ days ago → Active-POC
+        WHEN trial_plan_id IS NOT NULL
+            AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+            AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) >= 30
+            AND plan_id IS NOT NULL
+        THEN 'Active-POC'
+
+        -- If trial plan is active but registered 30+ days ago and plan_id is NULL → Inactive-POC
+        WHEN trial_plan_id IS NOT NULL
+            AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+            AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) >= 30
+            AND plan_id IS NULL
+        THEN 'Inactive-POC'
+
         -- Then check for active regular plan
-        WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
-        
+        WHEN plan_id IS NOT NULL
+            AND DATE(plan_expiry) >= DATE(roundup_timestamp)
+        THEN 'Active'
+
         -- Everyone else is inactive
         ELSE 'Inactive'
     END AS billing_status
-from
-    tenants_us_final
+    FROM tenants_us_final
+--     CASE
+--         -- Check for POC first (active trial plan takes precedence)
+--         WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
+        
+--         -- Then check for active regular plan
+--         WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
+        
+--         -- Everyone else is inactive
+--         ELSE 'Inactive'
+--     END AS billing_status
+-- from
+--     tenants_us_final
     -- ironscales_us_db.rr_prod_sch.tenants_vw
 union
 select
@@ -245,25 +274,55 @@ select
     business_type as business_type,
     date(roundup_timestamp) as record_date,
 
+CASE
+    -- Check for POC first (active trial plan takes precedence, registered less than 30 days ago)
+    WHEN trial_plan_id IS NOT NULL
+         AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+         AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) < 30
+    THEN 'POC'
+
+    -- If trial plan is active but registered 30+ days ago → Active-POC
+    WHEN trial_plan_id IS NOT NULL
+         AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+         AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) >= 30
+         AND plan_id IS NOT NULL
+    THEN 'Active-POC'
+
+    -- If trial plan is active but registered 30+ days ago and plan_id is NULL → Inactive-POC
+    WHEN trial_plan_id IS NOT NULL
+         AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+         AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) >= 30
+         AND plan_id IS NULL
+    THEN 'Inactive-POC'
+
+    -- Then check for active regular plan
+    WHEN plan_id IS NOT NULL
+         AND DATE(plan_expiry) >= DATE(roundup_timestamp)
+    THEN 'Active'
+
+    -- Everyone else is inactive
+    ELSE 'Inactive'
+END AS billing_status
+    FROM tenants_eu_final
     -- current_date-2 as record_date,
 
     -- finance_db.billing_sch.billing_status_fn(plan_id, trial_plan_id, plan_expiry, trial_plan_expiry, roundup_timestamp) as billing_status,
     -- iff(plan_id is not null and plan_expiry >= roundup_timestamp,'Active',
     --     iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
     --     ) as billing_status
-    CASE
-        -- Check for POC first (active trial plan takes precedence)
-        WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
+--     CASE
+--         -- Check for POC first (active trial plan takes precedence)
+--         WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
         
-        -- Then check for active regular plan
-        WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
+--         -- Then check for active regular plan
+--         WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
         
-        -- Everyone else is inactive
-        ELSE 'Inactive'
-    END AS billing_status
-from
-    -- secondary_eu_db.tenants_sch.tenants_tbl
-    tenants_eu_final
+--         -- Everyone else is inactive
+--         ELSE 'Inactive'
+--     END AS billing_status
+-- from
+--     -- secondary_eu_db.tenants_sch.tenants_tbl
+--     tenants_eu_final
 
 
 union
@@ -352,17 +411,46 @@ select
     -- iff(plan_id is not null and plan_expiry >= roundup_timestamp ,'Active',
     --     iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
     --     ) as billing_status,
+CASE
+    -- Check for POC first (active trial plan takes precedence, registered less than 30 days ago)
+    WHEN trial_plan_id IS NOT NULL
+         AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+         AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) < 30
+    THEN 'POC'
 
-    CASE
-        -- Check for POC first (active trial plan takes precedence)
-        WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
+    -- If trial plan is active but registered 30+ days ago → Active-POC
+    WHEN trial_plan_id IS NOT NULL
+         AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+         AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) >= 30
+         AND plan_id IS NOT NULL
+    THEN 'Active-POC'
+
+    -- If trial plan is active but registered 30+ days ago and plan_id is NULL → Inactive-POC
+    WHEN trial_plan_id IS NOT NULL
+         AND DATE(trial_plan_expiry) >= DATE(roundup_timestamp)
+         AND DATEDIFF('day', DATE(registration_timestamp), DATE(roundup_timestamp)) >= 30
+         AND plan_id IS NULL
+    THEN 'Inactive-POC'
+
+    -- Then check for active regular plan
+    WHEN plan_id IS NOT NULL
+         AND DATE(plan_expiry) >= DATE(roundup_timestamp)
+    THEN 'Active'
+
+    -- Everyone else is inactive
+    ELSE 'Inactive'
+END AS billing_status
+    FROM tenants_ae_final
+--     CASE
+--         -- Check for POC first (active trial plan takes precedence)
+--         WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
         
-        -- Then check for active regular plan
-        WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
+--         -- Then check for active regular plan
+--         WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
         
-        -- Everyone else is inactive
-        ELSE 'Inactive'
-    END AS billing_status
-from
-    -- secondary_eu_db.tenants_sch.tenants_tbl
-    tenants_ae_final
+--         -- Everyone else is inactive
+--         ELSE 'Inactive'
+--     END AS billing_status
+-- from
+--     -- secondary_eu_db.tenants_sch.tenants_tbl
+--     tenants_ae_final

@@ -110,7 +110,7 @@ from global_tenant_history_daily g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and profile_type is not NULL
     and ltp in ('EU-49000','EU-51541','US-11100')
 
@@ -192,7 +192,7 @@ from global_tenant_history_daily g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and ltp in ('EU-49000','EU-51541','US-11100')
     and premium_name != 'No Premium'
 group by                              
@@ -236,7 +236,7 @@ from global_tenant_history_daily g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and ltp in ('EU-49000','EU-51541','US-11100')
     and incident_management = true
 group by
@@ -278,7 +278,7 @@ from global_tenant_history_daily g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and ltp in ('EU-49000','EU-51541','US-11100')
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
@@ -317,7 +317,7 @@ from global_tenant_history_daily g
 left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and ltp in ('EU-49000','EU-51541','US-11100')
     and ATO = true
     and plan_name != 'Complete Protect'
@@ -351,7 +351,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 -- left join hwm_dmarc_count d on g.tenant_global_id = d.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and ltp in ('EU-49000','EU-51541','US-11100')
     -- and DMARC_MANAGEMENT = true
 

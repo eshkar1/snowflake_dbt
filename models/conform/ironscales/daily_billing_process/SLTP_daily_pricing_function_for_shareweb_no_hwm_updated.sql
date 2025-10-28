@@ -100,7 +100,7 @@ left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp
                                             and g.partner_pricing = i.partner_pricing
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and profile_type is not NULL
     and g.FIRST_LAYER_ID in ('US-211815')
     and licensed_profiles is not NULL
@@ -153,7 +153,7 @@ left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp
                                             and g.partner_pricing = i.partner_pricing
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and g.FIRST_LAYER_ID in ('US-211815')
     and premium_name != 'No Premium'
 
@@ -192,7 +192,7 @@ left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp
                                             and g.partner_pricing = i.partner_pricing
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and g.FIRST_LAYER_ID in ('US-211815')
     and incident_management = true
 
@@ -228,7 +228,7 @@ from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and g.FIRST_LAYER_ID in ('US-211815')
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
@@ -265,7 +265,7 @@ from current_global_tenant_by_layer g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and g.FIRST_LAYER_ID in ('US-211815')
     and ATO = true
     and plan_name != 'Complete Protect'
@@ -294,7 +294,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 -- left join hwm_dmarc_count d on COALESCE(NULLIF(TRIM(fifth_layer_id), ''),NULLIF(TRIM(fourth_layer_id), '') , NULLIF(TRIM(third_layer_id), ''), NULLIF(TRIM(second_layer_id), ''), NULLIF(TRIM(first_layer_id), '')) = d.tenant_global_id
 where
     approved = true
-    and billing_status = 'Active'
+    and billing_status in ('Active','Active-POC')
     and g.FIRST_LAYER_ID in ('US-211815')
     -- and DMARC_MANAGEMENT = true
 having

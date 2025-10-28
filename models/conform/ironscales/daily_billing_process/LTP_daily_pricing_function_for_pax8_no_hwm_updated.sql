@@ -155,7 +155,7 @@ unioned AS (
     LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
     WHERE
       g.approved = TRUE
-      AND g.billing_status = 'Active'
+      AND g.billing_status in ('Active','Active-POC')
       AND p.profile_type IS NOT NULL
       AND g.root IN ('US-733','EU-25')
       AND g.licensed_profiles IS NOT NULL
@@ -208,7 +208,7 @@ unioned AS (
     FROM global_tenant_history_daily g
     LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
     WHERE g.approved = TRUE
-      AND g.billing_status = 'Active'
+      AND g.billing_status in ('Active','Active-POC')
       AND g.root IN ('US-733','EU-25')
       AND g.premium_name <> 'No Premium'
     GROUP BY g.date_recorded, g.root, g.premium_name, p.profile_type, p.PSCP_1
@@ -242,7 +242,7 @@ unioned AS (
     FROM global_tenant_history_daily g
     LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
     WHERE g.approved = TRUE
-      AND g.billing_status = 'Active'
+      AND g.billing_status in ('Active','Active-POC')
       AND g.root IN ('US-733','EU-25')
       AND g.incident_management = TRUE
     GROUP BY g.date_recorded, g.root, p.profile_type, p.IM_1
@@ -276,7 +276,7 @@ unioned AS (
     FROM global_tenant_history_daily g
     LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
     WHERE g.approved = TRUE
-      AND g.billing_status = 'Active'
+      AND g.billing_status in ('Active','Active-POC')
       AND g.root IN ('US-733','EU-25')
       AND g.simulation_and_training_bundle_plus = TRUE
       AND g.plan_name NOT IN ('Complete Protect','SAT Suite')
@@ -311,7 +311,7 @@ unioned AS (
     FROM global_tenant_history_daily g
     LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
     WHERE g.approved = TRUE
-      AND g.billing_status = 'Active'
+      AND g.billing_status in ('Active','Active-POC')
       AND g.root IN ('US-733','EU-25')
       AND g.ATO = TRUE
       AND g.plan_name <> 'Complete Protect'
@@ -340,7 +340,7 @@ unioned AS (
     LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
     -- LEFT JOIN hwm_dmarc_count h   ON g.tenant_global_id = h.tenant_global_id
     WHERE g.approved = TRUE
-      AND g.billing_status = 'Active'
+      AND g.billing_status in ('Active','Active-POC')
       AND g.root IN ('US-733','EU-25')
     GROUP BY g.date_recorded, g.root, p.DMARC_1
     HAVING sum(g.dmarc_domains_number) > 0
