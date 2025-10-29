@@ -86,6 +86,28 @@ sources:
             tests:
               # - unique
               - not_null
+
+      - name: ironapi_irontrapssettings_table
+        # description: 
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+        columns:
+          - name: id
+            tests:
+              # - unique
+              - not_null
+
+      - name: ironapi_gmailwebhookintegration_table
+        # description: 
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+        columns:
+          - name: id
+            tests:
+              # - unique
+              - not_null
       
   - name: ironscales_eu
     description: ironscales_eu raw tables
