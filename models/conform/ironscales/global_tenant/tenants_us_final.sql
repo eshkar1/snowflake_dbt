@@ -30,6 +30,18 @@ active_profiles as (
 
 shared_profiles as (
     select * from {{ ref('tenants_us_shared_profile')}}
+),
+
+gmail as (
+    select * from {{ ref('stg_ironscales_gmailwebhookintegration_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()
+),
+
+setting as (
+    select * from {{ ref('stg_ironscales_irontrapssettings_table')}}
+    where
+    date(_RIVERY_LAST_UPDATE) = current_date()
 )
 
 select
@@ -74,6 +86,8 @@ select
     c.affiliation_type as type,
     c.business_type as business_type,
     l._rivery_last_update as roundup_timestamp,
+    setting.serverside_type,
+    gmail.enabled
 
 from
     tenants_us t
@@ -82,3 +96,5 @@ from
     left join campaigns_companylicense l on t.tenant_id = l.company_id
     left join campaigns_company c on t.TENANT_GLOBAL_ID = c.tenant_global_id
     left join auth_user u on c.owner_id = u.id
+    left join setting on t.tenant_global_id = concat('US-',setting.company_id)
+    left join gmail gmail on t.tenant_global_id = gmail.tenant_global_id

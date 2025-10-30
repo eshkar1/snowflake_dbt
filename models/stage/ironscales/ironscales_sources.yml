@@ -208,3 +208,14 @@ sources:
             tests:
               # - unique
               - not_null
+
+      - name: ironapi_irontrapssettings_table
+        # description: The table contains records of user profiles tagged with specific auto tag types. Each record represents a tagged user profile and includes the user's name, associated auto tag type, and relevant identifiers for company, locale, tenant, and tag.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+        columns:
+          - name: id
+            tests:
+              # - unique
+              - not_null

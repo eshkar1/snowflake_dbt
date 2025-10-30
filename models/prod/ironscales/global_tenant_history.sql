@@ -1,13 +1,19 @@
 with tenants_us_final as (
-    select * from {{ ref('tenants_us_final')}}
+    select * from 
+    -- dev_conform.dbt_stage_db.tenants_us_final
+    {{ ref('tenants_us_final')}}
 ),
 
 tenants_eu_final as (
-    select * from {{ ref('stg_ironscales_tenants_eu')}}
+    select * from 
+    -- dev_conform.dbt_raw_db.stg_ironscales_tenants_eu
+    {{ ref('stg_ironscales_tenants_eu')}}
 ),
 
 tenants_ae_final as (
-    select * from {{ ref('tenants_ae_final')}}
+    select * from 
+    -- dev_conform.dbt_stage_db.tenants_ae_final
+    {{ ref('tenants_ae_final')}}
 )
 
 select
@@ -57,7 +63,9 @@ PILLAR,
 TYPE,  
 BUSINESS_TYPE,
 RECORD_DATE,  
-BILLING_STATUS
+BILLING_STATUS,
+integration,
+integration_type
 from prod_mart.operation.global_tenant_history
 
 union 
@@ -176,22 +184,24 @@ select
 
         -- Everyone else is inactive
         ELSE 'Inactive'
-    END AS billing_status
+    END AS billing_status,
+case
+    when serverside_type = 0 and (enabled = false or enabled is null) then false
+    else true
+end as integration,
+    case
+        when serverside_type = 0 and enabled = true then 'GMAIL'
+        when serverside_type = 0 then 'NONE'
+        when serverside_type = 1 then 'EXCHANGE'
+        when serverside_type = 2 then 'GMAIL'
+        when serverside_type = 3 then 'OFFICE365'
+        when serverside_type = 4 then 'POWERSHELL'
+    end as integration_type,
+
     FROM tenants_us_final
---     CASE
---         -- Check for POC first (active trial plan takes precedence)
---         WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
-        
---         -- Then check for active regular plan
---         WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
-        
---         -- Everyone else is inactive
---         ELSE 'Inactive'
---     END AS billing_status
--- from
---     tenants_us_final
-    -- ironscales_us_db.rr_prod_sch.tenants_vw
+
 union
+
 select
     root,
     parent_global_id,
@@ -302,28 +312,21 @@ CASE
 
     -- Everyone else is inactive
     ELSE 'Inactive'
-END AS billing_status
-    FROM tenants_eu_final
-    -- current_date-2 as record_date,
+END AS billing_status,
+case
+    when serverside_type = 0 and (gmail_enabled = false or gmail_enabled is null) then false
+    else true
+end as integration,
 
-    -- finance_db.billing_sch.billing_status_fn(plan_id, trial_plan_id, plan_expiry, trial_plan_expiry, roundup_timestamp) as billing_status,
-    -- iff(plan_id is not null and plan_expiry >= roundup_timestamp,'Active',
-    --     iff(trial_plan_id is not null and trial_plan_expiry >= roundup_timestamp, 'POC', 'Inactive')
-    --     ) as billing_status
---     CASE
---         -- Check for POC first (active trial plan takes precedence)
---         WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
-        
---         -- Then check for active regular plan
---         WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
-        
---         -- Everyone else is inactive
---         ELSE 'Inactive'
---     END AS billing_status
--- from
---     -- secondary_eu_db.tenants_sch.tenants_tbl
---     tenants_eu_final
-
+case
+when serverside_type = 0 and GMAIL_ENABLED = true then 'GMAIL'
+when serverside_type = 0 then 'NONE'
+when serverside_type = 1 then 'EXCHANGE'
+when serverside_type = 2 then 'GMAIL'
+when serverside_type = 3 then 'OFFICE365'
+when serverside_type = 4 then 'POWERSHELL'
+end as integration_type,
+FROM tenants_eu_final
 
 union
 select
@@ -439,18 +442,16 @@ CASE
 
     -- Everyone else is inactive
     ELSE 'Inactive'
-END AS billing_status
-    FROM tenants_ae_final
---     CASE
---         -- Check for POC first (active trial plan takes precedence)
---         WHEN trial_plan_id IS NOT NULL AND date(trial_plan_expiry) >= date(roundup_timestamp) THEN 'POC'
-        
---         -- Then check for active regular plan
---         WHEN plan_id IS NOT NULL AND date(plan_expiry) >= date(roundup_timestamp) THEN 'Active'
-        
---         -- Everyone else is inactive
---         ELSE 'Inactive'
---     END AS billing_status
--- from
---     -- secondary_eu_db.tenants_sch.tenants_tbl
---     tenants_ae_final
+END AS billing_status,
+case
+when serverside_type = 0 then false
+else true end as integration,
+case
+when serverside_type = 0 then 'NONE'
+when serverside_type = 1 then 'EXCHANGE'
+when serverside_type = 2 then 'GMAIL'
+when serverside_type = 3 then 'OFFICE365'
+when serverside_type = 4 then 'POWERSHELL'
+end as integration_type
+
+FROM tenants_ae_final
