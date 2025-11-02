@@ -97,4 +97,4 @@ from
     left join campaigns_company c on t.TENANT_GLOBAL_ID = c.tenant_global_id
     left join auth_user u on c.owner_id = u.id
     left join setting on t.tenant_global_id = concat('US-',setting.company_id)
-    left join gmail gmail on t.tenant_global_id = gmail.tenant_global_id
+    left join gmail gmail on t.tenant_global_id = concat('US-', gmail.company_id)
