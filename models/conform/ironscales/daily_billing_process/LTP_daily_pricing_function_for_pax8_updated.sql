@@ -252,7 +252,7 @@ unioned AS (
   SELECT
     u.date_recorded,
     u.ltp,
-    'S&T Plus Bundle' AS item,
+    'S&T Bundle Plus' AS item,
     'IS-LTP-STBP'     AS sku,
     u.quantity,
     NULL AS combined_quantity,

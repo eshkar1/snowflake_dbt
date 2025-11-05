@@ -114,8 +114,8 @@ sltp_bill AS (
       MAX(CASE WHEN item = 'S&T Bundle' THEN billable_quantity ELSE 0 END) as ST_Bundle_of_Licenses,
     
       -- S&T Plus Bundle
-      MAX(CASE WHEN item = 'S&T Plus Bundle' THEN true ELSE false END) as ST_Plus_Bundle,
-      MAX(CASE WHEN item = 'S&T Plus Bundle' THEN billable_quantity ELSE 0 END) as ST_Plus_Bundle_of_Licenses,
+      MAX(CASE WHEN item = 'S&T Bundle Plus' THEN true ELSE false END) as ST_Bundle_Plus,
+      MAX(CASE WHEN item = 'S&T Bundle Plus' THEN billable_quantity ELSE 0 END) as ST_Bundle_Plus_of_Licenses,
     
       -- Security Awareness Training
       MAX(CASE WHEN item = 'Security Awareness Training' THEN true ELSE false END) as Security_Awareness_Training,
@@ -200,8 +200,8 @@ OBJECT_CONSTRUCT(
     CASE WHEN sltp_bill.ST_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle THEN ifnull(sltp_bill.ST_Bundle_of_Licenses,0) ELSE NULL END,
 
     -- S&T Plus Bundle
-    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN sltp_bill.ST_Plus_Bundle ELSE NULL END,
-    CASE WHEN sltp_bill.ST_Plus_Bundle THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Plus_Bundle THEN ifnull(sltp_bill.ST_Plus_Bundle_of_Licenses,0) ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Bundle_Plus THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle_Plus THEN sltp_bill.ST_Bundle_Plus ELSE NULL END,
+    CASE WHEN sltp_bill.ST_Bundle_Plus THEN 'SIMULATION_AND_TRAINING_BUNDLE_PLUS_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.ST_Bundle_Plus THEN ifnull(sltp_bill.ST_Bundle_Plus_of_Licenses,0) ELSE NULL END,
 
     -- Security Awareness Training
     CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN sltp_bill.Security_Awareness_Training ELSE NULL END,
