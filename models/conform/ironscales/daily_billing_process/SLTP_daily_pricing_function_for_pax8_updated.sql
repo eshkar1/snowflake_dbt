@@ -565,7 +565,7 @@ SECOND_LAYER_ID,
 THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
-'S&T Plus Bundle' as item,
+'S&T Bundle Plus' as item,
 'IS-LTP-STBP' as sku,
 null as partner_pricing,
 CASE profile_type
