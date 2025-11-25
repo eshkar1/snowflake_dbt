@@ -1,0 +1,42 @@
+version: 2
+sources:
+  - name: cursor
+    description: cursor raw tables
+    database: prod_raw
+    schema: cursor
+    # config:
+    #   grants:
+    #     select: ['RIVERY_ROLE']
+    tables:
+      - name: cursor_table
+        description: The table contains records of cursor data. Each record represents a single cursor and includes details about its data and time period.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+        # columns:
+          # - name: id
+            # tests:
+              # - not_null
+      - name: emp_emails
+        description: The table contains records of employee email addresses. Each record includes details about the employee's skills, team assignments, and team drill-down information.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+
+      - name: historical_data
+        description: The table contains records of user interactions and activity history. Each record represents a user's activity and includes details about their engagement with the system, including chat interactions and feature usage.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+
+      - name: skill_set_compensation
+        description: The table contains records of employee skills and compensation. Each record represents a single skill set and includes details about the skill and its associated compensation.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+
+      - name: sprint_date
+        description: The table contains records of sprint dates. Each record represents a single date and includes details about the sprint.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
