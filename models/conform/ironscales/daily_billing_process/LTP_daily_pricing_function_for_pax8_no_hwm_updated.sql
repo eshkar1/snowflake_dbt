@@ -180,7 +180,7 @@ unioned AS (
     t.quantity,
     NULL AS combined_quantity,
     NULL AS partner_pricing,
-    CASE t.premium_name
+    CASE t.item
       WHEN 'NINJIO'               THEN t.quantity * t.PSCP_1
       WHEN 'Cybermaniacs Videos'  THEN t.quantity * t.PSCP_1
       WHEN 'Habitu8'              THEN t.quantity * t.PSCP_1
@@ -189,7 +189,7 @@ unioned AS (
     SELECT
       g.date_recorded,
       g.root AS ltp,
-      g.premium_name,
+      g.premium_name as item,
       CASE g.premium_name
         WHEN 'NINJIO'              THEN 'IS-LTP-PSCP'
         WHEN 'Cybermaniacs Videos' THEN 'IS-LTP-PSCP'
@@ -203,7 +203,7 @@ unioned AS (
                                  ELSE (SUM(active_profiles) - SUM(shared_profiles))
                             END
       END AS quantity,
-      'Premium' AS item,
+    --   'Premium' AS item,
       p.PSCP_1
     FROM global_tenant_history_daily g
     LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
