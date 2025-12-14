@@ -10,25 +10,27 @@ global_tenant_history as (
     select * from 
     -- prod_mart.operation.global_tenant_history
     {{ ref('global_tenant_history')}}
-    WHERE
-    record_date = current_date
+    -- WHERE
+    -- record_date = current_date
 ),
 
 ltp_pricing_list as (
     select * from 
     -- prod_mart.upload_tables.ltp_pricing_list_today
-    {{ ref('ltp_pricing_tbl')}}
+    -- {{ ref('ltp_pricing_tbl')}}
+    {{ ref('ltp_pricing_history_tbl') }}
 ),
 
 sltp_daily_itemized_billing_tbl as (
     select * from 
     {{ ref('sltp_daily_itemized_billing_tbl')}}
-    WHERE
-    billing_date = current_date
+    -- WHERE
+    -- billing_date = current_date -- removed 14.12.25
 ),
 
 billing_base AS (
   SELECT
+    billing_date,
     CASE
         WHEN FIFTH_LAYER_ID IS NOT NULL AND FIFTH_LAYER_ID <> '' THEN FIFTH_LAYER_ID
         WHEN FOURTH_LAYER_ID IS NOT NULL AND FOURTH_LAYER_ID <> '' THEN FOURTH_LAYER_ID
@@ -46,6 +48,7 @@ billing_base AS (
 sltp_bill AS (
 
     SELECT
+      billing_date,
       tenant_global_id,
     
       -- Email Protect
@@ -133,7 +136,7 @@ sltp_bill AS (
       MAX(CASE WHEN item = 'DMARC' THEN billable_quantity ELSE 0 END) as DMARC_Management_of_Licenses
     
     FROM billing_base
-    GROUP BY tenant_global_id
+    GROUP BY billing_date, tenant_global_id
 )
 
 -- select
@@ -236,11 +239,11 @@ g.partner_pricing as not_for_resale_flag,
 null as price_per_mailbox,
 gh.tree_key
 from global_tenant_history_daily_agg_billing_tbl g
-left join global_tenant_history gh on g.date_recorded = gh.record_date 
+left join global_tenant_history gh on g.record_date = gh.record_date 
                                                         and g.tenant_global_id = gh.tenant_global_id
                                                         
-left join ltp_pricing_list p on g.root = p.tenant_global_id
-left join sltp_bill on g.tenant_global_id = sltp_bill.tenant_global_id
+left join ltp_pricing_list p on g.root = p.tenant_global_id and g.record_date = p.snapshot_date
+left join sltp_bill on g.tenant_global_id = sltp_bill.tenant_global_id and g.record_date = sltp_bill.billing_date
 WHERE
 REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'US'
 and gh.billing_status in ('Active','Active-POC')
