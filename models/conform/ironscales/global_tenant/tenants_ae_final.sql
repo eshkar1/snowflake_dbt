@@ -73,6 +73,7 @@ select
     l.DMARC_MANAGEMENT,
     l.dmarc_domains_number,
     l.dmarc_plan_name,
+    l.DMARC_IRONSCALES_plan,
     t.depth as depth,
     t.approved as approved,
     t.tree_key as tree_key,
