@@ -55,7 +55,9 @@ TRIAL_PREMIUM_NAME,
 TRIAL_PLAN_EXPIRY_DATE,  
 DMARC_MANAGEMENT,  
 DMARC_DOMAINS_NUMBER,  
-DMARC_PLAN_NAME,  
+DMARC_PLAN_NAME,
+DMARC_IRONSCALES_PLAN,
+DMARC_IRONSCALES_PLAN_NAME,  
 DEPTH,  
 APPROVED,  
 TREE_KEY,  
@@ -145,6 +147,13 @@ select
     DMARC_MANAGEMENT,
     dmarc_domains_number,
     dmarc_plan_name,
+    dmarc_ironscales_plan,
+    case dmarc_ironscales_plan
+        when 1 then 'Core Management'
+        when 2 then 'Pro'
+        when 3 then 'Premium'
+        else ifnull(to_varchar(dmarc_ironscales_plan),'No_Plan')
+    end as dmarc_ironscales_plan_name,
     depth,
     approved,
     tree_key,
@@ -276,6 +285,13 @@ select
     DMARC_MANAGEMENT,
     dmarc_domains_number,
     dmarc_plan_name,
+    dmarc_ironscales_plan,
+    case dmarc_ironscales_plan
+        when 1 then 'Core Management'
+        when 2 then 'Pro'
+        when 3 then 'Premium'
+        else ifnull(to_varchar(dmarc_ironscales_plan),'No_Plan')
+    end as dmarc_ironscales_plan_name,
     depth,
     approved,
     tree_key,
@@ -403,6 +419,13 @@ select
     DMARC_MANAGEMENT,
     dmarc_domains_number,
     dmarc_plan_name,
+    dmarc_ironscales_plan,
+    case dmarc_ironscales_plan
+        when 1 then 'Core Management'
+        when 2 then 'Pro'
+        when 3 then 'Premium'
+        else ifnull(to_varchar(dmarc_ironscales_plan),'No_Plan')
+    end as dmarc_ironscales_plan_name,
     depth,
     approved,
     tree_key,
