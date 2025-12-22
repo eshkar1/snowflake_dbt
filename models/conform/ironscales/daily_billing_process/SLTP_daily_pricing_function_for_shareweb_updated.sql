@@ -318,4 +318,5 @@ where
     and g.FIRST_LAYER_ID in ('US-211815')
     -- and DMARC_MANAGEMENT = true
 having
-    billable_quantity is not null
+    -- billable_quantity is not null
+    (billable_quantity > 0 and billable_quantity is not null) 
