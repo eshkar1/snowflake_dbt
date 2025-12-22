@@ -1,6 +1,6 @@
 
 with current_month_ltp_roundup_tbl as (
-    select * from {{ ref('current_month_ltp_roundup_tbl_updated_new')}} 
+    select * from {{ ref('current_month_hwm_dmarc_domains_number')}} 
     WHERE
     tenant_global_id not in ('US-315501','US-314610') -- Manually excluding two tenants from AMSYS (US-311247)
 ),
@@ -10,10 +10,6 @@ global_tenant_history as (
     -- prod_mart.operation.global_tenant_history
     -- PROD_CONFORM.DBT_PROD_DB.global_tenant_history
     {{ ref('global_tenant_history')}}
-),
-
-ltp_pricing_list as (
-    select * from {{ ref('ltp_pricing_tbl')}}
 )
 
 SELECT
@@ -59,9 +55,5 @@ SELECT
     g.dmarc_ironscales_plan,
     g.dmarc_ironscales_plan_name
 FROM
-    -- current_month_ltp_roundup_tbl r
-    global_tenant_history g
-    -- JOIN global_tenant_history g ON g.tenant_global_id = r.tenant_global_id AND g.record_date = r.record_date
-WHERE
-g.record_date = current_date
-and g.root in (select tenant_global_id from ltp_pricing_list )
+    current_month_ltp_roundup_tbl r
+    JOIN global_tenant_history g ON g.tenant_global_id = r.tenant_global_id AND g.record_date = r.record_date
