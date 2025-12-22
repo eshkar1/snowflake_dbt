@@ -287,14 +287,14 @@ unioned AS (
 
   /* --------------------------- ACCOUNT TAKEOVER --------------------------- */
   SELECT
-    u.date_recorded,
-    u.ltp,
+    at.date_recorded,
+    at.ltp,
     'Account Takeover' AS item,
     'IS-LTP-ATO'       AS sku,
-    u.quantity,
+    at.quantity,
     NULL AS combined_quantity,
     NULL AS partner_pricing,
-    u.quantity * u.ATO_1 AS amount
+    at.quantity * at.ATO_1 AS amount
   FROM (
     SELECT
       g.date_recorded,
@@ -316,35 +316,87 @@ unioned AS (
       AND g.ATO = TRUE
       AND g.plan_name <> 'Complete Protect'
     GROUP BY g.date_recorded, g.root, p.profile_type, p.ATO_1
-  ) u
+  ) at
 
   UNION ALL
 
   /* --------------------------- DMARC --------------------------- */
-  SELECT
-    d.date_recorded,
-    d.ltp,
-    'DMARC'            AS item,
-    'IS-LTP-DMARC'     AS sku,
-    d.dmarc_quantity as quantity,
-    NULL AS combined_quantity,
-    NULL AS partner_pricing,
-    d.dmarc_quantity * d.DMARC_1 AS amount
-  FROM (
-    SELECT
-      g.date_recorded,
-      g.root AS ltp,
-      SUM(g.dmarc_domains_number) AS dmarc_quantity,
-      p.DMARC_1
-    FROM global_tenant_history_daily g
-    LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
-    -- LEFT JOIN hwm_dmarc_count h   ON g.tenant_global_id = h.tenant_global_id
-    WHERE g.approved = TRUE
-      AND g.billing_status in ('Active','Active-POC')
-      AND g.root IN ('US-733','EU-25')
-    GROUP BY g.date_recorded, g.root, p.DMARC_1
-    HAVING sum(g.dmarc_domains_number) > 0
-  ) d
+--   SELECT
+--     d.date_recorded,
+--     d.ltp,
+--     'DMARC'            AS item,
+--     'IS-LTP-DMARC'     AS sku,
+--     d.dmarc_quantity as quantity,
+--     NULL AS combined_quantity,
+--     NULL AS partner_pricing,
+--     d.dmarc_quantity * d.DMARC_1 AS amount
+--   FROM (
+--     SELECT
+--       g.date_recorded,
+--       g.root AS ltp,
+--       SUM(g.dmarc_domains_number) AS dmarc_quantity,
+--       p.DMARC_1
+--     FROM global_tenant_history_daily g
+--     LEFT JOIN ltp_pricing_list p ON g.root = p.tenant_global_id
+--     -- LEFT JOIN hwm_dmarc_count h   ON g.tenant_global_id = h.tenant_global_id
+--     WHERE g.approved = TRUE
+--       AND g.billing_status in ('Active','Active-POC')
+--       AND g.root IN ('US-733','EU-25')
+--     GROUP BY g.date_recorded, g.root, p.DMARC_1
+--     HAVING sum(g.dmarc_domains_number) > 0
+--   ) d
+
+    select
+    dm.date_recorded,
+    dm.ltp,
+    dm.item,
+    dm.sku,
+    dm.quantity,
+    dm.combined_quantity,
+    dm.partner_pricing,
+    dm.amount
+    from (
+            select
+            gd.date_recorded,
+            gd.root as ltp,
+            case 
+                when dmarc_ironscales_plan = 1 then 'DMARC Core Management'
+                when dmarc_ironscales_plan = 2 then 'DMARC Pro'
+                when dmarc_ironscales_plan = 3 then 'DMARC Premium'
+            end as item,
+            case 
+                when dmarc_ironscales_plan = 1 then 'IS-LTP-DMARC'
+                when dmarc_ironscales_plan = 2 then 'IS-LTP-DMARC_PRO'
+                when dmarc_ironscales_plan = 3 then 'IS-LTP-DMARC_PREMIUM'
+            -- when dmarc_ironscales_plan = 2 then 'DMARC Premium'
+            end as sku,
+            sum(gd.dmarc_domains_number) as quantity,
+            NULL AS combined_quantity,
+            null as partner_pricing,
+            case 
+                when dmarc_ironscales_plan = 1 then quantity * DMARC_1 
+                when dmarc_ironscales_plan = 2 then quantity * DMARC_PRO_1 
+                when dmarc_ironscales_plan = 3 then quantity * DMARC_1 
+            end as amount
+
+            FROM global_tenant_history_daily gd
+            left join ltp_pricing_list p on gd.root = p.tenant_global_id
+            -- left join hwm_dmarc_count d on gd.tenant_global_id = d.tenant_global_id
+            WHERE
+            gd.approved = TRUE
+            AND gd.billing_status in ('Active','Active-POC')
+            AND gd.root IN ('US-733','EU-25')
+            GROUP BY
+            gd.date_recorded,
+            gd.root,
+            item,
+            sku,
+            dmarc_ironscales_plan,
+            DMARC_1,
+            DMARC_PRO_1 
+            having
+            (quantity > 0 and quantity is not null) 
+        ) dm
 )
 
 -- =================== HIDE combined_quantity FROM FINAL OUTPUT ===================

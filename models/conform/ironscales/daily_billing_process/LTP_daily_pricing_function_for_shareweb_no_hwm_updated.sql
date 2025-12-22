@@ -314,30 +314,72 @@ group by
 
 union
 
-select
-g.DATE_RECORDED,
-g.root as ltp,
-'DMARC' as item,
-'IS-LTP-DMARC' as sku,
-sum(g.dmarc_domains_number) as quantity,
-null as partner_pricing,
-quantity * DMARC_1 as amount
-from global_tenant_history_daily g
-left join ltp_pricing_list p on g.root = p.tenant_global_id
--- left join hwm_dmarc_count d on g.tenant_global_id = d.tenant_global_id
-where
-    approved = true
-    and billing_status in ('Active','Active-POC')
-    and ltp in ('US-211815')
-    -- and DMARC_MANAGEMENT = true
+-- select
+-- g.DATE_RECORDED,
+-- g.root as ltp,
+-- 'DMARC' as item,
+-- 'IS-LTP-DMARC' as sku,
+-- sum(g.dmarc_domains_number) as quantity,
+-- null as partner_pricing,
+-- quantity * DMARC_1 as amount
+-- from global_tenant_history_daily g
+-- left join ltp_pricing_list p on g.root = p.tenant_global_id
+-- -- left join hwm_dmarc_count d on g.tenant_global_id = d.tenant_global_id
+-- where
+--     approved = true
+--     and billing_status in ('Active','Active-POC')
+--     and ltp in ('US-211815')
+--     -- and DMARC_MANAGEMENT = true
 
-group by
-    g.DATE_RECORDED,
-    root,   
-    item,
-    sku,
-    profile_type,
-    -- g.partner_pricing,
-    DMARC_1
+-- group by
+--     g.DATE_RECORDED,
+--     root,   
+--     item,
+--     sku,
+--     profile_type,
+--     -- g.partner_pricing,
+--     DMARC_1
+-- having
+--     sum(g.dmarc_domains_number) > 0
+
+
+select
+gd.date_recorded,
+gd.root as ltp,
+case 
+    when dmarc_ironscales_plan = 1 then 'DMARC Core Management'
+    when dmarc_ironscales_plan = 2 then 'DMARC Pro'
+    when dmarc_ironscales_plan = 3 then 'DMARC Premium'
+end as item,
+case 
+    when dmarc_ironscales_plan = 1 then 'IS-LTP-DMARC'
+    when dmarc_ironscales_plan = 2 then 'IS-LTP-DMARC_PRO'
+    when dmarc_ironscales_plan = 3 then 'IS-LTP-DMARC_PREMIUM'
+-- when dmarc_ironscales_plan = 2 then 'DMARC Premium'
+end as sku,
+sum(gd.dmarc_domains_number) as quantity,
+null as partner_pricing,
+case 
+    when dmarc_ironscales_plan = 1 then quantity * DMARC_1 
+    when dmarc_ironscales_plan = 2 then quantity * DMARC_PRO_1 
+    when dmarc_ironscales_plan = 3 then quantity * DMARC_1 
+end as amount
+
+-- from global_tenant_history_daily_dmarc gd
+from global_tenant_history_daily gd
+left join ltp_pricing_list p on gd.root = p.tenant_global_id
+-- left join hwm_dmarc_count d on gd.tenant_global_id = d.tenant_global_id
+WHERE
+approved = true
+and billing_status in ('Active','Active-POC')
+and ltp in ('US-211815')
+GROUP BY
+gd.date_recorded,
+gd.root,
+item,
+sku,
+dmarc_ironscales_plan,
+DMARC_1,
+DMARC_PRO_1 
 having
-    sum(g.dmarc_domains_number) > 0
+(quantity > 0 and quantity is not null) 

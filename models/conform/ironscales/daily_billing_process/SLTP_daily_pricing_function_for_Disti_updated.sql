@@ -2,6 +2,10 @@ with current_global_tenant_by_layer as (
     select * from {{ ref('current_global_tenant_by_layer')}} 
 ),
 
+current_global_tenant_by_layer_DMARC as (
+    select * from {{ ref('current_global_tenant_by_layer_DMARC')}}
+),
+
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
@@ -282,12 +286,28 @@ SECOND_LAYER_ID,
 THIRD_LAYER_ID,
 FOURTH_LAYER_ID,
 FIFTH_LAYER_ID,
-'DMARC' as item,
-'IS-LTP-DMARC' as sku,
+-- 'DMARC' as item,
+case 
+    when dmarc_ironscales_plan = 1 then 'DMARC Core Management'
+    when dmarc_ironscales_plan = 2 then 'DMARC Pro'
+    when dmarc_ironscales_plan = 3 then 'DMARC Premium'
+end as item,
+-- 'IS-LTP-DMARC' as sku,
+case 
+    when dmarc_ironscales_plan = 1 then 'IS-LTP-DMARC'
+    when dmarc_ironscales_plan = 2 then 'IS-LTP-DMARC_PRO'
+    when dmarc_ironscales_plan = 3 then 'IS-LTP-DMARC_PREMIUM'
+-- when dmarc_ironscales_plan = 2 then 'DMARC Premium'
+end as sku,
 null as partner_pricing,
 d.dmarc_domains_number as billable_quantity,
-billable_quantity * DMARC_1 as amount
-from current_global_tenant_by_layer g
+-- billable_quantity * DMARC_1 as amount
+case 
+    when dmarc_ironscales_plan = 1 then billable_quantity * DMARC_1 
+    when dmarc_ironscales_plan = 2 then billable_quantity * DMARC_PRO_1 
+    when dmarc_ironscales_plan = 3 then billable_quantity * DMARC_1 
+end as amount
+from current_global_tenant_by_layer_DMARC g
 left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 left join hwm_dmarc_count d on COALESCE(NULLIF(TRIM(fifth_layer_id), ''),NULLIF(TRIM(fourth_layer_id), '') , NULLIF(TRIM(third_layer_id), ''), NULLIF(TRIM(second_layer_id), ''), NULLIF(TRIM(first_layer_id), '')) = d.tenant_global_id
 where
@@ -296,4 +316,5 @@ where
     and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
     -- and DMARC_MANAGEMENT = true
 having
-    billable_quantity is not null
+    -- billable_quantity is not null
+    (billable_quantity > 0 and billable_quantity is not null)  
