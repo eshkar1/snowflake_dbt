@@ -81,7 +81,8 @@ select
     c.affiliation_type as type,
     c.business_type as business_type,
     l._rivery_last_update as roundup_timestamp,
-    setting.serverside_type
+    setting.serverside_type,
+    l.auto_convert_trial
 from
     tenants_ae t
     left join active_profiles a on t.tenant_global_id = a.tenant_global_id 

@@ -88,7 +88,8 @@ select
     c.business_type as business_type,
     l._rivery_last_update as roundup_timestamp,
     setting.serverside_type,
-    gmail.enabled
+    gmail.enabled,
+    l.auto_convert_trial
 
 from
     tenants_us t
