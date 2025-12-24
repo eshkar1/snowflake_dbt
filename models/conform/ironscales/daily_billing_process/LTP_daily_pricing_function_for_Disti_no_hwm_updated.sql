@@ -259,7 +259,7 @@ group by
 
 
 -----------------------------------------
----------- SAT Bundle Plus --------------
+---------- S&T Bundle Plus --------------
 -----------------------------------------
 
 UNION 
@@ -267,7 +267,7 @@ UNION
 select
 g.DATE_RECORDED,
 g.root as ltp,
-'SAT Bundle Plus' as item,
+'S&T Bundle Plus' as item,
 'IS-LTP-STBP' as sku,
 CASE p.profile_type
     when 'active' then sum(Active_profiles)
