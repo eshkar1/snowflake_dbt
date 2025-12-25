@@ -131,18 +131,18 @@ sltp_bill AS (
       MAX(CASE WHEN item = 'SAT Suite' AND partner_pricing = true THEN true ELSE false END) as Security_Awareness_Training_Suite_NFR,
       MAX(CASE WHEN item = 'SAT Suite' AND partner_pricing = true THEN billable_quantity ELSE 0 END) as SAT_Suite_NFR_of_Licenses, 
 
-      -- DMARC ---
-    --   MAX(CASE WHEN item = 'DMARC' THEN true ELSE false END) as DMARC_Management,
-    --   MAX(CASE WHEN item = 'DMARC' THEN billable_quantity ELSE 0 END) as DMARC_Management_of_Licenses
-          --core--
-      MAX(CASE WHEN item = 'DMARC Core Management' THEN true ELSE false END) as DMARC_Core_Management,
-      MAX(CASE WHEN item = 'DMARC Core Management' THEN billable_quantity ELSE 0 END) as DMARC_Core_Management_of_Licenses,
-      --pro--
-      MAX(CASE WHEN item = 'DMARC Pro' THEN true ELSE false END) as DMARC_Pro_Management,
-      MAX(CASE WHEN item = 'DMARC Pro' THEN billable_quantity ELSE 0 END) as DMARC_Pro_Management_of_Licenses,
-      --premium--
-      MAX(CASE WHEN item = 'DMARC Premium' THEN true ELSE false END) as DMARC_Premium_Management,
-      MAX(CASE WHEN item = 'DMARC Premium' THEN billable_quantity ELSE 0 END) as DMARC_Premium_Management_of_Licenses
+      DMARC ---
+      MAX(CASE WHEN item = 'DMARC' THEN true ELSE false END) as DMARC_Management,
+      MAX(CASE WHEN item = 'DMARC' THEN billable_quantity ELSE 0 END) as DMARC_Management_of_Licenses
+    --       --core--
+    --   MAX(CASE WHEN item = 'DMARC Core Management' THEN true ELSE false END) as DMARC_Core_Management,
+    --   MAX(CASE WHEN item = 'DMARC Core Management' THEN billable_quantity ELSE 0 END) as DMARC_Core_Management_of_Licenses,
+    --   --pro--
+    --   MAX(CASE WHEN item = 'DMARC Pro' THEN true ELSE false END) as DMARC_Pro_Management,
+    --   MAX(CASE WHEN item = 'DMARC Pro' THEN billable_quantity ELSE 0 END) as DMARC_Pro_Management_of_Licenses,
+    --   --premium--
+    --   MAX(CASE WHEN item = 'DMARC Premium' THEN true ELSE false END) as DMARC_Premium_Management,
+    --   MAX(CASE WHEN item = 'DMARC Premium' THEN billable_quantity ELSE 0 END) as DMARC_Premium_Management_of_Licenses
     
     FROM billing_base
     GROUP BY billing_date, tenant_global_id
@@ -220,23 +220,23 @@ OBJECT_CONSTRUCT(
     CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN ifnull(sltp_bill.SAT_of_Licenses,0) ELSE NULL END,
 
         
-    -- DMARC
-    -- CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN sltp_bill.DMARC_Management ELSE NULL END,
-    -- CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN ifnull(DMARC_Management_of_Licenses,0) ELSE NULL END
+    DMARC
+    CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN sltp_bill.DMARC_Management ELSE NULL END,
+    CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN ifnull(DMARC_Management_of_Licenses,0) ELSE NULL END
 
-   -- DMARC Core--
-    CASE WHEN sltp_bill.DMARC_Core_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Core_Management THEN sltp_bill.DMARC_Core_Management ELSE NULL END,
-    CASE WHEN sltp_bill.DMARC_Core_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Core_Management THEN ifnull(sltp_bill.DMARC_Core_Management_of_Licenses,0) ELSE NULL END,
-    CASE WHEN sltp_bill.DMARC_Core_Management THEN 'DMARC_MANAGEMENT_PLAN' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Core_Management THEN 'Core Management' ELSE NULL END,
+--    -- DMARC Core--
+--     CASE WHEN sltp_bill.DMARC_Core_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Core_Management THEN sltp_bill.DMARC_Core_Management ELSE NULL END,
+--     CASE WHEN sltp_bill.DMARC_Core_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Core_Management THEN ifnull(sltp_bill.DMARC_Core_Management_of_Licenses,0) ELSE NULL END,
+--     CASE WHEN sltp_bill.DMARC_Core_Management THEN 'DMARC_MANAGEMENT_PLAN' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Core_Management THEN 'Core Management' ELSE NULL END,
 
-    -- DMARC pro--
-    CASE WHEN sltp_bill.DMARC_Pro_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Pro_Management THEN sltp_bill.DMARC_Pro_Management ELSE NULL END,
-    CASE WHEN sltp_bill.DMARC_Pro_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Pro_Management THEN ifnull(sltp_bill.DMARC_Pro_Management_of_Licenses,0) ELSE NULL END,
-    CASE WHEN sltp_bill.DMARC_Pro_Management THEN 'DMARC_MANAGEMENT_PLAN' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Pro_Management THEN 'Pro' ELSE NULL END,                                                                                      
-    -- DMARC premium--
-    CASE WHEN sltp_bill.DMARC_Premium_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Premium_Management THEN sltp_bill.DMARC_Premium_Management ELSE NULL END,
-    CASE WHEN sltp_bill.DMARC_Premium_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Premium_Management THEN ifnull(sltp_bill.DMARC_Premium_Management_of_Licenses,0) ELSE NULL END,
-    CASE WHEN sltp_bill.DMARC_Premium_Management THEN 'DMARC_MANAGEMENT_PLAN' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Premium_Management THEN 'Premium' ELSE NULL END
+--     -- DMARC pro--
+--     CASE WHEN sltp_bill.DMARC_Pro_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Pro_Management THEN sltp_bill.DMARC_Pro_Management ELSE NULL END,
+--     CASE WHEN sltp_bill.DMARC_Pro_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Pro_Management THEN ifnull(sltp_bill.DMARC_Pro_Management_of_Licenses,0) ELSE NULL END,
+--     CASE WHEN sltp_bill.DMARC_Pro_Management THEN 'DMARC_MANAGEMENT_PLAN' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Pro_Management THEN 'Pro' ELSE NULL END,                                                                                      
+--     -- DMARC premium--
+--     CASE WHEN sltp_bill.DMARC_Premium_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Premium_Management THEN sltp_bill.DMARC_Premium_Management ELSE NULL END,
+--     CASE WHEN sltp_bill.DMARC_Premium_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Premium_Management THEN ifnull(sltp_bill.DMARC_Premium_Management_of_Licenses,0) ELSE NULL END,
+--     CASE WHEN sltp_bill.DMARC_Premium_Management THEN 'DMARC_MANAGEMENT_PLAN' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Premium_Management THEN 'Premium' ELSE NULL END
 
 ) as billable_items,
 
