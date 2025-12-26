@@ -220,7 +220,7 @@ OBJECT_CONSTRUCT(
     CASE WHEN sltp_bill.Security_Awareness_Training THEN 'SECURITY_AWARENESS_TRAINING_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.Security_Awareness_Training THEN ifnull(sltp_bill.SAT_of_Licenses,0) ELSE NULL END,
 
         
-    DMARC
+    --DMARC--
     CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_MANAGEMENT' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN sltp_bill.DMARC_Management ELSE NULL END,
     CASE WHEN sltp_bill.DMARC_Management THEN 'DMARC_MANAGEMENT_QUANTITY' ELSE NULL END, CASE WHEN sltp_bill.DMARC_Management THEN ifnull(DMARC_Management_of_Licenses,0) ELSE NULL END
 
