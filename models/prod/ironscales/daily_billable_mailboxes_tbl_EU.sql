@@ -131,7 +131,7 @@ sltp_bill AS (
       MAX(CASE WHEN item = 'SAT Suite' AND partner_pricing = true THEN true ELSE false END) as Security_Awareness_Training_Suite_NFR,
       MAX(CASE WHEN item = 'SAT Suite' AND partner_pricing = true THEN billable_quantity ELSE 0 END) as SAT_Suite_NFR_of_Licenses, 
 
-      DMARC ---
+      --DMARC ---
       MAX(CASE WHEN item = 'DMARC' THEN true ELSE false END) as DMARC_Management,
       MAX(CASE WHEN item = 'DMARC' THEN billable_quantity ELSE 0 END) as DMARC_Management_of_Licenses
     --       --core--
