@@ -106,7 +106,7 @@ where
     and billing_status in ('Active','Active-POC')
     and profile_type is not NULL
     and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
-    and licensed_profiles is not NULL
+    -- and licensed_profiles is not NULL
 
 ----------------------------------------------------------------------------------------
                                     -- Add Ons --
