@@ -1,5 +1,9 @@
 with global_tenant_history_daily_billing_tbl as (
     select * from {{ ref('global_tenant_history_daily_billing_tbl')}}
+),
+
+ltp_pricing_history_tbl as (
+    select * from {{ ref('ltp_pricing_history_tbl') }}
 )
 
 -- select
@@ -49,45 +53,48 @@ with global_tenant_history_daily_billing_tbl as (
 -- union 
 
 select
-    date_recorded,
-    root,
-    parent_global_id,
-    parent_name,
-    tenant_global_id,
-    tenant_name,
-    registration_date,
-    domain,
-    partner_pricing,
-    plan_id,
-    plan_name,
-    premium_id,
-    premium_name,
-    incident_management,
-    security_awareness_training,
-    simulation_and_training_bundle,
-    simulation_and_training_bundle_plus,
-    ai_empower_bundle,
-    themis_co_pilot,
-    ato,
-    teams_protection,
-    file_scanning,
-    link_scanning,
-    multi_tenancy,
-    licensed_profiles,
-    active_profiles,
-    shared_profiles,
-    trial_plan_id,
-    trial_plan_name,
-    trial_premium_id,
-    trial_premium_name,
-    trial_plan_expiry_date,
-    depth,
-    approved,
-    tree_key,
-    record_date,
-    billing_status,
-    dmarc_management,
-    dmarc_domains_number,
-    dmarc_ironscales_plan,
-    dmarc_ironscales_plan_name
-from global_tenant_history_daily_billing_tbl
+    g.date_recorded,
+    g.root,
+    g.parent_global_id,
+    g.parent_name,
+    g.tenant_global_id,
+    g.tenant_name,
+    g.registration_date,
+    g.domain,
+    g.partner_pricing,
+    g.plan_id,
+    g.plan_name,
+    g.premium_id,
+    g.premium_name,
+    g.incident_management,
+    g.security_awareness_training,
+    g.simulation_and_training_bundle,
+    g.simulation_and_training_bundle_plus,
+    g.ai_empower_bundle,
+    g.themis_co_pilot,
+    g.ato,
+    g.teams_protection,
+    g.file_scanning,
+    g.link_scanning,
+    g.multi_tenancy,
+    g.licensed_profiles,
+    g.active_profiles,
+    g.shared_profiles,
+    g.trial_plan_id,
+    g.trial_plan_name,
+    g.trial_premium_id,
+    g.trial_premium_name,
+    g.trial_plan_expiry_date,
+    g.depth,
+    g.approved,
+    g.tree_key,
+    g.record_date,
+    g.billing_status,
+    g.dmarc_management,
+    g.dmarc_domains_number,
+    g.dmarc_ironscales_plan,
+    g.dmarc_ironscales_plan_name
+from global_tenant_history_daily_billing_tbl g
+INNER JOIN ltp_pricing_history_tbl AS l --Added the LTP pricing table to the Global Tenant History Daily Aggregate Billing table to align the data with the billing calculation logic.
+    ON g.record_date = l.snapshot_date
+   AND g.root = l.tenant_global_id
