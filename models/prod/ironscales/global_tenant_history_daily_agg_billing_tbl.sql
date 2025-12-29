@@ -95,6 +95,6 @@ select
     g.dmarc_ironscales_plan,
     g.dmarc_ironscales_plan_name
 from global_tenant_history_daily_billing_tbl g
-INNER JOIN ltp_pricing_history_tbl AS l
+INNER JOIN ltp_pricing_history_tbl AS l --Added the LTP pricing table to the Global Tenant History Daily Aggregate Billing table to align the data with the billing calculation logic.
     ON g.record_date = l.snapshot_date
    AND g.root = l.tenant_global_id
