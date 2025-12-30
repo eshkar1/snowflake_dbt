@@ -265,7 +265,8 @@ left join global_tenant_history gh on g.record_date = gh.record_date
                                                         and g.tenant_global_id = gh.tenant_global_id
                                                         
 left join ltp_pricing_list p on g.root = p.tenant_global_id and g.record_date = p.snapshot_date
-left join sltp_bill on g.tenant_global_id = sltp_bill.tenant_global_id and g.record_date = sltp_bill.billing_date
+left join sltp_bill on g.tenant_global_id = sltp_bill.tenant_global_id and sltp_bill.billing_date = current_date 
+-- and g.record_date = sltp_bill.billing_date
 WHERE
 REGEXP_SUBSTR(g.tenant_global_id, '[A-Za-z]+') = 'EU'
 and gh.billing_status in ('Active','Active-POC')
