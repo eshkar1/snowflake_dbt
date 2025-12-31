@@ -18,7 +18,7 @@ ltp_pricing_list as (
     select * from 
     -- prod_mart.upload_tables.ltp_pricing_list_today
     -- {{ ref('ltp_pricing_tbl')}}
-    {{ ref('ltp_pricing_history_tbl') }}
+    {{ ref('ltp_pricing_tbl') }}
 ),
 
 sltp_daily_itemized_billing_tbl as (
@@ -264,7 +264,8 @@ from global_tenant_history_daily_agg_billing_tbl g
 left join global_tenant_history gh on g.record_date = gh.record_date 
                                                         and g.tenant_global_id = gh.tenant_global_id
                                                         
-left join ltp_pricing_list p on g.root = p.tenant_global_id and g.record_date = p.snapshot_date
+left join ltp_pricing_list p on g.root = p.tenant_global_id
+--g.record_date = p.snapshot_date
 left join sltp_bill on g.tenant_global_id = sltp_bill.tenant_global_id and sltp_bill.billing_date = current_date 
 -- g.record_date = sltp_bill.billing_date
 WHERE
