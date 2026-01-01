@@ -13,7 +13,7 @@ global_tenant_history_daily_dmarc as (
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
-    tenant_global_id in ('EU-49000','EU-51541','US-11100')
+    tenant_global_id in ('EU-49000','EU-51541','US-11100','EU-74773')
     and IS_TRACKED = true
 )
 ,
@@ -68,6 +68,9 @@ CASE
     WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 15000 then (15000 * EP_1) + (quantity-15000) * EP_1000
     WHEN ltp in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 15000 then quantity * EP_1
     
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 300000 then (150000 * EP_1) + ((300000-15000) * EP_1000) + (quantity - 300000) * EP_3500
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 150000 then (150000 * EP_1) + (quantity-150000) * EP_1000
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 150000 then quantity * EP_1    
     -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 25000 then (11000 * EP_1) + ((25000-11000) * EP_1000) + (quantity - 25000) * EP_3500
     -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity >= 11000 then (11000 * EP_1) + (quantity-11000) * EP_1000  once 
     -- WHEN ltp in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' and quantity < 11000 then quantity * EP_1
@@ -79,20 +82,29 @@ CASE
     
         -- end
     -- WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' then quantity * IP_1
-    WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 25000 then (15000 * IP_1) + ((25000-15000) * IP_1000) + (quantity - 25000) * IP_3500
-    WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 15000 then (15000 * IP_1) + (quantity-15000) * IP_1000
-    WHEN g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity < 15000 then quantity * IP_1
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 25000 then (15000 * IP_1) + ((25000-15000) * IP_1000) + (quantity - 25000) * IP_3500
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 15000 then (15000 * IP_1) + (quantity-15000) * IP_1000
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity < 15000 then quantity * IP_1
+
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 300000 then (150000 * IP_1) + ((300000-150000) * IP_1000) + (quantity - 30000) * IP_3500
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity >= 150000 then (150000 * IP_1) + (quantity-150000) * IP_1000
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'IRONSCALES Protect' and quantity < 150000 then quantity * IP_1
 
     -- WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' then quantity * CP_1
-    WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 25000 then (15000 * CP_1) + ((25000-15000) * CP_1000) + (quantity - 25000) * CP_3500
-    WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 15000 then (15000 * CP_1) + (quantity-15000) * CP_1000
-    WHEN g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity < 15000 then quantity * CP_1
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 25000 then (15000 * CP_1) + ((25000-15000) * CP_1000) + (quantity - 25000) * CP_3500
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 15000 then (15000 * CP_1) + (quantity-15000) * CP_1000
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity < 15000 then quantity * CP_1
 
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 300000 then (150000 * CP_1) + ((300000-150000) * CP_1000) + (quantity - 300000) * CP_3500
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity >= 150000 then (150000 * CP_1) + (quantity-150000) * CP_1000
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'Complete Protect' and quantity < 150000 then quantity * CP_1
     
     -- WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' then quantity * SAT_SUITE_1
-    WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity >= 25000 then (15000 * SAT_SUITE_1) + ((25000-15000) * SAT_SUITE_1000) + (quantity - 25000) * SAT_SUITE_3500
-    WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity >= 15000 then (15000 * SAT_SUITE_1) + (quantity-15000) * SAT_SUITE_1000
-    WHEN g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity < 15000 then quantity * SAT_SUITE_1
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity >= 25000 then (15000 * SAT_SUITE_1) + ((25000-15000) * SAT_SUITE_1000) + (quantity - 25000) * SAT_SUITE_3500
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity >= 15000 then (15000 * SAT_SUITE_1) + (quantity-15000) * SAT_SUITE_1000
+    WHEN ltp not in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'SAT Suite' and quantity < 15000 then quantity * SAT_SUITE_1
+    
+    WHEN ltp in ('EU-74773') and g.partner_pricing = FALSE and plan_name = 'SAT Suite' then quantity * SAT_SUITE_1
     
     WHEN g.partner_pricing = FALSE and plan_name = 'Starter' then quantity * STARTER_1
 
@@ -118,7 +130,7 @@ where
     approved = true
     and billing_status in ('Active','Active-POC')
     and profile_type is not NULL
-    and ltp in ('EU-49000','EU-51541','US-11100')
+    and ltp in ('EU-49000','EU-51541','US-11100','EU-74773')
 
 
 group by
@@ -199,7 +211,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and ltp in ('EU-49000','EU-51541','US-11100')
+    and ltp in ('EU-49000','EU-51541','US-11100','EU-74773')
     and premium_name != 'No Premium'
 group by                              
 g.DATE_RECORDED,
@@ -243,7 +255,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and ltp in ('EU-49000','EU-51541','US-11100')
+    and ltp in ('EU-49000','EU-51541','US-11100','EU-74773')
     and incident_management = true
 group by
     g.DATE_RECORDED,
@@ -285,7 +297,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and ltp in ('EU-49000','EU-51541','US-11100')
+    and ltp in ('EU-49000','EU-51541','US-11100','EU-74773')
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
 group by
@@ -324,7 +336,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and ltp in ('EU-49000','EU-51541','US-11100')
+    and ltp in ('EU-49000','EU-51541','US-11100','EU-74773')
     and ATO = true
     and plan_name != 'Complete Protect'
 group by
@@ -401,7 +413,7 @@ left join hwm_dmarc_count d on gd.tenant_global_id = d.tenant_global_id
 WHERE
 approved = true
 and billing_status in ('Active','Active-POC')
-and ltp in ('EU-49000','EU-51541','US-11100')
+and ltp in ('EU-49000','EU-51541','US-11100','EU-74773')
 GROUP BY
 gd.date_recorded,
 gd.root,

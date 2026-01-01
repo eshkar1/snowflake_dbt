@@ -9,7 +9,7 @@ current_global_tenant_by_layer_DMARC as (
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
-    tenant_global_id in ('EU-49000','EU-51541','US-11100')
+    tenant_global_id in ('EU-49000','EU-51541','US-11100','EU-74773')
     and IS_TRACKED = true
 ),
 
@@ -72,7 +72,7 @@ end as billable_quantity,
 -- Non NFR Plans --
 CASE 
 
-    WHEN FIRST_LAYER_ID in ('EU-49000','EU-51541') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
+    WHEN FIRST_LAYER_ID in ('EU-49000','EU-51541','EU-74773') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
     WHEN FIRST_LAYER_ID in ('US-11100') and g.partner_pricing = FALSE and plan_name = 'Email Protect' then billable_quantity * i.amount/i.quantity
 
     WHEN g.partner_pricing = FALSE and plan_name = 'Core' then billable_quantity * i.amount/i.quantity
@@ -105,7 +105,7 @@ where
     approved = true
     and billing_status in ('Active','Active-POC')
     and profile_type is not NULL
-    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100','EU-74773') 
     -- and licensed_profiles is not NULL
 
 ----------------------------------------------------------------------------------------
@@ -157,7 +157,7 @@ left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100','EU-74773') 
     and premium_name != 'No Premium'
 
 
@@ -196,7 +196,7 @@ left join ltp_daily_itemized_billing_tbl i on g.FIRST_LAYER_ID = i.ltp
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100','EU-74773') 
     and incident_management = true
 
 
@@ -232,7 +232,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100','EU-74773') 
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
 
@@ -269,7 +269,7 @@ left join ltp_pricing_list p on g.FIRST_LAYER_ID = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100','EU-74773') 
     and ATO = true
     and plan_name != 'Complete Protect'
 
@@ -313,7 +313,7 @@ left join hwm_dmarc_count d on COALESCE(NULLIF(TRIM(fifth_layer_id), ''),NULLIF(
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100') 
+    and g.FIRST_LAYER_ID in ('EU-49000','EU-51541','US-11100','EU-74773') 
     -- and DMARC_MANAGEMENT = true
 having
     -- billable_quantity is not null
