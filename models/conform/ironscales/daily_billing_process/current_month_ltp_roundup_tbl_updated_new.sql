@@ -14,7 +14,8 @@ date_bounds AS (
         CASE 
             WHEN DATE_PART('day', CURRENT_DATE) = 1 THEN DATEADD(day, 1, DATE_TRUNC('month', DATEADD(month, -1, CURRENT_DATE)))
             WHEN DATE_PART('day', CURRENT_DATE) = 2 THEN CURRENT_DATE
-            ELSE DATEADD(day, 1, DATE_TRUNC('month', CURRENT_DATE))
+            -- ELSE DATEADD(day, 1, DATE_TRUNC('month', CURRENT_DATE))
+            ELSE DATEADD(day, 3, DATE_TRUNC('month', CURRENT_DATE))
         END AS start_date,
         CURRENT_DATE AS end_date
 ),
