@@ -73,6 +73,7 @@ and u.name in (
                                         'Paul Clark',
                                         'Charlie Mather',
                                         'Evan Poses'
+                                        'Alex Paquette'
                                         )
 and stagename in ('Closed Lost', 'Closed Won')
 
