@@ -72,7 +72,7 @@ and u.name in (
                                         'Robin Clothier',
                                         'Paul Clark',
                                         'Charlie Mather',
-                                        'Evan Poses'
+                                        'Evan Poses',
                                         'Alex Paquette'
                                         )
 and stagename in ('Closed Lost', 'Closed Won')
