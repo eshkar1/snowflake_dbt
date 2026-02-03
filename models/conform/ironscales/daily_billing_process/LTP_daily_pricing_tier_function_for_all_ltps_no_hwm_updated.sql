@@ -7,7 +7,7 @@ with global_tenant_history_daily as (
 ltp_pricing_list as (
     select * from {{ ref('ltp_pricing_tbl')}}
     where
-    tenant_global_id not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815')
+    tenant_global_id not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815','EU-74773')
     and IS_TRACKED = true
 )
 
@@ -108,7 +108,7 @@ where
     approved = true
     and billing_status in ('Active','Active-POC')
     and profile_type is not NULL
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815','EU-74773') -- exclude ofek & pax8
 group by
     g.DATE_RECORDED,
     root,   
@@ -187,7 +187,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
 approved = true
 and billing_status in ('Active','Active-POC')
-and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
+and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815','EU-74773') -- exclude ofek & pax8
 and premium_name != 'No Premium'
 group by                              
 g.DATE_RECORDED,
@@ -227,7 +227,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815','EU-74773') -- exclude ofek & pax8
     and incident_management = true
 group by
     g.DATE_RECORDED,
@@ -268,7 +268,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815','EU-74773') -- exclude ofek & pax8
     and SIMULATION_AND_TRAINING_BUNDLE_PLUS = true
     and plan_name != 'Complete Protect'
     and partner_pricing = false
@@ -309,7 +309,7 @@ left join ltp_pricing_list p on g.root = p.tenant_global_id
 where
     approved = true
     and billing_status in ('Active','Active-POC')
-    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
+    and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815','EU-74773') -- exclude ofek & pax8
     and ATO = true
     and plan_name != 'Complete Protect'
     and partner_pricing = false
@@ -387,7 +387,7 @@ left join ltp_pricing_list p on gd.root = p.tenant_global_id
 WHERE
 approved = true
 and billing_status in ('Active','Active-POC')
-and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815') -- exclude ofek & pax8
+and ltp not in ('US-11100','US-733','EU-25','EU-49000','EU-51541','US-211815','EU-74773') -- exclude ofek & pax8
 GROUP BY
 gd.date_recorded,
 gd.root,

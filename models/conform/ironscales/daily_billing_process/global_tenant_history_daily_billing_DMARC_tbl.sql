@@ -1,8 +1,8 @@
 
 with current_month_ltp_roundup_tbl as (
     select * from {{ ref('current_month_hwm_dmarc_domains_number')}} 
-    WHERE
-    tenant_global_id not in ('US-315501','US-314610') -- Manually excluding two tenants from AMSYS (US-311247)
+    -- WHERE
+    -- tenant_global_id not in ('US-315501','US-314610') -- Manually excluding two tenants from AMSYS (US-311247)
 ),
 
 global_tenant_history as (
