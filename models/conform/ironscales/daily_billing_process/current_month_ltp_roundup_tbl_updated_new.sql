@@ -10,14 +10,21 @@ ltp_pricing_list AS (
 ),
 
 date_bounds AS (
-    SELECT
-        CASE 
-            WHEN DATE_PART('day', CURRENT_DATE) = 1 THEN DATEADD(day, 1, DATE_TRUNC('month', DATEADD(month, -1, CURRENT_DATE)))
-            WHEN DATE_PART('day', CURRENT_DATE) = 2 THEN CURRENT_DATE
-            -- ELSE DATEADD(day, 1, DATE_TRUNC('month', CURRENT_DATE))
-            ELSE DATEADD(day, 3, DATE_TRUNC('month', CURRENT_DATE))
-        END AS start_date,
-        CURRENT_DATE AS end_date
+  SELECT
+    CASE
+    WHEN DAY(CURRENT_DATE) = 1
+      THEN DATEADD(day, 1, DATE_TRUNC('month', DATEADD(month, -1, CURRENT_DATE)))  -- prev month 2nd
+    ELSE DATEADD(day, 1, DATE_TRUNC('month', CURRENT_DATE))                        -- current month 2nd
+    END AS start_date,
+  CURRENT_DATE AS end_date
+    -- SELECT
+    --     CASE 
+    --         WHEN DATE_PART('day', CURRENT_DATE) = 1 THEN DATEADD(day, 1, DATE_TRUNC('month', DATEADD(month, -1, CURRENT_DATE)))
+    --         WHEN DATE_PART('day', CURRENT_DATE) = 2 THEN CURRENT_DATE
+    --         -- ELSE DATEADD(day, 1, DATE_TRUNC('month', CURRENT_DATE))
+    --         ELSE DATEADD(day, 3, DATE_TRUNC('month', CURRENT_DATE))
+    --     END AS start_date,
+    --     CURRENT_DATE AS end_date
 ),
 profile_metrics AS (
     SELECT 
