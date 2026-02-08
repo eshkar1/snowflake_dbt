@@ -82,7 +82,9 @@ select
     c.business_type as business_type,
     l._rivery_last_update as roundup_timestamp,
     setting.serverside_type,
-    l.auto_convert_trial
+    l.auto_convert_trial,
+    l.NOT_FOR_BILLING as not_for_billing,
+    l.NOT_NFR_PARTNER as not_nfr_partner
 from
     tenants_ae t
     left join active_profiles a on t.tenant_global_id = a.tenant_global_id 
