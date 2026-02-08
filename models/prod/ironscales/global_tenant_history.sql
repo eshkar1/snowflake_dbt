@@ -74,7 +74,9 @@ RECORD_DATE,
 BILLING_STATUS,
 integration,
 integration_type,
-auto_convert_trial
+auto_convert_trial,
+not_for_billing,
+not_nfr_partner
 from prod_mart.operation.global_tenant_history
 
 union 
@@ -213,7 +215,9 @@ end as integration,
         when serverside_type = 3 then 'OFFICE365'
         when serverside_type = 4 then 'POWERSHELL'
     end as integration_type,
-    auto_convert_trial
+    auto_convert_trial,
+    not_for_billing,
+    not_nfr_partner
 
     FROM tenants_us_final
 
@@ -350,7 +354,9 @@ when serverside_type = 2 then 'GMAIL'
 when serverside_type = 3 then 'OFFICE365'
 when serverside_type = 4 then 'POWERSHELL'
 end as integration_type,
-auto_convert_trial
+auto_convert_trial,
+not_for_billing,
+not_nfr_partner
 FROM tenants_eu_final
 
 union
@@ -485,7 +491,9 @@ when serverside_type = 2 then 'GMAIL'
 when serverside_type = 3 then 'OFFICE365'
 when serverside_type = 4 then 'POWERSHELL'
 end as integration_type,
-auto_convert_trial
+auto_convert_trial,
+not_for_billing,
+not_nfr_partner
 
 FROM tenants_ae_final
 
@@ -621,6 +629,8 @@ when serverside_type = 2 then 'GMAIL'
 when serverside_type = 3 then 'OFFICE365'
 when serverside_type = 4 then 'POWERSHELL'
 end as integration_type,
-auto_convert_trial
+auto_convert_trial,
+not_for_billing,
+not_nfr_partner
 
 FROM tenants_ca_final
