@@ -1,0 +1,15 @@
+version: 2
+sources:
+  - name: zendesk
+    description: zendesk raw tables
+    database: prod_raw
+    schema: zendesk
+    # config:
+    #   grants:
+    #     select: ['RIVERY_ROLE']
+    tables:
+      - name: zendesk_ticket_metrics_enriched
+        description: 
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
