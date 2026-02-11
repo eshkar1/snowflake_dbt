@@ -9,7 +9,8 @@ sources:
     #     select: ['RIVERY_ROLE']
     tables:
       - name: zendesk_ticket_metrics_enriched
-        description: 
+        # description: 
         config:
-          grants:
-            select: ['RIVERY_ROLE']
+          meta:
+            grants:
+              select: ['RIVERY_ROLE']
