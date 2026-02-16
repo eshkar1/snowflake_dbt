@@ -1,0 +1,16 @@
+version: 2
+sources:
+  - name: jira
+    description: jira raw tables
+    database: prod_raw
+    schema: jira
+    # config:
+    #   grants:
+    #     select: ['RIVERY_ROLE']
+    tables:
+      - name: jira_issue
+        # description: 
+        config:
+          meta:
+            grants:
+              select: ['RIVERY_ROLE']
