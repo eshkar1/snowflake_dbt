@@ -1,7 +1,7 @@
 version: 2
 sources:
   - name: cursor
-    description: cursor raw tables
+    # description: cursor raw tables
     database: prod_raw
     schema: cursor
     # config:
