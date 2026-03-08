@@ -1,0 +1,33 @@
+version: 2
+sources:
+  - name: ltp_pricing_table_new_billing_calc
+    description: pricing and info about LTPs
+    database: prod_mart
+    schema: upload_tables
+    tables:
+      
+      - name: LTP_PRICING_TBL_UNPIVOT
+        description: The table contains pricing information for various products. Each record represents a specific product tier and includes details about its pricing, availability, and time-based restrictions.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+        # columns:
+        #   - name: LTP_TYPE
+        #     tests:
+
+        #   - name: SNAPSHOT_DATE
+        #     tests:
+        #       - not_null
+
+      - name: LTP_ACCOUNT_META
+        description: The table contains records of account metadata. Each record represents a single account and includes details about its status, ownership, and configuration.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+        # columns:
+        #   - name: LTP_TYPE
+        #     tests:
+
+        #   - name: SNAPSHOT_DATE
+        #     tests:
+        #       - not_null
