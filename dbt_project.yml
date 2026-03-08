@@ -1,17 +1,9 @@
-
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
 name: 'ironscales_dbt_project'
 version: '1.0.0'
 config-version: 2
 
-# This setting configures which "profile" dbt uses for this project.
 profile: 'snowflake'
 
-# These configurations specify where dbt should look for different types of files.
-# The `model-paths` config, for example, states that models in this project can be
-# found in the "models/" directory. You probably won't need to change these!
 model-paths: ["models"]
 analysis-paths: ["analyses"]
 test-paths: ["tests"]
@@ -19,25 +11,15 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
-target-path: "target"  # directory which will store compiled SQL files
-clean-targets:         # directories to be removed by `dbt clean`
+target-path: "target"
+clean-targets:
   - "target"
   - "dbt_packages"
 
 
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
-
-# In dbt, the default materialization for a model is a view. This means, when you run 
-# dbt run or dbt build, all of your models will be built as a view in your data platform. 
-# The configuration below will override this setting for models in the example folder to 
-# instead be materialized as tables. Any models you add to the root of the models folder will 
-# continue to be built as views. These settings can be overridden in the individual model files
-# using the `{{ config(...) }}` macro.
-
 models:
   ironscales_dbt_project:
-    # Applies to all files under models/example/
+
     prod:
       +schema: dbt_prod_db
       +materialized: table
@@ -51,9 +33,39 @@ models:
       +tags: p1
       +grants:
         select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED','SNOWFLAKE_FINANCE_ANALYST_ROLE']
-    
+
     stage:
       +schema: dbt_raw_db
       +materialized: table
       +grants:
         select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED']
+
+    # -------------------------------------------------------
+    # Billing layer — isolated calculation pipeline
+    # models/billing/
+    # Run all billing:  dbt run --select tag:billing
+    # Run HWM only:     dbt run --select tag:hwm
+    # Run no-HWM only:  dbt run --select tag:no_hwm
+    # -------------------------------------------------------
+    billing:
+      +tags: billing
+      +grants:
+        select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED','SNOWFLAKE_FINANCE_ANALYST_ROLE']
+
+      staging:
+        +schema: dbt_billing_staging_db
+        +materialized: view
+        +grants:
+          select: ['RIVERY_ROLE','RIVERY_ROLE_UPDATED']
+
+      intermediate:
+        +schema: dbt_billing_int_db
+        +materialized: view
+        hwm:
+          +tags: ['billing', 'hwm']
+        no_hwm:
+          +tags: ['billing', 'no_hwm']
+
+      marts:
+        +schema: dbt_billing_db
+        +materialized: table
