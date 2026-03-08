@@ -241,41 +241,57 @@ ato AS (
 
 -- ============================================================
 -- DMARC (flat rate per domain, quantity from dmarc_hwm)
+-- Pre-aggregate DMARC domains by ROOT to handle multi-tenant LTPs
 -- ============================================================
-dmarc AS (
+dmarc_by_root AS (
     SELECT
+        h.ROOT                                      AS ltp,
+        SUM(d.DMARC_DOMAINS_NUMBER)                 AS total_dmarc_domains
+    FROM hwm h
+    JOIN dmarc_hwm d
+        ON  h.TENANT_GLOBAL_ID  = d.TENANT_GLOBAL_ID
+    GROUP BY h.ROOT
+),
+
+dmarc_info AS (
+    SELECT DISTINCT
         q.DATE_RECORDED,
         q.ltp,
-        CASE q.DMARC_IRONSCALES_PLAN
+        q.DMARC_IRONSCALES_PLAN
+    FROM quantities q
+    WHERE q.DMARC_IRONSCALES_PLAN IS NOT NULL
+),
+
+dmarc AS (
+    SELECT
+        di.DATE_RECORDED,
+        di.ltp,
+        CASE di.DMARC_IRONSCALES_PLAN
             WHEN 1 THEN 'DMARC Core Management'
             WHEN 2 THEN 'DMARC Pro'
             WHEN 3 THEN 'DMARC Premium'
         END                                         AS item,
-        CASE q.DMARC_IRONSCALES_PLAN
+        CASE di.DMARC_IRONSCALES_PLAN
             WHEN 1 THEN 'IS-LTP-DMARC'
             WHEN 2 THEN 'IS-LTP-DMARC_PRO'
             WHEN 3 THEN 'IS-LTP-DMARC_PREMIUM'
         END                                         AS sku,
         FALSE                                       AS partner_pricing,
-        SUM(d.DMARC_DOMAINS_NUMBER)                 AS quantity,
-        SUM(d.DMARC_DOMAINS_NUMBER) * p.PRICE       AS amount
-    FROM quantities q
-    JOIN dmarc_hwm d
-        ON  q.ltp               = d.TENANT_GLOBAL_ID
+        dr.total_dmarc_domains                      AS quantity,
+        dr.total_dmarc_domains * p.PRICE            AS amount
+    FROM dmarc_info di
+    JOIN dmarc_by_root dr
+        ON  di.ltp              = dr.ltp
     JOIN pricing p
-        ON  q.ltp               = p.TENANT_GLOBAL_ID
+        ON  di.ltp              = p.TENANT_GLOBAL_ID
         AND p.IS_NFR            = FALSE
         AND p.TIER_MIN          = 1
-        AND p.SKU               = CASE q.DMARC_IRONSCALES_PLAN
+        AND p.SKU               = CASE di.DMARC_IRONSCALES_PLAN
                                     WHEN 1 THEN 'DMARC'
                                     WHEN 2 THEN 'DMARC_PRO'
                                     WHEN 3 THEN 'DMARC'
                                   END
-    WHERE q.DMARC_IRONSCALES_PLAN IS NOT NULL
-    GROUP BY
-        q.DATE_RECORDED, q.ltp,
-        q.DMARC_IRONSCALES_PLAN, p.PRICE
-    HAVING SUM(d.DMARC_DOMAINS_NUMBER) > 0
+    WHERE dr.total_dmarc_domains > 0
 )
 
 -- ============================================================

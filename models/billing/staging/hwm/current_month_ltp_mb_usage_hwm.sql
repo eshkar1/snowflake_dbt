@@ -135,7 +135,7 @@ highwater_selected AS (
 non_highwater_selected AS (
     SELECT
         TENANT_GLOBAL_ID,
-        CURRENT_DATE AS RECORD_DATE,
+        RECORD_DATE,
         IS_HIGHWATERMARK,
         plan_name
     FROM profile_metrics_filtered
