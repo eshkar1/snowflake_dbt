@@ -51,7 +51,7 @@ SELECT
     g.DMARC_MANAGEMENT,
     g.dmarc_domains_number,
     g.dmarc_ironscales_plan,
-    g.dmarc_ironscales_plan_name
+    g.NOT_NFR_PARTNER
 FROM
     current_month_ltp_mb_usage_hwm r
     JOIN global_tenant_history g ON g.tenant_global_id = r.tenant_global_id AND g.record_date = r.record_date
