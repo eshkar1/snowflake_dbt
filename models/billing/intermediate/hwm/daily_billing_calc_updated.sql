@@ -39,8 +39,7 @@ base AS (
         h.DATE_RECORDED,
         h.ROOT                                                                     AS ltp,
         h.PLAN_NAME,
-        -- effective_partner_pricing: if NOT_NFR_PARTNER=TRUE, override to FALSE
-        CASE WHEN h.NOT_NFR_PARTNER = TRUE THEN FALSE ELSE h.PARTNER_PRICING END AS PARTNER_PRICING,
+        h.PARTNER_PRICING,
         m.PROFILE_TYPE,
         CASE m.PROFILE_TYPE
             WHEN 'active'  THEN SUM(h.ACTIVE_PROFILES)
@@ -60,7 +59,7 @@ base AS (
         AND h.ROOT NOT IN ('US-733','EU-25')
     GROUP BY
         h.DATE_RECORDED, h.ROOT, h.PLAN_NAME,
-        CASE WHEN h.NOT_NFR_PARTNER = TRUE THEN FALSE ELSE h.PARTNER_PRICING END, m.PROFILE_TYPE
+        h.PARTNER_PRICING, m.PROFILE_TYPE
 ),
 
 -- ============================================================
@@ -69,15 +68,14 @@ base AS (
 -- Add-on flags and PREMIUM_NAME kept in GROUP BY — no MAX() —
 -- so quantities are correct per flag combination with no bleeding.
 -- DMARC_IRONSCALES_PLAN excluded from GROUP BY (handled in dmarc CTE).
--- US-733 and EU-25 included — billed for add-ons per account separately.
+-- US-733 and EU-25 excluded — not billed for add-ons.
 -- ============================================================
 base_addons AS (
     SELECT
         h.DATE_RECORDED,
         h.ROOT                                                                     AS ltp,
         h.PLAN_NAME,
-        -- effective_partner_pricing: if NOT_NFR_PARTNER=TRUE, override to FALSE
-        CASE WHEN h.NOT_NFR_PARTNER = TRUE THEN FALSE ELSE h.PARTNER_PRICING END AS PARTNER_PRICING,
+        h.PARTNER_PRICING,
         h.INCIDENT_MANAGEMENT,
         h.SIMULATION_AND_TRAINING_BUNDLE_PLUS,
         h.ATO,
@@ -98,9 +96,9 @@ base_addons AS (
         AND h.BILLING_STATUS IN ('Active', 'Active-POC')
         AND m.PROFILE_TYPE IS NOT NULL
         AND h.LICENSED_PROFILES IS NOT NULL
+        AND h.ROOT NOT IN ('US-733','EU-25')
     GROUP BY
-        h.DATE_RECORDED, h.ROOT, h.PLAN_NAME,
-        CASE WHEN h.NOT_NFR_PARTNER = TRUE THEN FALSE ELSE h.PARTNER_PRICING END,
+        h.DATE_RECORDED, h.ROOT, h.PLAN_NAME, h.PARTNER_PRICING,
         h.INCIDENT_MANAGEMENT, h.SIMULATION_AND_TRAINING_BUNDLE_PLUS,
         h.ATO, h.PREMIUM_NAME, m.PROFILE_TYPE
 ),
@@ -122,8 +120,7 @@ pax8_base AS (
         h.DATE_RECORDED,
         h.ROOT                                                                     AS ltp,
         h.PLAN_NAME,
-        -- effective_partner_pricing: if NOT_NFR_PARTNER=TRUE, override to FALSE
-        CASE WHEN h.NOT_NFR_PARTNER = TRUE THEN FALSE ELSE h.PARTNER_PRICING END AS PARTNER_PRICING,
+        h.PARTNER_PRICING,
         m.PROFILE_TYPE,
         CASE m.PROFILE_TYPE
             WHEN 'active'  THEN SUM(h.ACTIVE_PROFILES)
@@ -143,7 +140,7 @@ pax8_base AS (
         AND h.ROOT IN ('US-733', 'EU-25')
     GROUP BY
         h.DATE_RECORDED, h.ROOT, h.PLAN_NAME,
-        CASE WHEN h.NOT_NFR_PARTNER = TRUE THEN FALSE ELSE h.PARTNER_PRICING END, m.PROFILE_TYPE
+        h.PARTNER_PRICING, m.PROFILE_TYPE
 ),
 
 pax8_combined AS (
@@ -397,7 +394,7 @@ ato AS (
 ----------------------------------------------------------------------------------------
 -- DMARC (flat rate per domain)
 -- Joins hwm directly — uses domain count not seat count.
--- US-733 and EU-25 included — billed for DMARC per account separately.
+-- US-733 and EU-25 excluded — not billed for DMARC.
 ----------------------------------------------------------------------------------------
 dmarc AS (
     SELECT
@@ -432,6 +429,7 @@ dmarc AS (
         AND h.BILLING_STATUS IN ('Active', 'Active-POC')
         AND h.DMARC_IRONSCALES_PLAN IS NOT NULL
         AND h.DMARC_MANAGEMENT = TRUE
+        AND h.ROOT NOT IN ('US-733','EU-25')
     GROUP BY
         h.DATE_RECORDED, h.ROOT,
         h.DMARC_IRONSCALES_PLAN, p.PRICE
