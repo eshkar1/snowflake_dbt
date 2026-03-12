@@ -67,8 +67,12 @@ models:
           +tags: ['billing', 'no_hwm']
 
       marts:
-        +schema: dbt_billing_db
+        +schema: dbt_billing_prod_db
         +materialized: table
+        hwm:
+          +tags: ['billing', 'hwm']
+        no_hwm:
+          +tags: ['billing', 'no_hwm']
 
       pricing_tables:
         +schema: dbt_billing_pricing_tbl
