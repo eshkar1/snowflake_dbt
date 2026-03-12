@@ -69,3 +69,7 @@ models:
       marts:
         +schema: dbt_billing_db
         +materialized: table
+
+      pricing_tables:
+        +schema: dbt_billing_pricing_tbl
+        +materialized: table

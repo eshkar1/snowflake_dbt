@@ -257,9 +257,11 @@ OBJECT_CONSTRUCT(
                 ) as active_add_ons,
 p.is_highwatermark as high_water_mark,
 null as non_profit_flag,
-g.partner_pricing as not_for_resale_flag,
+-- g.partner_pricing as not_for_resale_flag,
+CASE WHEN gh.NOT_NFR_PARTNER = TRUE THEN FALSE ELSE g.PARTNER_PRICING END as not_for_resale_flag,
 null as price_per_mailbox,
-gh.tree_key
+gh.tree_key,
+
 from global_tenant_history_daily_agg_billing_tbl g
 left join global_tenant_history gh on g.record_date = gh.record_date 
                                                         and g.tenant_global_id = gh.tenant_global_id
