@@ -1,9 +1,9 @@
 with pricing_function_all_ltps as (
-    select * from {{ ref('daily_billing_calc')}} 
+    select * from {{ ref('ltp_daily_billing_calc')}} 
 ),
 
 ltp_nfr_calc as (
-    select * from {{ ref("LTP_NFR_calculation_new_billing")}} 
+    select * from {{ ref("ltp_nfr_calculation_new_billing")}} 
 )
 
 
