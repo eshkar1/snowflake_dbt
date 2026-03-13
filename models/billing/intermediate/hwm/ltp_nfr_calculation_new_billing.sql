@@ -7,7 +7,7 @@ meta as (
 ),
 
 ltp_daily_itemized as (
-    select * from {{ ref('daily_billing_calc')}} 
+    select * from {{ ref('ltp_daily_billing_calc')}} 
 ),
 
 conversion_tbl_sf as (
