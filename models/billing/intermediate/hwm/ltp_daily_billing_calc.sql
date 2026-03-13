@@ -199,7 +199,7 @@ pax8_plans AS (
                 WHEN 'Complete Protect'   THEN 'IS-LTP-CP'
                 WHEN 'Core'               THEN 'IS-LTP-CORE'
                 WHEN 'IRONSCALES Protect' THEN 'IS-LTP-IP'
-                WHEN 'SAT Suite'          THEN 'IS-SAT_SUITE_1'
+                WHEN 'SAT Suite'          THEN 'IS-SAT_SUITE'
                 WHEN 'Starter'            THEN 'IS-LTP-STARTER'
             END
         ELSE
