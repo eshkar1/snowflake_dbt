@@ -56,7 +56,7 @@ base AS (
         h.APPROVED = TRUE
         AND h.BILLING_STATUS IN ('Active', 'Active-POC')
         AND m.PROFILE_TYPE IS NOT NULL
-        AND h.LICENSED_PROFILES IS NOT NULL
+        -- AND h.LICENSED_PROFILES IS NOT NULL
         AND h.ROOT NOT IN ('US-733','EU-25')
     GROUP BY
         h.DATE_RECORDED, h.ROOT, h.PLAN_NAME,
@@ -97,7 +97,7 @@ base_addons AS (
         h.APPROVED = TRUE
         AND h.BILLING_STATUS IN ('Active', 'Active-POC')
         AND m.PROFILE_TYPE IS NOT NULL
-        AND h.LICENSED_PROFILES IS NOT NULL
+        -- AND h.LICENSED_PROFILES IS NOT NULL
     GROUP BY
         h.DATE_RECORDED, h.ROOT, h.PLAN_NAME,
         CASE WHEN h.NOT_NFR_PARTNER = TRUE THEN FALSE ELSE h.PARTNER_PRICING END,
@@ -139,7 +139,7 @@ pax8_base AS (
         h.APPROVED = TRUE
         AND h.BILLING_STATUS IN ('Active', 'Active-POC')
         AND m.PROFILE_TYPE IS NOT NULL
-        AND h.LICENSED_PROFILES IS NOT NULL
+        -- AND h.LICENSED_PROFILES IS NOT NULL
         AND h.ROOT IN ('US-733', 'EU-25')
     GROUP BY
         h.DATE_RECORDED, h.ROOT, h.PLAN_NAME,
@@ -208,7 +208,7 @@ pax8_plans AS (
                 WHEN 'Complete Protect'   THEN 'IS-LTP-CPNFR'
                 WHEN 'Core'               THEN 'IS-LTP-CORENFR'
                 WHEN 'IRONSCALES Protect' THEN 'IS-LTP-IPNFR'
-                WHEN 'SAT Suite'          THEN 'IS-SAT_SUITENFR_1'
+                WHEN 'SAT Suite'          THEN 'IS-SAT_SUITENFR'
                 WHEN 'Starter'            THEN 'IS-LTP-STARTERNFR'
             END
         END                                         AS sku,
@@ -244,7 +244,7 @@ plans AS (
                 WHEN 'Complete Protect'   THEN 'IS-LTP-CP'
                 WHEN 'Core'               THEN 'IS-LTP-CORE'
                 WHEN 'IRONSCALES Protect' THEN 'IS-LTP-IP'
-                WHEN 'SAT Suite'          THEN 'IS-SAT_SUITE_1'
+                WHEN 'SAT Suite'          THEN 'IS-SAT_SUITE'
                 WHEN 'Starter'            THEN 'IS-LTP-STARTER'
             END
         ELSE
@@ -253,7 +253,7 @@ plans AS (
                 WHEN 'Complete Protect'   THEN 'IS-LTP-CPNFR'
                 WHEN 'Core'               THEN 'IS-LTP-CORENFR'
                 WHEN 'IRONSCALES Protect' THEN 'IS-LTP-IPNFR'
-                WHEN 'SAT Suite'          THEN 'IS-SAT_SUITENFR_1'
+                WHEN 'SAT Suite'          THEN 'IS-SAT_SUITENFR'
                 WHEN 'Starter'            THEN 'IS-LTP-STARTERNFR'
             END
         END                                         AS sku,
