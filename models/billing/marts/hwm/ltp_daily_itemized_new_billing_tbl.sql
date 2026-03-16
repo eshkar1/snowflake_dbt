@@ -8,12 +8,12 @@ ltp_nfr_calc as (
 
 
 
--- SELECT
--- *
+SELECT
+*
 -- from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_WITH_NFR_TBL
--- from PROD_CONFORM.dbt_billing_prod_db.
+from prod_conform.dbt_billing_prod_db.ltp_daily_itemized_new_billing_tbl
 
--- union all  
+union all  
 
 
 SELECT

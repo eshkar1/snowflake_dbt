@@ -1,3 +1,10 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='id'
+    )
+}}
+
 with source as (
     select * from {{ source('ironscales_us','campaigns_companylicense_table') }}
 ),

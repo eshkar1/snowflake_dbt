@@ -1,18 +1,21 @@
+{{
+    config(
+        materialized='incremental',
+        unique_key='id'
+    )
+}}
+
 with source as (
-    select * from {{ source('ironscales_us','profiles_profile_table') }}
+    select * from {{ source('ironscales_us', 'profiles_profile_table') }}
 ),
 
 renamed as (
-            select
-            *
-            from source
+    select *
+    from source
 
-            {% if is_incremental() %}
+    {% if is_incremental() %}
+    where _rivery_last_update > (select max(_rivery_last_update) from {{ this }})
+    {% endif %}
+)
 
-            where _rivery_last_update > (select max(_rivery_last_update) from {{this}})
-
-            {% endif %}
-
-            )
-
-select *  from renamed
+select * from renamed

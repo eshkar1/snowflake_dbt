@@ -54,7 +54,8 @@ extracted as (
         g.shared_profiles,
         g.date_recorded,
         g.dmarc_management,
-        g.dmarc_domains_number
+        g.dmarc_domains_number,
+        g.NOT_NFR_PARTNER
 
     from global_tenant_history g
     left join ltp_account_meta l on g.root = l.tenant_global_id
@@ -108,7 +109,8 @@ select
     a.shared_profiles,
     a.date_recorded,
     a.dmarc_management,
-    a.dmarc_domains_number
+    a.dmarc_domains_number,
+    a.not_nfr_partner
     -- a.prefix,
     -- a.tenant_global_id
 
