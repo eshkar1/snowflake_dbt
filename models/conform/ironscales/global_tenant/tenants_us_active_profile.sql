@@ -1,5 +1,6 @@
 with profiles_profile as (
-    select * from {{ ref('stg_ironscales_profiles_profile_table')}}
+    select * from 
+    PROD_RAW.IRONSCALES_US_RAW_DB.profiles_profile_table
     where
     date(_RIVERY_LAST_UPDATE) = current_date()
 ),
