@@ -48,7 +48,7 @@ SELECT
     g.depth,
     g.approved,
     g.tree_key,
-    g.record_date as hwm_date,
+    r.record_date as hwm_date,
     g.billing_status,
     g.DMARC_MANAGEMENT,
     g.dmarc_domains_number,
