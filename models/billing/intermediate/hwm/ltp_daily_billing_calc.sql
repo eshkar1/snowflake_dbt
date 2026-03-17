@@ -8,7 +8,8 @@ hwm AS (
 ),
 
 dmarc_hwm AS (
-    SELECT * FROM {{ ref('current_month_ltp_dmarc_domain_hwm') }}
+    SELECT * FROM 
+    {{ ref('global_tenant_history_sltp_daily_billing_DMARC_tbl') }}
 ),
 
 meta AS (
@@ -400,47 +401,43 @@ ato AS (
 -- US-733 and EU-25 included — billed for DMARC per account separately.
 ----------------------------------------------------------------------------------------
 dmarc AS (
-    SELECT
-        h.DATE_RECORDED,
-        h.ROOT                                      AS ltp,
-        CASE h.DMARC_IRONSCALES_PLAN
+SELECT
+        g.date_recorded,
+        g.root                                      AS ltp,
+        CASE g.dmarc_ironscales_plan
             WHEN 1 THEN 'DMARC Core Management'
             WHEN 2 THEN 'DMARC Pro'
             WHEN 3 THEN 'DMARC Premium'
         END                                         AS item,
-        CASE h.DMARC_IRONSCALES_PLAN
+        CASE g.dmarc_ironscales_plan
             WHEN 1 THEN 'IS-LTP-DMARC'
             WHEN 2 THEN 'IS-LTP-DMARC_PRO'
             WHEN 3 THEN 'IS-LTP-DMARC_PREMIUM'
         END                                         AS sku,
         NULL                                        AS partner_pricing,
-        SUM(d.DMARC_DOMAINS_NUMBER)                 AS quantity,
-        SUM(d.DMARC_DOMAINS_NUMBER) * p.PRICE       AS amount
-    FROM hwm h
-    JOIN dmarc_hwm d
-        ON  h.TENANT_GLOBAL_ID = d.TENANT_GLOBAL_ID
+        SUM(g.dmarc_domains_number)                 AS quantity,
+        SUM(g.dmarc_domains_number) * p.PRICE       AS amount
+    FROM dmarc_hwm g
     JOIN pricing p
-        ON  h.ROOT     = p.TENANT_GLOBAL_ID
+        ON  g.root     = p.TENANT_GLOBAL_ID
         AND p.TIER_MIN = 1
-        AND p.SKU      = CASE h.DMARC_IRONSCALES_PLAN
+        AND p.SKU      = CASE g.dmarc_ironscales_plan
                             WHEN 1 THEN 'DMARC'
                             WHEN 2 THEN 'DMARC_PRO'
                             WHEN 3 THEN 'DMARC'
                          END
-    WHERE
-        h.APPROVED = TRUE
-        AND h.BILLING_STATUS IN ('Active', 'Active-POC')
-        AND h.DMARC_IRONSCALES_PLAN IS NOT NULL
-        AND h.DMARC_MANAGEMENT = TRUE
     GROUP BY
-        h.DATE_RECORDED, h.ROOT,
-        h.DMARC_IRONSCALES_PLAN, p.PRICE
-    HAVING SUM(d.DMARC_DOMAINS_NUMBER) > 0
+        g.date_recorded,
+        g.root,
+        g.dmarc_ironscales_plan,
+        p.PRICE
+    HAVING SUM(g.dmarc_domains_number) > 0
 )
 
 -- ============================================================
 -- FINAL OUTPUT
 -- ============================================================
+
 SELECT DATE_RECORDED, ltp, item, sku, partner_pricing, quantity, amount FROM plans
 UNION ALL
 SELECT DATE_RECORDED, ltp, item, sku, partner_pricing, quantity, amount FROM pax8_plans
