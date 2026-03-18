@@ -247,6 +247,7 @@ plans AS (
                 WHEN 'IRONSCALES Protect' THEN 'IS-LTP-IP'
                 WHEN 'SAT Suite'          THEN 'IS-SAT_SUITE'
                 WHEN 'Starter'            THEN 'IS-LTP-STARTER'
+                WHEN 'Phishing Simulation and Training' THEN 'IS-LTP-PST'
             END
         ELSE
             CASE b.PLAN_NAME
@@ -274,10 +275,12 @@ plans AS (
                                 WHEN 'IRONSCALES Protect' THEN 'IRONSCALES Protect'
                                 WHEN 'SAT Suite'          THEN 'SAT_SUITE'
                                 WHEN 'Starter'            THEN 'STARTER'
+                                WHEN 'Phishing Simulation and Training' THEN 'PST'
                             END
     WHERE b.PLAN_NAME IN (
         'Email Protect', 'Complete Protect', 'Core',
-        'IRONSCALES Protect', 'SAT Suite', 'Starter'
+        'IRONSCALES Protect', 'SAT Suite', 'Starter',
+        'Phishing Simulation and Training'
     )
     GROUP BY
         b.DATE_RECORDED, b.ltp, b.PLAN_NAME,
