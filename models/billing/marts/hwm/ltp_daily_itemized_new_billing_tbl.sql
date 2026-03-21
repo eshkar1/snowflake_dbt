@@ -1,5 +1,5 @@
 with pricing_function_all_ltps as (
-    select * from {{ ref('ltp_daily_billing_calc')}} 
+    select * from {{ ref('ltp_daily_billing_unified_with_promo_calc')}} 
 ),
 
 ltp_nfr_calc as (
@@ -8,12 +8,12 @@ ltp_nfr_calc as (
 
 
 
-SELECT
-*
--- from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_WITH_NFR_TBL
-from prod_conform.dbt_billing_prod_db.ltp_daily_itemized_new_billing_tbl
+-- SELECT
+-- *
+-- -- from PROD_CONFORM.DBT_PROD_DB.LTP_DAILY_ITEMIZED_BILLING_WITH_NFR_TBL
+-- from prod_conform.dbt_billing_prod_db.ltp_daily_itemized_new_billing_tbl
 
-union all  
+-- union all  
 
 
 SELECT
@@ -22,6 +22,7 @@ ltp,
 item,
 sku,
 partner_pricing,
+price_type,
 sum(quantity) as quantity,
 sum(amount) as amount
 -- from pricing_function_pax8 
@@ -31,7 +32,8 @@ group by
     ltp,
     item,
     sku,
-    partner_pricing
+    partner_pricing,
+    price_type
 
 
 union all
@@ -42,6 +44,7 @@ TENANT_GLOBAL_ID as ltp,
 'NFR' as item,
 'IS-LTP-NFR' as sku,
 null as partner_pricing,
+null as price_type,
 BILLABLE_QTY as quantity,
 INVOICE as amount
 from ltp_nfr_calc
