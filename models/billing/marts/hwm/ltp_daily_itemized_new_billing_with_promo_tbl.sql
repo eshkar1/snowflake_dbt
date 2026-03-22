@@ -1,5 +1,5 @@
 with pricing_function_all_ltps as (
-    select * from {{ ref('ltp_daily_billing_with_promo_calc')}} 
+    select * from {{ ref('ltp_daily_billing_unified_with_promo_with_excep_calc')}} 
 ),
 
 ltp_nfr_calc as (

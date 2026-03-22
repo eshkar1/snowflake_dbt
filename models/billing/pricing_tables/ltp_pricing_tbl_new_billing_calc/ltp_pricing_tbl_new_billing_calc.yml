@@ -30,3 +30,38 @@ sources:
             description: The tenant's display name
           - name: MASTER_TENANT_ID
             description: The master tenant ID for this pool. Self-referencing for master tenants.
+
+      - name: MANUAL_EXCEP_TBL
+        description: Manual exception table for specific sub-tenant rate overrides. Exceptional rates take priority over promo and standard pricing. Each row defines a specific rate for a sub-tenant (identified by TENANT_GLOBAL_ID in HWM) under a given LTP (PARENT_ID). Scalable to any number of sub-tenants across any number of LTPs.
+        config:
+          grants:
+            select: ['RIVERY_ROLE']
+        columns:
+          - name: TENANT_ID
+            description: The sub-tenant global ID (maps to TENANT_GLOBAL_ID in the HWM table). This is the specific sub-tenant the exceptional rate applies to.
+          - name: TENANT_NAME
+            description: Display name of the sub-tenant
+          - name: CURRENCY
+            description: Currency code for the rate (e.g. USD)
+          - name: PROFILE_TYPE
+            description: Profile type the rate applies to (active, license, shared)
+          - name: ITEM
+            description: Plan name the rate applies to (e.g. Complete Protect). Maps to PLAN_NAME in HWM.
+          - name: SKU
+            description: SKU code for reference (e.g. IS-LTP-CP)
+          - name: PARTNER_PRICING
+            description: Whether this exception applies to NFR (partner) pricing. FALSE = standard, TRUE = NFR.
+          - name: TIER_MIN
+            description: Minimum seat threshold for this tier
+          - name: TIER_RATE
+            description: Exceptional rate per seat for this tier
+          - name: TIER_MAX
+            description: Maximum seat threshold for this tier
+          - name: START_DATE
+            description: Date from which this exceptional rate becomes active (inclusive)
+          - name: END_DATE
+            description: Date on which this exceptional rate expires (inclusive)
+          - name: TENANT_MSP
+            description: Scope of the exception. Tenant = applies to a specific sub-tenant. MSP = applies to all tenants under the MSP tree (future use).
+          - name: PARENT_ID
+            description: The LTP global ID that the sub-tenant belongs to (maps to ROOT in HWM). Used to scope the exception to the correct LTP.
