@@ -1,11 +1,5 @@
 
-    with current_month_ltp_roundup_tbl as (
-        select * from {{ ref('current_month_ltp_roundup_tbl_updated_new')}} 
-        -- WHERE
-        -- tenant_global_id not in ('US-315501','US-314610') -- Manually excluding two tenants from AMSYS (US-311247)
-    ),
-
-    global_tenant_history as (
+    with global_tenant_history as (
         select * from 
         -- prod_mart.operation.global_tenant_history
         -- PROD_CONFORM.DBT_PROD_DB.global_tenant_history
@@ -13,7 +7,7 @@
     ),
 
     ltp_pricing_list as (
-        select * from {{ ref('ltp_pricing_tbl')}}
+        select * from {{ ref('ltp_account_meta') }}
     )
 
     SELECT
@@ -52,12 +46,13 @@
         g.depth,
         g.approved,
         g.tree_key,
-        g.record_date,
+        g.record_date AS hwm_date,
         g.billing_status,
         g.DMARC_MANAGEMENT,
         g.dmarc_domains_number,
         g.dmarc_ironscales_plan,
-        g.dmarc_ironscales_plan_name
+        g.dmarc_ironscales_plan_name,
+        g.not_nfr_partner
     FROM
         -- current_month_ltp_roundup_tbl r
         global_tenant_history g

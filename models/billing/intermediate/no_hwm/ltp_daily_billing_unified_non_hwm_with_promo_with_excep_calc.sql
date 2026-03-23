@@ -4,7 +4,7 @@ WITH
 -- SOURCES
 -- ============================================================
 hwm AS (
-    SELECT * FROM {{ ref('current_global_tenant_ltp_hwm') }}
+    SELECT * FROM {{ ref('current_global_tenant_ltp_non_hwm') }}  -- non-HWM version
 ),
 
 dmarc_hwm AS (
