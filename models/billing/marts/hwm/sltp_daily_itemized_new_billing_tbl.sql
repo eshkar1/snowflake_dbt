@@ -1,5 +1,5 @@
 with pricing_function_all_ltps as (
-    select * from {{ ref('ltp_daily_billing_calc')}} 
+    select * from {{ ref('sltp_daily_billing_calc')}} 
 ),
 
 ltp_nfr_calc as (
@@ -18,29 +18,41 @@ ltp_nfr_calc as (
 
 SELECT
 current_date as billing_date,
-ltp,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
 item,
 sku,
 partner_pricing,
 price_type,
-sum(quantity) as quantity,
+sum(billable_quantity) as quantity,
 sum(amount) as amount
 -- from pricing_function_pax8 
 from pricing_function_all_ltps --changed the old calc to the new calc
 group by
-    billing_date,
-    ltp,
-    item,
-    sku,
-    partner_pricing,
-    price_type
+billing_date,
+FIRST_LAYER_ID,
+SECOND_LAYER_ID,
+THIRD_LAYER_ID,
+FOURTH_LAYER_ID,
+FIFTH_LAYER_ID,
+item,
+sku,
+partner_pricing,
+price_type
 
 
 union all
 
 select
 current_date as billing_date,
-TENANT_GLOBAL_ID as ltp,
+TENANT_GLOBAL_ID as FIRST_LAYER_ID,
+null as SECOND_LAYER_ID,
+null as THIRD_LAYER_ID,
+null as FOURTH_LAYER_ID, 
+null as FIFTH_LAYER_ID,
 'NFR' as item,
 'IS-LTP-NFR' as sku,
 null as partner_pricing,
