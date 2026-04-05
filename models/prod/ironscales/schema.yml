@@ -1,0 +1,376 @@
+version: 2
+
+models:
+  - name: global_tenant_history
+    description: >
+      Daily snapshot of all IRONSCALES tenants across all regions (US, EU, UAE, Canada).
+      One row per tenant per day — use record_date = current_date to get the current
+      state. Do not aggregate across record_dates unless intentionally calculating
+      historical trends.
+
+      This is the central tenant reference table. Join to billing and usage tables
+      using tenant_global_id.
+
+      For any billing or revenue query, always apply all three filters together:
+        WHERE billing_status IN ('Active', 'Active-POC')
+          AND not_for_billing = false
+          AND approved = true
+
+      Billable seat count per tenant = active_profiles - shared_profiles.
+      partner_pricing = true tenants with not_nfr_partner = true should be
+      included in standard billing calculations despite their partner status.
+
+    columns:
+      - name: tenant_global_id
+        description: >
+          Unique identifier for the tenant. Primary key of this table.
+          Use this column to join to other tables (e.g. ltp_pricing_list, billing tables).
+
+      - name: tenant_name
+        description: >
+          Display name of the tenant (company name).
+
+      - name: root
+        description: >
+          The tenant_global_id of the top-level (depth = 0) tenant in this tenant's
+          hierarchy tree. If the tenant is itself the root, root equals tenant_global_id.
+
+      - name: parent_global_id
+        description: >
+          The tenant_global_id of the direct parent of this tenant in the hierarchy.
+          Null if the tenant is a root (depth = 0).
+
+      - name: parent_name
+        description: >
+          Display name of the direct parent tenant.
+
+      - name: depth
+        description: >
+          Position of the tenant in the hierarchy tree. Region prefix (US/EU/AE/CA)
+          is ignored. 0 = root / first layer — can be a distributor, direct MSP, or
+          enterprise. 1 = second layer, 2 = third layer, and so on. No fixed maximum depth.
+
+      - name: tree_key
+        description: >
+          A path string representing the tenant's full position in the hierarchy,
+          formatted as root_id/parent_id/tenant_id. Useful for traversing or
+          filtering entire subtrees.
+
+      - name: registration_date
+        description: >
+          The date the tenant first registered on the CNC platform.
+
+      - name: domain
+        description: >
+          The primary email domain of the tenant (e.g. acme.com).
+
+      - name: approved
+        description: >
+          Boolean. True means the tenant has been approved for billing.
+          False means the tenant is not yet approved. Note: a tenant can have
+          billing_status = 'Active' while approved = false — always check both
+          when querying for fully billable tenants.
+
+      - name: owner_name
+        description: >
+          Full name of the primary contact or owner on the customer's side for this tenant.
+
+      - name: owner_email
+        description: >
+          Email address of the primary contact or owner on the customer's side for this tenant.
+
+      - name: partner_pricing
+        description: >
+          Boolean. True means the tenant has partner status — they are a reseller or MSP
+          with a partner commercial relationship with IRONSCALES.
+          False means the tenant is a direct or end customer without partner status.
+
+      - name: type
+        description: >
+          The affiliation type of the tenant. Values:
+          'Distributor' — a distributor partner.
+          'Company' — an end customer company.
+          'MSP' — a Managed Service Provider or MSSP.
+
+      - name: pillar
+        description: >
+          The business pillar this tenant belongs to. Currently: 'msp' or null.
+          Null currently represents enterprise tenants — this field is expected
+          to expand to explicit values in the future.
+
+      - name: business_type
+        description: >
+          The detailed commercial classification of the tenant. Values:
+          'Customer under Disti' — end customer under a distributor.
+          'Customer under MSP' — end customer under an MSP.
+          'OEM' — original equipment manufacturer partner.
+          'MSP under MSP' — an MSP nested under another MSP.
+          'Disti' — distributor.
+          'Direct MSP/MSSP' — MSP or MSSP contracted directly with IRONSCALES.
+          'MSP under OEM' — MSP nested under an OEM partner.
+          'Customer under MSP / MSSP Disti' — customer under an MSP that sits under a distributor.
+          'Customer under MSP / MSSP Direct' — customer under a directly contracted MSP.
+          'Customer under OEM' — customer under an OEM partner.
+          'Disti MSP/MSSP' — distributor that also operates as an MSP or MSSP.
+
+      - name: plan_id
+        description: >
+          Numeric identifier for the tenant's current paid plan.
+          1 = Phishing Simulation and Training, 2 = Starter, 3 = Core,
+          4 = Email Protect, 5 = Complete Protect, 6 = IRONSCALES Protect, 7 = SAT Suite.
+          Null means no active paid plan. Use plan_name for filtering — not plan_id.
+
+      - name: plan_name
+        description: >
+          Name of the tenant's current paid plan. Values: 'Phishing Simulation and Training',
+          'Starter', 'Core', 'Email Protect', 'Complete Protect', 'IRONSCALES Protect',
+          'SAT Suite', 'No_Plan'. Use this column for plan-based filtering and reporting.
+
+      - name: premium_id
+        description: >
+          Numeric identifier for the tenant's premium content add-on.
+          1 = NINJIO, 3 = Habitu8, 4 = Cybermaniacs Videos, 5 = Wizer, 6 = IRONSCALES.
+          Null means no premium content add-on. Use premium_name for filtering.
+
+      - name: premium_name
+        description: >
+          Name of the premium content add-on enabled for this tenant. Values:
+          'NINJIO', 'Habitu8', 'Cybermaniacs Videos', 'Wizer', 'IRONSCALES', 'No Premium'.
+
+      - name: plan_expiry_date
+        description: >
+          The date the tenant's current paid plan expires. When this date is earlier than
+          record_date, the plan is considered expired and billing_status will reflect that.
+
+      - name: incident_management
+        description: >
+          Boolean. True means the Incident Management feature is enabled for this tenant.
+
+      - name: security_awareness_training
+        description: >
+          Boolean. True means the Security Awareness Training (SAT) feature is enabled for this tenant.
+
+      - name: simulation_and_training_bundle
+        description: >
+          Boolean. True means the Simulation and Training Bundle is enabled for this tenant.
+
+      - name: simulation_and_training_bundle_plus
+        description: >
+          Boolean. True means the Simulation and Training Bundle Plus is enabled for this tenant.
+
+      - name: ai_empower_bundle
+        description: >
+          Boolean. True means the AI Empower Bundle is enabled for this tenant.
+
+      - name: themis_co_pilot
+        description: >
+          Boolean. True means the Themis Co-Pilot feature is enabled for this tenant.
+
+      - name: ato
+        description: >
+          Boolean. True means Account Takeover (ATO) protection is enabled for this tenant.
+
+      - name: teams_protection
+        description: >
+          Boolean. True means Microsoft Teams Protection is enabled for this tenant.
+
+      - name: file_scanning
+        description: >
+          Boolean. True means File Scanning is enabled for this tenant.
+
+      - name: link_scanning
+        description: >
+          Boolean. True means Link Scanning is enabled for this tenant.
+
+      - name: multi_tenancy
+        description: >
+          Boolean. True means Multi-Tenancy management is enabled for this tenant.
+
+      - name: licensed_profiles
+        description: >
+          The number of mailboxes counted against the tenant's purchased license quantity
+          under their active plan. Represents contractual capacity — the maximum number of
+          mailboxes the tenant is entitled to protect. Does not equal billed quantity directly;
+          billing is based on active_profiles. Exceeding licensed capacity may trigger plan
+          upgrades or overage handling depending on the billing model.
+
+      - name: active_profiles
+        description: >
+          The number of mailboxes with active = true in Mailbox Management — in practice,
+          all enabled mailboxes. This is the primary billing dimension. Active mailboxes are
+          the base number used in billing calculations, regardless of whether IRONSCALES can
+          technically protect them. A mailbox that is enabled but not protected due to a
+          technical issue is still counted as active and billed.
+
+      - name: shared_profiles
+        description: >
+          The number of shared mailboxes (e.g. support@, info@) accessed by multiple users
+          rather than a single individual. Shared mailboxes are not included in billing.
+          When calculating billable seats, use active_profiles - shared_profiles.
+
+      - name: trial_plan_id
+        description: >
+          Numeric identifier for the tenant's trial plan. Same values as plan_id:
+          1 = Phishing Simulation and Training, 2 = Starter, 3 = Core,
+          4 = Email Protect, 5 = Complete Protect, 6 = IRONSCALES Protect, 7 = SAT Suite.
+          Null means no active trial. A tenant can have both a trial plan and a paid plan
+          running simultaneously — billing_status determines whether they are billed.
+
+      - name: trial_plan_name
+        description: >
+          Name of the tenant's trial plan. Same values as plan_name.
+          Use billing_status to determine if the tenant is billable, not the presence
+          of a trial plan alone.
+
+      - name: trial_premium_id
+        description: >
+          Numeric identifier for the premium content add-on on the trial plan.
+          Same values as premium_id: 1 = NINJIO, 3 = Habitu8, 4 = Cybermaniacs Videos,
+          5 = Wizer, 6 = IRONSCALES. Null means no trial premium add-on.
+
+      - name: trial_premium_name
+        description: >
+          Name of the premium content add-on on the trial plan. Same values as premium_name.
+
+      - name: trial_plan_expiry_date
+        description: >
+          The date the tenant's trial plan expires. Used together with trial_plan_id and
+          registration_date to determine billing_status. When trial_plan_expiry_date is
+          earlier than record_date, the trial is considered expired.
+
+      - name: billing_status
+        description: >
+          The billing status of the tenant as of record_date. Determines whether a tenant
+          is billable. Only 'Active' and 'Active-POC' should be included in revenue and
+          billing calculations.
+
+          Values:
+          'Active' — has a paid plan with a non-expired plan_expiry_date. Fully billable.
+          'POC' — trial plan is active and the tenant registered less than 30 days ago.
+            Not billable.
+          'Active-POC' — trial plan is active, tenant registered 30+ days ago, and has
+            a paid plan. Billable.
+          'Inactive-POC' — trial plan is active, tenant registered 30+ days ago, but has
+            no paid plan. Not billable.
+          'Inactive' — no active paid plan or trial. Not billable.
+
+          For any revenue or seat count query, always filter:
+          WHERE billing_status IN ('Active', 'Active-POC')
+
+      - name: dmarc_management
+        description: >
+          Boolean. True means DMARC Management is enabled for this tenant.
+
+      - name: dmarc_domains_number
+        description: >
+          The number of DMARC domains the tenant is managing.
+
+      - name: dmarc_plan_name
+        description: >
+          Legacy DMARC plan name. Deprecated — use dmarc_ironscales_plan_name instead.
+
+      - name: dmarc_ironscales_plan
+        description: >
+          Numeric identifier for the tenant's DMARC plan.
+          1 = Core Management, 2 = Pro, 3 = Premium. Null means no DMARC plan.
+          Use dmarc_ironscales_plan_name for filtering.
+
+      - name: dmarc_ironscales_plan_name
+        description: >
+          Name of the tenant's current DMARC plan. Values: 'Core Management', 'Pro',
+          'Premium', 'No_Plan'. Use this column for DMARC plan filtering and reporting.
+
+      - name: record_date
+        description: >
+          The date of this snapshot row. This table is a daily historical record —
+          one row per tenant per day. Use record_date = current_date to get the
+          current state of all tenants. Do not aggregate across multiple record_dates
+          unless calculating historical trends.
+
+      - name: integration
+        description: >
+          Boolean. True means the tenant has an active email platform integration
+          configured with IRONSCALES.
+
+      - name: integration_type
+        description: >
+          The type of email platform integration configured for this tenant. Values:
+          'GMAIL', 'EXCHANGE', 'OFFICE365', 'POWERSHELL', 'NONE'.
+          'NONE' means no integration is configured.
+
+      - name: auto_convert_trial
+        description: >
+          Boolean. True means the tenant is set to automatically convert to a paid
+          plan when their trial expires.
+
+      - name: not_for_billing
+        description: >
+          Boolean. True means this tenant is excluded from billing cycles — typically
+          internal or test accounts. Always filter WHERE not_for_billing = false
+          for any billing, revenue, or seat count query.
+
+      - name: not_nfr_partner
+        description: >
+          Boolean. True means this tenant has partner_pricing = true but is not a
+          real partner or NFR account — they should be treated as a regular end
+          customer and included in standard billing calculations.
+          When querying billable tenants, include records where not_nfr_partner = true
+          despite their partner_pricing status.
+
+  - name: ltp_daily_itemized_billing_tbl
+    description: >
+      Daily itemized billing amounts per Low Touch Partner (LTP).
+      One row per billing_date + ltp + item + sku + partner_pricing combination.
+      Use this table for daily revenue and license quantity reporting by partner.
+
+      The ltp column always represents the root / first layer tenant (depth = 0).
+      Join to global_tenant_history on the root column to get LTP details.
+
+      This table combines historical billing records with the current day's
+      calculated amounts via a union.
+
+    columns:
+      - name: billing_date
+        description: >
+          The date this billing record applies to. For historical rows this is the
+          date the record was calculated. For the current day it is current_date.
+
+      - name: ltp
+        description: >
+          The tenant_global_id of the Low Touch Partner (LTP) being billed. Always
+          represents the root / first layer tenant (depth = 0). Join to
+          global_tenant_history on the root column to get LTP details.
+
+      - name: item
+        description: >
+          The product line item being billed. Can be either a base plan or an add-on.
+
+          Base plans: 'Email Protect', 'Complete Protect', 'Core', 'IRONSCALES Protect',
+          'Phishing Simulation and Training', 'Starter', 'SAT Suite'.
+
+          Add-ons: 'DMARC', 'Account Takeover', 'Incident Management', 'Multi Tenant',
+          'S&T Bundle', 'S&T Plus Bundle', 'Security Awareness Training',
+          'Habitu8', 'NINJIO', 'Cybermaniacs Videos'.
+
+      - name: sku
+        description: >
+          Product code for the billed item. Encodes both the product and the pricing
+          type — SKUs ending with 'nfr' represent partner-priced (NFR) seats for that
+          item. Use sku for granular product + pricing tier reporting, item for
+          product-only reporting.
+
+      - name: partner_pricing
+        description: >
+          Boolean. True means the tenant has partner status — they are a reseller or MSP
+          with a partner commercial relationship with IRONSCALES.
+          False means the tenant is an end customer without partner status.
+
+      - name: quantity
+        description: >
+          The number of billable units (seats/mailboxes) for this item on this billing_date,
+          aggregated across all tenants under the LTP.
+
+      - name: amount
+        description: >
+          The billing amount in local currency for this item on this billing_date,
+          aggregated across all tenants under the LTP.
