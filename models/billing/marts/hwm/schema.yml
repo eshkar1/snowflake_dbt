@@ -1,0 +1,85 @@
+version: 2
+
+models:
+  - name: ltp_daily_itemized_new_billing_tbl
+    description: >
+      Daily itemized billing amounts per Low Touch Partner (LTP) using the updated
+      billing calculation. One row per billing_date + ltp + item + sku +
+      partner_pricing + price_type combination.
+
+      This is the most up-to-date billing table and supersedes
+      ltp_daily_itemized_billing_tbl. Use this table for daily revenue and
+      license quantity reporting by partner.
+
+      The ltp column always represents the root / first layer tenant (depth = 0).
+      Join to global_tenant_history on the root column to get LTP details.
+
+      Contains two types of rows unioned together:
+      1. Standard itemized billing rows per product and pricing type.
+      2. NFR rows (item = 'NFR', sku = 'IS-LTP-NFR') representing the LTP's own
+         partner seats billed at a special rate. NFR billing applies only to MSP-type
+         LTPs registered 90+ days ago, with the first 100 seats complimentary.
+
+    columns:
+      - name: billing_date
+        description: >
+          The date this billing record applies to. Always current_date as this
+          table calculates the current day's billing only.
+
+      - name: ltp
+        description: >
+          The tenant_global_id of the Low Touch Partner (LTP) being billed. Always
+          represents the root / first layer tenant (depth = 0). Join to
+          global_tenant_history on the root column to get LTP details.
+
+      - name: item
+        description: >
+          The product line item being billed. Can be a base plan, an add-on, or NFR.
+
+          Base plans: 'Email Protect', 'Complete Protect', 'Core', 'IRONSCALES Protect',
+          'Phishing Simulation and Training', 'Starter', 'SAT Suite'.
+
+          Add-ons: 'DMARC', 'Account Takeover', 'Incident Management', 'Multi Tenant',
+          'S&T Bundle', 'S&T Plus Bundle', 'Security Awareness Training',
+          'Habitu8', 'NINJIO', 'Cybermaniacs Videos'.
+
+          Special: 'NFR' — the LTP's own partner seats billed at a special rate.
+          Only applies to MSP-type LTPs registered 90+ days ago. The first 100
+          NFR seats are complimentary and not billed.
+
+      - name: sku
+        description: >
+          Product code for the billed item. Encodes both the product and the pricing
+          type — SKUs ending with 'nfr' represent partner-priced (NFR) seats for that
+          item. For NFR rows the sku is always 'IS-LTP-NFR'.
+          Use sku for granular product + pricing tier reporting, item for
+          product-only reporting.
+
+      - name: partner_pricing
+        description: >
+          Boolean. True means the tenant has partner status — they are a reseller or
+          MSP with a partner commercial relationship with IRONSCALES.
+          False means the tenant is an end customer without partner status.
+          Null for NFR rows.
+
+      - name: price_type
+        description: >
+          The pricing rate type applied to this row. Values:
+          'standard' — no special rate, billed at the standard price.
+          'promo' — a promotional rate applied for a specific time period.
+          'Exceptional' — a custom exceptional rate for a specific tenant or MSP.
+          Null for NFR rows.
+
+      - name: quantity
+        description: >
+          The number of billable units (seats/mailboxes) for this item on this
+          billing_date, aggregated across all tenants under the LTP.
+          For NFR rows this is the total NFR seat count before the 100-seat
+          free tier is applied.
+
+      - name: amount
+        description: >
+          The billing amount in local currency for this item on this billing_date,
+          aggregated across all tenants under the LTP.
+          For NFR rows this is the invoiced amount after applying the conversion
+          rate and deducting the 100-seat free tier.
