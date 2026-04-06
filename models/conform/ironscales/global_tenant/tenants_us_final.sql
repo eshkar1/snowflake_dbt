@@ -91,7 +91,9 @@ select
     gmail.enabled,
     l.auto_convert_trial,
     l.NOT_FOR_BILLING as not_for_billing,
-    l.NOT_NFR_PARTNER as not_nfr_partner
+    l.NOT_NFR_PARTNER as not_nfr_partner,
+    l.is_education_customer as is_education_customer,
+    l.education_type as education_type 
 
 from
     tenants_us t

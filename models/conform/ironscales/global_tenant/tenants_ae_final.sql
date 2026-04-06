@@ -84,7 +84,9 @@ select
     setting.serverside_type,
     l.auto_convert_trial,
     l.NOT_FOR_BILLING as not_for_billing,
-    l.NOT_NFR_PARTNER as not_nfr_partner
+    l.NOT_NFR_PARTNER as not_nfr_partner,
+    null::boolean as is_education_customer,
+    null::varchar as education_type
 from
     tenants_ae t
     left join active_profiles a on t.tenant_global_id = a.tenant_global_id 
