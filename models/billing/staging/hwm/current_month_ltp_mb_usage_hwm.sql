@@ -1,12 +1,9 @@
 WITH global_tenant_history AS (
     SELECT * FROM 
-    -- prod_mart.operation.global_tenant_history
     {{ ref('global_tenant_history')}} 
 ),
 ltp_pricing_list AS (
     SELECT * FROM 
-    -- prod_mart.upload_tables.ltp_pricing_list_today
-    -- {{ ref('ltp_pricing_tbl')}}
     {{ref('ltp_account_meta')}}
 ),
 
@@ -20,28 +17,47 @@ date_bounds AS (
         CURRENT_DATE AS end_date
 ),
 
+latest_root AS (
+    SELECT
+        tenant_global_id,
+        root AS resolved_root
+    FROM global_tenant_history
+    JOIN date_bounds d ON record_date BETWEEN d.start_date AND d.end_date
+    WHERE
+        approved = TRUE
+        AND billing_status IN ('Active', 'Active-POC')
+        AND plan_name != 'No_Plan'
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY tenant_global_id
+        ORDER BY record_date DESC
+    ) = 1
+),
+
 profile_metrics AS (
     SELECT 
         g.record_date,
-        g.root,
+        lr.resolved_root AS root,
         g.tenant_global_id,
         p.profile_type,
         p.is_highwatermark,
         g.plan_name,
         CASE p.profile_type
-            WHEN 'active' THEN ifnull(g.active_profiles,0)
-            WHEN 'license' THEN ifnull(g.licensed_profiles,0)
-            WHEN 'shared' THEN ifnull(g.active_profiles - IFNULL(g.shared_profiles, 0),0)
+            WHEN 'active' THEN IFNULL(g.active_profiles, 0)
+            WHEN 'license' THEN IFNULL(g.licensed_profiles, 0)
+            WHEN 'shared' THEN IFNULL(g.active_profiles - IFNULL(g.shared_profiles, 0), 0)
         END AS profile_count
     FROM global_tenant_history g
-    JOIN date_bounds d ON g.record_date BETWEEN d.start_date AND d.end_date
+    JOIN date_bounds d 
+        ON g.record_date BETWEEN d.start_date AND d.end_date
+    JOIN latest_root lr
+        ON g.tenant_global_id = lr.tenant_global_id
     LEFT JOIN ltp_pricing_list p 
-        ON g.root = p.tenant_global_id
+        ON lr.resolved_root = p.tenant_global_id
     WHERE 
         g.approved = TRUE
-        AND g.billing_status IN ('Active','Active-POC')
+        AND g.billing_status IN ('Active', 'Active-POC')
         AND g.plan_name != 'No_Plan'
-        AND g.root IN (
+        AND lr.resolved_root IN (
             SELECT tenant_global_id
             FROM ltp_pricing_list
         )
@@ -56,7 +72,6 @@ plan_count AS (
     GROUP BY tenant_global_id, is_highwatermark
 ),
 
--- For multi-plan tenants, identify the most expensive plan
 most_expensive_plan_info AS (
     SELECT
         pm.tenant_global_id,
@@ -82,7 +97,6 @@ most_expensive_plan_info AS (
     ) = 1
 ),
 
--- Get the date range during which the most expensive plan was active
 most_expensive_plan_start AS (
     SELECT
         mepi.tenant_global_id,
@@ -98,7 +112,6 @@ most_expensive_plan_start AS (
     GROUP BY mepi.tenant_global_id, mepi.is_highwatermark, mepi.plan_name
 ),
 
--- Single-plan tenants: all records; multi-plan tenants: only most expensive plan's window
 profile_metrics_filtered AS (
     SELECT pm.*
     FROM profile_metrics pm

@@ -76,7 +76,9 @@ integration,
 integration_type,
 auto_convert_trial,
 not_for_billing,
-not_nfr_partner
+not_nfr_partner,
+IS_EDUCATION_CUSTOMER,
+EDUCATION_TYPE 
 from prod_mart.operation.global_tenant_history
 
 union 
@@ -217,7 +219,9 @@ end as integration,
     end as integration_type,
     auto_convert_trial,
     not_for_billing,
-    not_nfr_partner
+    not_nfr_partner,
+    is_education_customer,
+    education_type
 
     FROM tenants_us_final
 
@@ -356,7 +360,11 @@ when serverside_type = 4 then 'POWERSHELL'
 end as integration_type,
 auto_convert_trial,
 not_for_billing,
-not_nfr_partner
+not_nfr_partner,
+null::boolean as is_education_customer,
+null::varchar as education_type
+-- is_education_customer,
+-- education_type
 FROM tenants_eu_final
 
 union
@@ -493,7 +501,9 @@ when serverside_type = 4 then 'POWERSHELL'
 end as integration_type,
 auto_convert_trial,
 not_for_billing,
-not_nfr_partner
+not_nfr_partner,
+is_education_customer,
+education_type
 
 FROM tenants_ae_final
 
@@ -631,6 +641,8 @@ when serverside_type = 4 then 'POWERSHELL'
 end as integration_type,
 auto_convert_trial,
 not_for_billing,
-not_nfr_partner
+not_nfr_partner,
+is_education_customer,
+education_type
 
 FROM tenants_ca_final
