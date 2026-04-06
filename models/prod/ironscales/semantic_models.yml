@@ -72,6 +72,7 @@ semantic_models:
         description: Count of distinct tenants.
         agg: count_distinct
         expr: tenant_global_id
+        agg_time_dimension: record_date
 
       - name: billable_tenant_count
         description: >
@@ -86,16 +87,19 @@ semantic_models:
              AND approved = true
             THEN tenant_global_id
           END
+        agg_time_dimension: record_date
 
       - name: total_active_profiles
         description: Sum of active mailboxes across all tenants.
         agg: sum
         expr: active_profiles
+        agg_time_dimension: record_date
 
       - name: total_shared_profiles
         description: Sum of shared mailboxes across all tenants.
         agg: sum
         expr: shared_profiles
+        agg_time_dimension: record_date
 
       - name: net_billable_seats
         description: >
@@ -110,24 +114,28 @@ semantic_models:
              AND approved = true
             THEN COALESCE(active_profiles, 0) - COALESCE(shared_profiles, 0)
           END
+        agg_time_dimension: record_date
 
       - name: poc_tenant_count
         description: Count of tenants in POC status (not yet billable).
         agg: count_distinct
         expr: >
           CASE WHEN billing_status = 'POC' THEN tenant_global_id END
+        agg_time_dimension: record_date
 
       - name: inactive_tenant_count
         description: Count of inactive tenants.
         agg: count_distinct
         expr: >
           CASE WHEN billing_status = 'Inactive' THEN tenant_global_id END
+        agg_time_dimension: record_date
 
       - name: dmarc_enabled_count
         description: Count of tenants with DMARC Management enabled.
         agg: count_distinct
         expr: >
           CASE WHEN dmarc_management = true THEN tenant_global_id END
+        agg_time_dimension: record_date
 
 
 # ─────────────────────────────────────────────────────────────────────────────
