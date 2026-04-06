@@ -1,0 +1,106 @@
+version: 2
+
+semantic_models:
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # ltp_daily_itemized_new_billing_tbl
+  # Daily billing amounts per LTP — most up-to-date billing table
+  # ─────────────────────────────────────────────────────────────────────────────
+  - name: ltp_daily_billing
+    model: ref('ltp_daily_itemized_new_billing_tbl')
+    description: >
+      Semantic model over the daily itemized billing table (new billing calculation).
+      Used for revenue and license quantity reporting by LTP.
+
+    entities:
+      - name: ltp
+        type: primary
+        expr: ltp
+
+    dimensions:
+      - name: billing_date
+        type: time
+        type_params:
+          time_granularity: day
+
+      - name: item
+        type: categorical
+        description: Product line item. Can be a base plan, add-on, or NFR.
+
+      - name: sku
+        type: categorical
+        description: Product code. SKUs ending in 'nfr' = partner-priced seats.
+
+      - name: partner_pricing
+        type: categorical
+        description: True = partner status, False = end customer.
+
+      - name: price_type
+        type: categorical
+        description: >
+          Pricing rate type. Values: 'standard', 'promo', 'Exceptional'.
+          Null for NFR rows.
+
+    measures:
+      - name: total_quantity
+        description: Total billable units (seats/mailboxes) across all LTPs.
+        agg: sum
+        expr: quantity
+
+      - name: total_amount
+        description: Total billing amount in local currency across all LTPs.
+        agg: sum
+        expr: amount
+
+      - name: commercial_amount
+        description: >
+          Billing amount excluding partner-priced (NFR) rows.
+          Use this for net commercial revenue reporting.
+        agg: sum
+        expr: >
+          CASE WHEN partner_pricing = false OR partner_pricing IS NULL
+               THEN amount END
+
+      - name: ltp_count
+        description: Count of distinct LTPs with billing activity.
+        agg: count_distinct
+        expr: ltp
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Billing metrics
+# ─────────────────────────────────────────────────────────────────────────────
+
+metrics:
+
+  - name: daily_billing_amount
+    label: Daily billing amount
+    description: >
+      Total billing amount in local currency for today across all LTPs.
+      Includes both commercial and partner-priced rows.
+    type: simple
+    type_params:
+      measure: total_amount
+
+  - name: daily_commercial_amount
+    label: Daily commercial billing amount
+    description: >
+      Total billing amount excluding partner-priced (NFR) rows.
+      Use this for net commercial revenue reporting.
+    type: simple
+    type_params:
+      measure: commercial_amount
+
+  - name: daily_billable_seats
+    label: Daily billable seats
+    description: Total number of billable seats across all LTPs today.
+    type: simple
+    type_params:
+      measure: total_quantity
+
+  - name: active_ltps
+    label: Active LTPs
+    description: Count of distinct Low Touch Partners with billing activity today.
+    type: simple
+    type_params:
+      measure: ltp_count
