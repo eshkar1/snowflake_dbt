@@ -1,0 +1,177 @@
+version: 2
+
+semantic_models:
+
+  # ─────────────────────────────────────────────────────────────────────────────
+  # global_tenant_history
+  # Central tenant reference table — daily snapshot, one row per tenant per day
+  # ─────────────────────────────────────────────────────────────────────────────
+  - name: global_tenant_history
+    model: ref('global_tenant_history')
+    description: >
+      Semantic model over the daily tenant snapshot. Used for tenant counts,
+      mailbox metrics, and plan-based segmentation. Always filter to
+      record_date = current_date for current state.
+
+    entities:
+      - name: tenant
+        type: primary
+        expr: tenant_global_id
+
+      - name: ltp
+        type: foreign
+        expr: root
+
+    dimensions:
+      - name: record_date
+        type: time
+        type_params:
+          time_granularity: day
+
+      - name: billing_status
+        type: categorical
+        description: >
+          Values: 'Active', 'Active-POC', 'POC', 'Inactive-POC', 'Inactive'.
+          Only 'Active' and 'Active-POC' are billable.
+
+      - name: plan_name
+        type: categorical
+        description: >
+          Product plan. Values: 'Email Protect', 'Complete Protect', 'Core',
+          'IRONSCALES Protect', 'Phishing Simulation and Training', 'Starter',
+          'SAT Suite', 'No_Plan'.
+
+      - name: business_type
+        type: categorical
+        description: Commercial classification of the tenant.
+
+      - name: type
+        type: categorical
+        description: "Affiliation type. Values: 'Distributor', 'Company', 'MSP'."
+
+      - name: pillar
+        type: categorical
+        description: "Business pillar. Values: 'msp' or null (null = enterprise)."
+
+      - name: integration_type
+        type: categorical
+        description: >
+          Email platform integration. Values: 'GMAIL', 'EXCHANGE',
+          'OFFICE365', 'POWERSHELL', 'NONE'.
+
+      - name: partner_pricing
+        type: categorical
+        description: True = partner status, False = end customer.
+
+      - name: dmarc_management
+        type: categorical
+        description: True = DMARC Management is enabled.
+
+    measures:
+      - name: tenant_count
+        description: Count of distinct tenants.
+        agg: count_distinct
+        expr: tenant_global_id
+
+      - name: billable_tenant_count
+        description: >
+          Count of billable tenants — Active or Active-POC, approved,
+          and not excluded from billing. This is the correct metric
+          for "how many billable customers do we have".
+        agg: count_distinct
+        expr: >
+          CASE
+            WHEN billing_status IN ('Active', 'Active-POC')
+             AND not_for_billing = false
+             AND approved = true
+            THEN tenant_global_id
+          END
+
+      - name: total_active_profiles
+        description: Sum of active mailboxes across all tenants.
+        agg: sum
+        expr: active_profiles
+
+      - name: total_shared_profiles
+        description: Sum of shared mailboxes across all tenants.
+        agg: sum
+        expr: shared_profiles
+
+      - name: net_billable_seats
+        description: >
+          Sum of billable mailboxes = active_profiles - shared_profiles,
+          for billable tenants only (Active + Active-POC, approved,
+          not excluded from billing).
+        agg: sum
+        expr: >
+          CASE
+            WHEN billing_status IN ('Active', 'Active-POC')
+             AND not_for_billing = false
+             AND approved = true
+            THEN COALESCE(active_profiles, 0) - COALESCE(shared_profiles, 0)
+          END
+
+      - name: poc_tenant_count
+        description: Count of tenants in POC status (not yet billable).
+        agg: count_distinct
+        expr: >
+          CASE WHEN billing_status = 'POC' THEN tenant_global_id END
+
+      - name: inactive_tenant_count
+        description: Count of inactive tenants.
+        agg: count_distinct
+        expr: >
+          CASE WHEN billing_status = 'Inactive' THEN tenant_global_id END
+
+      - name: dmarc_enabled_count
+        description: Count of tenants with DMARC Management enabled.
+        agg: count_distinct
+        expr: >
+          CASE WHEN dmarc_management = true THEN tenant_global_id END
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Tenant metrics
+# ─────────────────────────────────────────────────────────────────────────────
+
+metrics:
+
+  - name: billable_tenants
+    label: Billable tenants
+    description: >
+      Number of billable tenants today — Active or Active-POC,
+      approved, and not excluded from billing. This is the
+      definitive metric for "how many customers are we billing".
+    type: simple
+    type_params:
+      measure: billable_tenant_count
+
+  - name: billable_mailboxes
+    label: Billable mailboxes
+    description: >
+      Total billable mailboxes = active_profiles - shared_profiles
+      for all billable tenants. Use this for seat-count reporting.
+    type: simple
+    type_params:
+      measure: net_billable_seats
+
+  - name: total_tenants
+    label: Total tenants
+    description: Total count of all tenants regardless of billing status.
+    type: simple
+    type_params:
+      measure: tenant_count
+
+  - name: poc_tenants
+    label: POC tenants
+    description: Count of tenants currently in POC (trial) status.
+    type: simple
+    type_params:
+      measure: poc_tenant_count
+
+  - name: dmarc_tenants
+    label: Tenants with DMARC
+    description: Count of tenants with DMARC Management enabled.
+    type: simple
+    type_params:
+      measure: dmarc_enabled_count
