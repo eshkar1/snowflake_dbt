@@ -46,11 +46,13 @@ semantic_models:
         description: Total billable units (seats/mailboxes) across all LTPs.
         agg: sum
         expr: quantity
+        agg_time_dimension: billing_date
 
       - name: total_amount
         description: Total billing amount in local currency across all LTPs.
         agg: sum
         expr: amount
+        agg_time_dimension: billing_date
 
       - name: commercial_amount
         description: >
@@ -60,11 +62,13 @@ semantic_models:
         expr: >
           CASE WHEN partner_pricing = false OR partner_pricing IS NULL
                THEN amount END
+        agg_time_dimension: billing_date
 
       - name: ltp_count
         description: Count of distinct LTPs with billing activity.
         agg: count_distinct
         expr: ltp
+        agg_time_dimension: billing_date
 
 
 # ─────────────────────────────────────────────────────────────────────────────
