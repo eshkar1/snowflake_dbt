@@ -7,14 +7,8 @@ models:
       Contains one row per day from 2020-01-01 to 2 years from today.
       Do not query this table directly — it is used internally by MetricFlow
       for time-based metric aggregations.
-    config:
-      meta:
-        is_metricflow_time_spine: true
-
-time_spine:
-  name: metricflow_time_spine
-  node_relation:
-    alias: metricflow_time_spine
-  columns:
-    - name: date_day
-      granularity: day
+    time_spine:
+      standard_granularity_column: date_day
+    columns:
+      - name: date_day
+        granularity: day
