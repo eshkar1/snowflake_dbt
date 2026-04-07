@@ -361,8 +361,8 @@ end as integration_type,
 auto_convert_trial,
 not_for_billing,
 not_nfr_partner,
-null::boolean as is_education_customer,
-null::varchar as education_type
+is_education_customer,
+education_type
 -- is_education_customer,
 -- education_type
 FROM tenants_eu_final
