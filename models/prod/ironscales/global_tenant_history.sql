@@ -78,7 +78,12 @@ auto_convert_trial,
 not_for_billing,
 not_nfr_partner,
 IS_EDUCATION_CUSTOMER,
-EDUCATION_TYPE 
+EDUCATION_TYPE,
+email_encryption_entitled,
+email_encryption_active,
+email_dlp_entitled,
+email_dlp_active,
+is_churned
 from prod_mart.operation.global_tenant_history
 
 union 
@@ -221,7 +226,12 @@ end as integration,
     not_for_billing,
     not_nfr_partner,
     is_education_customer,
-    education_type
+    education_type,
+    email_encryption_entitled,
+    email_encryption_active,
+    email_dlp_entitled,
+    email_dlp_active,
+    is_churned
 
     FROM tenants_us_final
 
@@ -362,7 +372,12 @@ auto_convert_trial,
 not_for_billing,
 not_nfr_partner,
 is_education_customer,
-education_type
+education_type,
+email_encryption_entitled,
+email_encryption_active,
+email_dlp_entitled,
+email_dlp_active,
+is_churned
 -- is_education_customer,
 -- education_type
 FROM tenants_eu_final
@@ -503,7 +518,12 @@ auto_convert_trial,
 not_for_billing,
 not_nfr_partner,
 is_education_customer,
-education_type
+education_type,
+email_encryption_entitled,
+email_encryption_active,
+email_dlp_entitled,
+email_dlp_active,
+is_churned
 
 FROM tenants_ae_final
 
@@ -643,6 +663,11 @@ auto_convert_trial,
 not_for_billing,
 not_nfr_partner,
 is_education_customer,
-education_type
+education_type,
+email_encryption_entitled,
+email_encryption_active,
+email_dlp_entitled,
+email_dlp_active,
+is_churned
 
 FROM tenants_ca_final

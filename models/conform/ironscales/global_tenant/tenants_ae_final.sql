@@ -86,7 +86,17 @@ select
     l.NOT_FOR_BILLING as not_for_billing,
     l.NOT_NFR_PARTNER as not_nfr_partner,
     null::boolean as is_education_customer,
-    null::varchar as education_type
+    null::varchar as education_type,
+    null::boolean as email_encryption_entitled,
+    null::boolean as email_encryption_active,
+    null::boolean as email_dlp_entitled,
+    null::boolean as email_dlp_active,
+    null::boolean as is_churned
+    -- l.email_encryption_entitled,
+    -- l.email_encryption_active,
+    -- l.email_dlp_entitled,
+    -- l.email_dlp_active,
+    -- l.is_churned
 from
     tenants_ae t
     left join active_profiles a on t.tenant_global_id = a.tenant_global_id 

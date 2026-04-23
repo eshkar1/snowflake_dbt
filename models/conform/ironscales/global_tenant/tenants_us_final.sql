@@ -93,7 +93,12 @@ select
     l.NOT_FOR_BILLING as not_for_billing,
     l.NOT_NFR_PARTNER as not_nfr_partner,
     l.is_education_customer as is_education_customer,
-    l.education_type as education_type 
+    l.education_type as education_type,
+    l.email_encryption_entitled,
+    l.email_encryption_active,
+    l.email_dlp_entitled,
+    l.email_dlp_active,
+    l.is_churned
 
 from
     tenants_us t
